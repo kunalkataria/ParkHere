@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "757584269076",
+    "firebase_url": "https://parkhere-ceccb.firebaseio.com",
+    "project_id": "parkhere-ceccb",
+    "storage_bucket": "parkhere-ceccb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757584269076:android:bf0e040a28f6dd2a",
+        "android_client_info": {
+          "package_name": "edu.usc.sunset.team7.www.parkhere"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "757584269076-bckkfi6sgdl22ubemk6fq5n496k1kb2h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.usc.sunset.team7.www.parkhere",
+            "certificate_hash": "8D6632D20414E4AB03277BC67B3276D84238F08E"
+          }
+        },
+        {
+          "client_id": "757584269076-tojbbgll52i81vqrnphnimsb712o4dtu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3lMI75RxLrY0HfeE15aY5p9mJ_w7Vr4s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "757584269076-tojbbgll52i81vqrnphnimsb712o4dtu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
