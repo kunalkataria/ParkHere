@@ -4,40 +4,60 @@ package edu.usc.sunset.team7.www.parkhere.Objects;
  * Created by Acer on 10/14/2016.
  */
 
-public class PublicUserProfile {
-    protected String firstName;
-    protected double rating;
-    protected List<Review> reviews;
-    protected String userID;
+public class User extends PublicUserProfile{
+    private String lastName;
+    private String userID;
+    private String phoneNumber;
+    private Image profilePicture; //need import
+    private String email;
 
-    public PublicUserProfile(String firstName, double rating, List<Review> reviews) {
-        this.firstName = firstName;
-        this.rating = rating;
-        this.reviews = reviews;
+    public User(String firstName, String lastName, double rating, List<Review> reviews, String phoneNumber, Image profilePicture, String email){
+        super(firstName, rating, reviews);
+        this.email = email;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
     }
 
-    public String getFirstName() {
-        return this.firstName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String firstName, String lastName){
+        if (firstName != null) {
+            this.firstName = firstName;
+        }
+        if (lastName != null) {
+            this.lastName = lastName;
+        }
     }
 
-    public double getRating() {
-        return rating;
+    public String getPhoneNumber() {
+        return this.phoneNumber;
     }
 
-    public void setRating(double rating) {
-        this.rating = rating;
+    public void setPhoneNumber (String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public List<Review> getReviews() {
-        return this.reviews;
+    public Image getProfilePicture () {
+        return this.profilePicture;
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
+    public void setProfilePicture (Image profilePicture){
+        this.profilePicture = profilePicture;
     }
+
+    public String getEmail () {
+        return this.email;
+    }
+
+    public void setEmail (String email) {
+        this.email = email;
+    }
+
+//    public PublicUserProfile getPublicProfile () {
+//        return super(this.firstName, this.rating, this.reviews);
+//    }
 
 }
