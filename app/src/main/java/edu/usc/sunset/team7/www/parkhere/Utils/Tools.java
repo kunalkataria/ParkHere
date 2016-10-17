@@ -10,4 +10,12 @@ public class Tools {
         return false;
     }
 
+    public static boolean nameValid(String name) {
+        return false;
+    }
+
+    public static boolean phoneValid(String phoneNumber) {
+        return false;
+    }
+
 }
