@@ -1,5 +1,9 @@
 package edu.usc.sunset.team7.www.parkhere.Objects;
 
+import android.media.Image;
+
+import java.util.List;
+
 /**
  * Created by Acer on 10/14/2016.
  */
