@@ -67,6 +67,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    if (true)  {
+                        // check if user is a seeker or provider
+                        HomeActivity.startActivityForSearch(LoginActivity.this);
+                    }
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
