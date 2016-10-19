@@ -1,43 +1,75 @@
 package edu.usc.sunset.team7.www.parkhere.Objects;
 
 /**
- * Created by Acer on 10/14/2016.
+ * Created by Acer on 10/18/2016.
  */
 
-public class PublicUserProfile {
-    protected String firstName;
-    protected double rating;
-    protected List<Review> reviews;
-    protected String userID;
+public class Booking {
 
-    public PublicUserProfile(String firstName, double rating, List<Review> reviews) {
-        this.firstName = firstName;
-        this.rating = rating;
-        this.reviews = reviews;
+    private Listing mListing;
+    private PublicUserProfile seeker;
+    private int providerRating;
+    private int spaceRating;
+    private String review;
+    private long bookStartTime;
+    private long bookEndTime;
+
+    public Booking(Listing mListing, PublicUserProfile seeker) {
+        this.mListing = mListing;
+        this.seeker = seeker;
     }
 
-    public String getFirstName() {
-        return this.firstName;
+    public Listing getMListing() {
+        return this.mListing;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setMListing(Listing mListing) {
+        this.mListing = mListing;
     }
 
-    public double getRating() {
-        return rating;
+    public PublicUserProfile getSeeker() {
+        return this.seeker;
     }
 
-    public void setRating(double rating) {
-        this.rating = rating;
+    public void setSeeker(PublicUserProfile seeker) {
+        this.seeker = seeker;
     }
 
-    public List<Review> getReviews() {
-        return this.reviews;
+    public int getProviderRating() {
+        return this.providerRating;
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
+    public void setProviderRating(int providerRating) {
+        this.providerRating = providerRating;
+    }
+
+    public int getSpaceRating() {
+        return this.spaceRating;
+    }
+
+    public String getReview() {
+        return this.review;
+    }
+
+    public void rate(int providerRating, String review) {
+        this.providerRating = providerRating;
+        this.review = review;
+    }
+
+    public long getBookStartTime() {
+        return this.bookStartTime;
+    }
+
+    public void setBookStartTime(long bookStartTime) {
+        this.bookStartTime = bookStartTime;
+    }
+
+    public long getBookEndTime() {
+        return this.bookEndTime;
+    }
+
+    public void setBookEndTime(long bookEndTime) {
+        this.bookEndTime = bookEndTime;
     }
 
 }
