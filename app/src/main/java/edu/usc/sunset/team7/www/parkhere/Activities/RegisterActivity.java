@@ -3,10 +3,18 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +27,9 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
  */
 
 public class RegisterActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private static final String TAG = "RegisterActivity";
 
     @BindView(R.id.register_button) AppCompatButton registerButton;
 
@@ -44,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     @OnClick (R.id.register_button)
-    private void register() {
+    protected void register() {
         removeErrors();
         String email = emailEditText.getText().toString();
         String firstName = firstNameEditText.getText().toString();
@@ -76,6 +87,29 @@ public class RegisterActivity extends AppCompatActivity {
             emailTextInputLayout.setErrorEnabled(true);
             emailTextInputLayout.setError("Email not valid");
         }
+
+        /* Uncomment when password field is created. Also image url?
+
+        
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(RegisterActivity.this, "Invalid email or password. Please try again.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+         */
+
 
     }
 
