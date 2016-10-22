@@ -1,5 +1,7 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -35,6 +37,11 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.password_textinputlayout) TextInputLayout passwordTextInputLayout;
     @BindView(R.id.email_edittext) AppCompatEditText emailEditText;
     @BindView(R.id.password_edittext) AppCompatEditText passwordEditText;
+
+    public static void startActivity(Context context) {
+        Intent i = new Intent(context, LoginActivity.class);
+        context.startActivity(i);
+    }
 
     //Firebase AuthListener checks for changes to the Auth (when the user logs in and out)
     @Override
