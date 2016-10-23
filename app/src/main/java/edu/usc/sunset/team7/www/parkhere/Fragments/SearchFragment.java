@@ -1,10 +1,74 @@
 package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.app.Fragment;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.Locale;
+
+import butterknife.BindView;
+import edu.usc.sunset.team7.www.parkhere.R;
+
+import static com.google.android.gms.internal.zzs.TAG;
 
 /**
  * Created by kunal on 10/12/16.
  */
 
 public class SearchFragment extends Fragment {
+
+    private Place locationSelected;
+
+    @BindView(R.id.search_autocomplete_bar) PlaceAutocompleteFragment searchBarEditText;
+
+    @Override
+    public void onCreate(Bundle savedBundleInstance) {
+
+        //set location to be the current location
+        searchBarEditText.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                locationSelected = place;
+                Log.i(TAG, "Place: " + place.getName());
+                //send over latitude and longitude w/ place.latlng
+                }
+
+            @Override
+            public void onError(Status status) {// TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+                }
+            });
+    }
+
+    @Override
+    public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.search_fragment, container, false);
+    }
+
+    public void sendLocationToFirebase() {
+        if(locationSelected == null) return;
+
+        Location toSend = new Location("");
+        LatLng latLng = locationSelected.getLatLng();
+        toSend.setLatitude(latLng.latitude);
+        toSend.setLongitude(latLng.longitude);
+        //send it over
+    }
+
 }
