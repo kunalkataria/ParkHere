@@ -60,26 +60,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    if (true)  {
-                        // check if user is a seeker or provider
-                        // Send rest of user info up to server, navigate to login activity
-                        LoginActivity.startActivity(RegisterActivity.this);
-                    }
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
-
     }
 
     @OnClick (R.id.register_button)
@@ -91,10 +71,10 @@ public class RegisterActivity extends AppCompatActivity {
         String lastName = lastNameEditText.getText().toString();
         String phoneNumber = phoneNumberEditText.getText().toString();
 
-        if (!Tools.emailValid(email)) {
-            if (!Tools.nameValid(firstName)) {
-                if (!Tools.nameValid(lastName)) {
-                    if (!Tools.phoneValid(phoneNumber)) {
+        if (Tools.emailValid(email)) {
+            if (Tools.nameValid(firstName)) {
+                if (Tools.nameValid(lastName)) {
+                    if (Tools.phoneValid(phoneNumber)) {
                         registerUser(email, password);
                     } else {
                         // phone number not valid
@@ -125,13 +105,17 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
+                        LoginActivity.startActivity(RegisterActivity.this);
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Registration failed. Please try again.",
                                     Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "Registration success!. You may now log in.",
+                                    Toast.LENGTH_LONG).show();
+                            LoginActivity.startActivity(RegisterActivity.this);
                         }
                     }
                 });

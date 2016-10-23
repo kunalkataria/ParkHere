@@ -6,7 +6,7 @@ package edu.usc.sunset.team7.www.parkhere.Utils;
 
 public class Tools {
 
-    private static final String EMAIL_REGEX = ".+\\@.+\\..+";
+    private static final String EMAIL_REGEX = "^.+\\@.+\\..+$";
     private static final String NAME_REGEX = "^[a-zA-Z ,.'-]+$";
     private static final String PHONE_REGEX = "^[0-9]{10}$";
 
