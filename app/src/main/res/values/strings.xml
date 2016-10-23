@@ -7,5 +7,6 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="phone_number">Phone number</string>
+    <string name="sign_out">Sign Out</string>
 </resources>
 
