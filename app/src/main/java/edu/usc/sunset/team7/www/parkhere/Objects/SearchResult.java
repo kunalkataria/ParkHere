@@ -11,12 +11,14 @@ public class SearchResult {
     private ArrayList<Listing> allListings;
     private long latitude;
     private long longitude;
+    private double distanceFromSearchLocation;
 
-    public SearchResult(double averageParkPrice, long latitude, long longitude){
+    public SearchResult(double averageParkPrice, long latitude, long longitude, double distanceFromSearchLocation){
         allListings = new ArrayList<Listing>();
         this.averageParkPrice = averageParkPrice;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.distanceFromSearchLocation = distanceFromSearchLocation;
     }
 
     public long getLatitude() {
@@ -41,6 +43,14 @@ public class SearchResult {
 
     public void setAverageParkPrice(double averageParkPrice) {
         this.averageParkPrice = averageParkPrice;
+    }
+
+    public double getDistanceFromSearchLocation() {
+        return this.distanceFromSearchLocation;
+    }
+
+    public void setDistanceFromSearchLocation(double distanceFromSearchLocation) {
+        this.distanceFromSearchLocation = distanceFromSearchLocation;
     }
 
 }
