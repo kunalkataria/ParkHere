@@ -45,6 +45,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile files('libs/gson-2.7-javadoc.jar')
+    compile 'com.google.code.gson:gson:2.6.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
