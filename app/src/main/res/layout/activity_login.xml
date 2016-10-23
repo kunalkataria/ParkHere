@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -38,5 +39,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/register" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/forgot_password_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        tools:textColor="@android:color/holo_blue_dark"
+        android:text="forgot password" />
 
 </LinearLayout>

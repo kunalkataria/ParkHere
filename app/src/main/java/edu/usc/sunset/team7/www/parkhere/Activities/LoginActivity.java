@@ -1,13 +1,19 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.InputType;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import butterknife.BindView;
@@ -37,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.password_textinputlayout) TextInputLayout passwordTextInputLayout;
     @BindView(R.id.email_edittext) AppCompatEditText emailEditText;
     @BindView(R.id.password_edittext) AppCompatEditText passwordEditText;
+
 
     public static void startActivity(Context context) {
         Intent i = new Intent(context, LoginActivity.class);
@@ -118,4 +125,45 @@ public class LoginActivity extends AppCompatActivity {
     protected void moveToRegister() {
         RegisterActivity.startActivity(this);
     }
+
+    @OnClick (R.id.forgot_password_button)
+    protected void forgotPassword(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Forgot Password?");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mAuth.sendPasswordResetEmail(input.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "Email sent.");
+                                    Toast.makeText(getApplicationContext(), "Email Sent!", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Email invalid. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
 }
