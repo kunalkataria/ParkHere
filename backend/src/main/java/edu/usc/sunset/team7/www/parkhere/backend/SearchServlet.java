@@ -9,13 +9,16 @@ package edu.usc.sunset.team7.www.parkhere.backend;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DatabaseReference;
-import com.oracle.tools.packager.Log;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.http.*;
 
 public class SearchServlet extends HttpServlet {
+
+    static Logger Log = Logger.getLogger("edu.usc.sunset.team7.www.parkhere.backend.ServerServlet");
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
