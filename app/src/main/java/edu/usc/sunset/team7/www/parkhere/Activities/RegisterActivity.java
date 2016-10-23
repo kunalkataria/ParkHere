@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,16 +30,20 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
     private static final String TAG = "RegisterActivity";
 
     @BindView(R.id.register_button) AppCompatButton registerButton;
 
     @BindView(R.id.email_textinputlayout) TextInputLayout emailTextInputLayout;
+    @BindView(R.id.password_textinputlayout) TextInputLayout passwordTextInputLayout;
     @BindView(R.id.firstname_textinputlayout) TextInputLayout firstNameTextInputLayout;
     @BindView(R.id.lastname_textinputlayout) TextInputLayout lastNameTextInputLayout;
     @BindView(R.id.phonenumber_textinputlayout) TextInputLayout phoneNumberTextInputLayout;
 
     @BindView(R.id.email_edittext) AppCompatEditText emailEditText;
+    @BindView(R.id.password_edittext) AppCompatEditText passwordEditText;
     @BindView(R.id.firstname_edittext) AppCompatEditText firstNameEditText;
     @BindView(R.id.lastname_edittext) AppCompatEditText lastNameEditText;
     @BindView(R.id.phonenumber_edittext) AppCompatEditText phoneNumberEditText;
@@ -52,12 +57,36 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    if (true)  {
+                        // check if user is a seeker or provider
+                        // Send rest of user info up to server, navigate to login activity
+                        LoginActivity.startActivity(RegisterActivity.this);
+                    }
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
+
     }
 
     @OnClick (R.id.register_button)
     protected void register() {
         removeErrors();
         String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
         String phoneNumber = phoneNumberEditText.getText().toString();
@@ -66,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (!Tools.nameValid(firstName)) {
                 if (!Tools.nameValid(lastName)) {
                     if (!Tools.phoneValid(phoneNumber)) {
-
+                        registerUser(email, password);
                     } else {
                         // phone number not valid
                         phoneNumberTextInputLayout.setErrorEnabled(true);
@@ -88,9 +117,9 @@ public class RegisterActivity extends AppCompatActivity {
             emailTextInputLayout.setError("Email not valid");
         }
 
-        /* Uncomment when password field is created. Also image url?
+    }
 
-        
+    private void registerUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -101,15 +130,11 @@ public class RegisterActivity extends AppCompatActivity {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(RegisterActivity.this, "Invalid email or password. Please try again.",
+                            Toast.makeText(RegisterActivity.this, "Registration failed. Please try again.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-                        // ...
                     }
                 });
-         */
-
 
     }
 
@@ -118,6 +143,15 @@ public class RegisterActivity extends AppCompatActivity {
         firstNameTextInputLayout.setErrorEnabled(false);
         lastNameTextInputLayout.setErrorEnabled(false);
         phoneNumberTextInputLayout.setErrorEnabled(false);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+
     }
 
 }
