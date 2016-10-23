@@ -35,30 +35,34 @@ public class SearchFragment extends Fragment {
 
     private Place locationSelected;
 
-    @BindView(R.id.search_autocomplete_bar) PlaceAutocompleteFragment searchBarEditText;
-
     @Override
     public void onCreate(Bundle savedBundleInstance) {
-
-        //set location to be the current location
-        searchBarEditText.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                locationSelected = place;
-                Log.i(TAG, "Place: " + place.getName());
-                //send over latitude and longitude w/ place.latlng
-                }
-
-            @Override
-            public void onError(Status status) {// TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
-                }
-            });
+        super.onCreate(savedBundleInstance);
     }
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.search_fragment, container, false);
+        View view = inflater.inflate(R.layout.search_fragment, container, false);
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.search_autocomplete_bar);
+        //set location to be the current location
+        if (autocompleteFragment != null) {
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(Place place) {
+                    locationSelected = place;
+                    Log.i(TAG, "Place: " + place.getName());
+                    //send over latitude and longitude w/ place.latlng
+                }
+
+                @Override
+                public void onError(Status status) {// TODO: Handle the error.
+                    Log.i(TAG, "An error occurred: " + status);
+                }
+            });
+
+        }
+        return view;
     }
 
     public void sendLocationToFirebase() {
