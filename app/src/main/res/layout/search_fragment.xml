@@ -7,9 +7,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="96dp"
-        android:id="@+id/search_autocomplete_layout"
-
-        >
+        android:id="@+id/search_autocomplete_layout">
 
         <fragment
             android:layout_width="match_parent"
@@ -18,8 +16,4 @@
             android:id="@+id/search_autocomplete_bar" />
     </FrameLayout>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/search_results_view"/>
 </LinearLayout>
