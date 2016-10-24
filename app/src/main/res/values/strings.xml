@@ -8,6 +8,7 @@
     <string name="last_name">Last name</string>
     <string name="phone_number">Phone number</string>
     <string name="sign_out">Sign Out</string>
+    <string name="post_listing">Post a listing!</string>
 
     <string name="location_label">Location label</string>
     <string name="date_range">startDate - endDate</string>
