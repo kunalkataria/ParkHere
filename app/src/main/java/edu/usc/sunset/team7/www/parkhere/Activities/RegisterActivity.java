@@ -15,7 +15,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mDatabase;
 
     private static final String TAG = "RegisterActivity";
 
@@ -59,7 +61,6 @@ public class RegisterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mAuth = FirebaseAuth.getInstance();
-
     }
 
     @OnClick (R.id.register_button)
@@ -75,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (Tools.nameValid(firstName)) {
                 if (Tools.nameValid(lastName)) {
                     if (Tools.phoneValid(phoneNumber)) {
-                        registerUser(email, password);
+                        registerUser(email, password, firstName, lastName, phoneNumber);
                     } else {
                         // phone number not valid
                         phoneNumberTextInputLayout.setErrorEnabled(true);
@@ -99,13 +100,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void registerUser(String email, String password) {
+    private void registerUser(final String email, final String password, final String firstName, final String lastName, final String phoneNumber) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        LoginActivity.startActivity(RegisterActivity.this);
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -113,13 +113,17 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "Registration failed. Please try again.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(RegisterActivity.this, "Registration success!. You may now log in.",
-                                    Toast.LENGTH_LONG).show();
+                            mDatabase = FirebaseDatabase.getInstance().getReference();
+                            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            mDatabase.child("users").child(uid).child("firstname").setValue(firstName);
+                            mDatabase.child("users").child(uid).child("lastname").setValue(lastName);
+                            mDatabase.child("users").child(uid).child("email").setValue(email);
+                            mDatabase.child("users").child(uid).child("phonenumber").setValue(phoneNumber);
+
                             LoginActivity.startActivity(RegisterActivity.this);
                         }
                     }
                 });
-
     }
 
     private void removeErrors() {
