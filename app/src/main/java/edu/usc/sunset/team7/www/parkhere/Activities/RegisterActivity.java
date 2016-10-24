@@ -36,19 +36,32 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
-    @BindView(R.id.register_button) AppCompatButton registerButton;
+    @BindView(R.id.email_textinputlayout)
+    TextInputLayout emailTextInputLayout;
+    @BindView(R.id.password_textinputlayout)
+    TextInputLayout passwordTextInputLayout;
+    @BindView(R.id.firstname_textinputlayout)
+    TextInputLayout firstNameTextInputLayout;
+    @BindView(R.id.lastname_textinputlayout)
+    TextInputLayout lastNameTextInputLayout;
+    @BindView(R.id.phonenumber_textinputlayout)
+    TextInputLayout phoneNumberTextInputLayout;
 
-    @BindView(R.id.email_textinputlayout) TextInputLayout emailTextInputLayout;
-    @BindView(R.id.password_textinputlayout) TextInputLayout passwordTextInputLayout;
-    @BindView(R.id.firstname_textinputlayout) TextInputLayout firstNameTextInputLayout;
-    @BindView(R.id.lastname_textinputlayout) TextInputLayout lastNameTextInputLayout;
-    @BindView(R.id.phonenumber_textinputlayout) TextInputLayout phoneNumberTextInputLayout;
+    @BindView(R.id.email_edittext)
+    AppCompatEditText emailEditText;
+    @BindView(R.id.password_edittext)
+    AppCompatEditText passwordEditText;
+    @BindView(R.id.firstname_edittext)
+    AppCompatEditText firstNameEditText;
+    @BindView(R.id.lastname_edittext)
+    AppCompatEditText lastNameEditText;
+    @BindView(R.id.phonenumber_edittext)
+    AppCompatEditText phoneNumberEditText;
 
-    @BindView(R.id.email_edittext) AppCompatEditText emailEditText;
-    @BindView(R.id.password_edittext) AppCompatEditText passwordEditText;
-    @BindView(R.id.firstname_edittext) AppCompatEditText firstNameEditText;
-    @BindView(R.id.lastname_edittext) AppCompatEditText lastNameEditText;
-    @BindView(R.id.phonenumber_edittext) AppCompatEditText phoneNumberEditText;
+    @BindView(R.id.register_button)
+    AppCompatButton registerButton;
+    @BindView(R.id.upload_button)
+    AppCompatButton uploadButton;
 
     public static void startActivity(Context context) {
         Intent i = new Intent(context, RegisterActivity.class);
@@ -59,11 +72,10 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-
         mAuth = FirebaseAuth.getInstance();
     }
 
-    @OnClick (R.id.register_button)
+    @OnClick(R.id.register_button)
     protected void register() {
         removeErrors();
         String email = emailEditText.getText().toString();
@@ -134,6 +146,11 @@ public class RegisterActivity extends AppCompatActivity {
         phoneNumberTextInputLayout.setErrorEnabled(false);
     }
 
+    @OnClick(R.id.upload_button)
+    protected void uploadImage() {
+        UploadImageActivity.startActivity(RegisterActivity.this);
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -142,5 +159,4 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
     }
-
 }
