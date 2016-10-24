@@ -13,5 +13,7 @@
     <string name="location_label">Location label</string>
     <string name="date_range">startDate - endDate</string>
     <string name="booking_label">Booking label</string>
+    <string name="results_label">Results label</string>
+    <string name="distance_label">Distance label</string>
 </resources>
 
