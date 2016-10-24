@@ -9,9 +9,12 @@
     <string name="phone_number">Phone number</string>
     <string name="sign_out">Sign Out</string>
     <string name="post_listing">Post a listing!</string>
-
+    <string name="upload_picture">Upload profile image</string>
+    <string name="profile_image_description">Profile Image</string>
     <string name="location_label">Location label</string>
     <string name="date_range">startDate - endDate</string>
+    <string name="select_picture">Select Picture</string>
+    <string name="confirm">Confirm Picture</string>
     <string name="booking_label">Booking label</string>
 </resources>
 
