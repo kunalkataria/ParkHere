@@ -9,33 +9,32 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import edu.usc.sunset.team7.www.parkhere.Objects.Listing;
+import edu.usc.sunset.team7.www.parkhere.Objects.Booking;
 import edu.usc.sunset.team7.www.parkhere.R;
 
 /**
  * Created by johnsonhui on 10/23/16.
  */
 
-public class CustomListingAdapter extends BaseAdapter {
-
-    private Listing[] allListings;
+public class CustomBookingAdapter extends BaseAdapter {
+    private Booking[] allBookings;
     private static LayoutInflater inflater = null;
     private Context context;
 
-    public CustomListingAdapter(Activity activity, Listing[] allListings) {
+    public CustomBookingAdapter(Activity activity, Booking[] allBookings) {
         this.context = activity;
-        this.allListings = allListings;
+        this.allBookings = allBookings;
     }
 
     @Override
     public int getCount() {
-        return allListings.length;
+        return allBookings.length;
     }
 
     @Override
     public Object getItem(int position) {
-        if(position < allListings.length && position >= 0) {
-            return allListings[position];
+        if(position < allBookings.length && position >= 0){
+            return allBookings[position];
         }
         return null;
     }
@@ -49,31 +48,28 @@ public class CustomListingAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ItemShell item;
         View rowView = convertView;
-        if(rowView != null) {
-            inflater=((Activity)context).getLayoutInflater();
-            rowView = inflater.inflate(R.layout.listing_view, parent, false);
+        if(rowView != null){
+            inflater = ((Activity)context).getLayoutInflater();
+            rowView = inflater.inflate(R.layout.booking_view, parent, false);
 
             item = new ItemShell();
-            item.locationLabel = (TextView) rowView.findViewById(R.id.location_label);
+            item.bookingLabel = (TextView) rowView.findViewById(R.id.booking_label);
             item.dateLabel = (TextView) rowView.findViewById(R.id.date_range_label);
-            item.imgView =  (ImageView) rowView.findViewById(R.id.listing_image);
+            item.imgView = (ImageView) rowView.findViewById(R.id.booking_image);
 
             rowView.setTag(item);
         } else {
             item = (ItemShell) rowView.getTag();
         }
 
-        item.locationLabel.setText(((Listing)getItem(position)).getName());
-        item.dateLabel.setText(((Listing)getItem(position)).getStartTime() + "--" + ((Listing)getItem(position)).getStopTime());
-        /* for images later
-        String url = userRepos[position].avatarUrl;
-        Picasso.with(context).load(url).into(item.imgView);
-        * */
+        item.bookingLabel.setText(((Booking)getItem(position)).getMListing().getName());
+        item.dateLabel.setText(((Booking)getItem(position)).getBookStartTime() + "--" + ((Booking)getItem(position)).getBookEndTime());
+        //need for item
         return rowView;
     }
 
-    public class ItemShell {
-        TextView locationLabel;
+    public class ItemShell{
+        TextView bookingLabel;
         TextView dateLabel;
         ImageView imgView;
     }
