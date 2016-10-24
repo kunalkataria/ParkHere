@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @OnClick (R.id.forgot_password_button)
-    protected void forgotPassword(){
+    protected void forgotPassword() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Forgot Password? Enter your email");
