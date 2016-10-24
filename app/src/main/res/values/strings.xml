@@ -16,5 +16,7 @@
     <string name="select_picture">Select Picture</string>
     <string name="confirm">Confirm Picture</string>
     <string name="booking_label">Booking label</string>
+    <string name="results_label">Results label</string>
+    <string name="distance_label">Distance label</string>
 </resources>
 
