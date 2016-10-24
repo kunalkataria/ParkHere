@@ -1,8 +1,6 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,21 +9,20 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
-import android.text.InputType;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import edu.usc.sunset.team7.www.parkhere.R;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import edu.usc.sunset.team7.www.parkhere.R;
 
 /**
  * Created by kunal on 10/12/16.
@@ -65,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -81,15 +77,32 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    if (true)  {
+
+                    HomeActivity.startActivityForSearch(LoginActivity.this);
+
+                    /* Verification Code needs to be worked on
+                    if(user.isEmailVerified()){
                         // check if user is a seeker or provider
                         HomeActivity.startActivityForSearch(LoginActivity.this);
                     }
-                } else {
+                    else{
+                        Toast.makeText(LoginActivity.this, "Please verify your email before logging in.",
+                                Toast.LENGTH_SHORT).show();
+                        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "Email sent.");
+                                }
+                            }
+                        });
+                    }
+                    */
+                }
+                else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
 
@@ -120,7 +133,6 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        // ...
                     }
                 });
     }
@@ -132,7 +144,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick (R.id.forgot_password_button)
     protected void forgotPassword() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Forgot Password? Enter your email");
 
