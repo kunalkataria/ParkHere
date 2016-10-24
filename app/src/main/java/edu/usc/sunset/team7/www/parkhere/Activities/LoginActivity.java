@@ -113,6 +113,10 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            return;
+        }
+
         //Firebase sign in code
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -139,9 +143,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @OnClick (R.id.forgot_password_button)
-    protected void forgotPassword(){
+    protected void forgotPassword() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Forgot Password?");
+        builder.setTitle("Forgot Password? Enter your email");
 
         // Set up the input
         final EditText input = new EditText(this);

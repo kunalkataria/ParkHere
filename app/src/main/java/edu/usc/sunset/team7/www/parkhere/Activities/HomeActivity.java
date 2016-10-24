@@ -1,10 +1,15 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import edu.usc.sunset.team7.www.parkhere.Fragments.SearchFragment;
 import edu.usc.sunset.team7.www.parkhere.R;
@@ -52,5 +57,28 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             //TODO: figure out what do in this case
         }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem selectedItem) {
+        boolean consumed = super.onOptionsItemSelected(selectedItem);
+        if (!consumed) {
+            switch (selectedItem.getItemId()) {
+                case R.id.menu_action_sign_out :
+                    FirebaseAuth.getInstance().signOut();
+                    LoginActivity.startActivity(this);
+                    finish();
+                    return true;
+            }
+        }
+        return false;
     }
 }
