@@ -15,5 +15,6 @@
     <string name="date_range">startDate - endDate</string>
     <string name="select_picture">Select Picture</string>
     <string name="confirm">Confirm Picture</string>
+    <string name="booking_label">Booking label</string>
 </resources>
 

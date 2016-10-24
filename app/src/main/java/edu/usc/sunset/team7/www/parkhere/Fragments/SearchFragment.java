@@ -88,8 +88,4 @@ public class SearchFragment extends Fragment {
 
     }
 
-    public boolean isWithinRadius(Location a, Location b) {
-        return (a.distanceTo(b) <= 4828.02); //number of meters in 3 miles
-    }
-
 }

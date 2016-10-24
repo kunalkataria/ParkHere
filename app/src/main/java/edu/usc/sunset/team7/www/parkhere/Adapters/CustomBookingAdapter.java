@@ -50,12 +50,12 @@ public class CustomBookingAdapter extends BaseAdapter {
         View rowView = convertView;
         if(rowView != null){
             inflater = ((Activity)context).getLayoutInflater();
-            rowView = inflater.inflate(R.layout.booking_view, parent, false);
+            //rowView = inflater.inflate(R.layout.booking_view, parent, false);
 
             item = new ItemShell();
-            item.bookingLabel = (TextView) rowView.findViewById(R.id.booking_label);
+            //item.bookingLabel = (TextView) rowView.findViewById(R.id.booking_label);
             item.dateLabel = (TextView) rowView.findViewById(R.id.date_range_label);
-            item.imgView = (ImageView) rowView.findViewById(R.id.booking_image);
+            //item.imgView = (ImageView) rowView.findViewById(R.id.booking_image);
 
             rowView.setTag(item);
         } else {
