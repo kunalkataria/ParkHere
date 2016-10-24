@@ -106,9 +106,6 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        LoginActivity.startActivity(RegisterActivity.this);
-
-                        finish();
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -124,6 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                             mDatabase.child("users").child(uid).child("phonenumber").setValue(phoneNumber);
 
                             LoginActivity.startActivity(RegisterActivity.this);
+                            finish();
                         }
                     }
                 });
