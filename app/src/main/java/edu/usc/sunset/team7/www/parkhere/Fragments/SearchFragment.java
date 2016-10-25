@@ -23,6 +23,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.appengine.repackaged.com.google.gson.stream.JsonReader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +32,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -84,13 +91,30 @@ public class SearchFragment extends Fragment {
     public void sendLocationToFirebase() {
         if(locationSelected == null) return;
 
-        Location toSend = new Location("");
         LatLng latLng = locationSelected.getLatLng();
-        toSend.setLatitude(latLng.latitude);
-        toSend.setLongitude(latLng.longitude);
 
         //send it over
+        try {
+            String url = "http://www.parkhere-ceccb.appspot.com/?"+
+                    "lat="+latLng.latitude+
+                    "&long="+latLng.longitude;
+            URL servletURL = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) servletURL.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "text/plain");
+            connection.setRequestProperty("charset", "utf-8");
+            connection.connect();
 
+            //reading back listings as json
+            InputStream is = connection.getInputStream();
+            JsonReader reader = new JsonReader(new InputStreamReader(is));
+            while(reader.hasNext()) {
+                reader.beginObject();
+
+            }
+        } catch (IOException ioe) {
+            System.out.println(ioe.getMessage());
+        }
     }
 
 }

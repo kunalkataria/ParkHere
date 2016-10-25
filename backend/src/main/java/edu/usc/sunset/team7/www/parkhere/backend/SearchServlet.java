@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class SearchServlet extends HttpServlet {
-
+    //parkhere-ceccb.appspot.com
     static Logger Log = Logger.getLogger("edu.usc.sunset.team7.www.parkhere.backend.SearchServlet");
     public DataSnapshot lastDataSnapshot;
     public DatabaseReference listingsReference;
