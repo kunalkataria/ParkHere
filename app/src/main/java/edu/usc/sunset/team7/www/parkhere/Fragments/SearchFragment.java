@@ -1,5 +1,6 @@
 package edu.usc.sunset.team7.www.parkhere.Fragments;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,9 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
@@ -45,6 +48,7 @@ public class SearchFragment extends Fragment {
 
     private Place locationSelected;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     public void onCreate(Bundle savedBundleInstance) {
@@ -73,6 +77,7 @@ public class SearchFragment extends Fragment {
             });
 
         }
+        Log.i(TAG, "Returning view.");
         return view;
     }
 

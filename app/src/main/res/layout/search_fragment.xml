@@ -13,7 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            android:id="@+id/search_autocomplete_bar" />
+            android:id="@+id/search_autocomplete_bar"
+            android:focusable="true" />
     </FrameLayout>
 
 </LinearLayout>
