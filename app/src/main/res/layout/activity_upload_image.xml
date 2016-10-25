@@ -10,10 +10,10 @@
         android:text="@string/select_picture"/>
 
     <ImageView
+        android:id="@+id/uploadImage"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/image_to_upload"
         android:contentDescription="@string/profile_image_description"/>
 
     <Button

@@ -10,4 +10,6 @@ public class Consts {
     public static final String SEARCH_FRAGMENT_TAG = "search_fragment";
     public static final String BOOKING_FRAGMENT_TAG = "booking_fragment";
     public static final String LISTING_FRAGMENT_TAG = "listing_fragment";
+
+    public static final String IMAGE_URI = "image_uri";
 }
