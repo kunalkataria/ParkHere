@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Places;
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.usc.sunset.team7.www.parkhere.Fragments.SearchFragment;
@@ -18,6 +20,7 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 public class HomeActivity extends AppCompatActivity {
 
     public static final String FRAGMENT_TAG = "fragment_tag";
+    public GoogleApiClient mGoogleApiClient;
 
     // call this static method if you want the homeactivity to start with the search fragment
     public static void startActivityForSearch(Context context) {
@@ -34,6 +37,13 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, null)
+                .build();
 
         String currentFragmentTag = getIntent().getStringExtra(FRAGMENT_TAG);
 
