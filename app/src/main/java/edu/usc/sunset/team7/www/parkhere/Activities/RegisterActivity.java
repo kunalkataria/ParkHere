@@ -141,10 +141,15 @@ public class RegisterActivity extends AppCompatActivity {
                             mDatabase = FirebaseDatabase.getInstance().getReference();
                             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+                            //Add user to users database
                             mDatabase.child("users").child(uid).child("firstname").setValue(firstName);
                             mDatabase.child("users").child(uid).child("lastname").setValue(lastName);
                             mDatabase.child("users").child(uid).child("email").setValue(email);
                             mDatabase.child("users").child(uid).child("phonenumber").setValue(phoneNumber);
+
+                            //Add user to public user database
+                            mDatabase.child("publicusers").child(uid).child("firstname").setValue(firstName);
+                            mDatabase.child("publicusers").child(uid).child("rating").setValue(0);
 
                             if(sourceImageUri!=null){
                                 StorageReference storageRef = storage.getReferenceFromUrl("gs://parkhere-ceccb.appspot.com");
