@@ -59,9 +59,8 @@
         android:padding="@dimen/padding_small">
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/custom_field_toggle_button_control"
+            android:id="@+id/handicap_toggle_button_control"
             android:text="@string/handicap_label"
-            android:theme="@style/orange_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -77,9 +76,8 @@
         android:padding="@dimen/padding_small">
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/custom_field_toggle_button_control"
+            android:id="@+id/covered_toggle_button_control"
             android:text="@string/covered_label"
-            android:theme="@style/orange_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -95,9 +93,8 @@
         android:padding="@dimen/padding_small">
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/custom_field_toggle_button_control"
+            android:id="@+id/compact_toggle_button_control"
             android:text="@string/compact_label"
-            android:theme="@style/orange_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
