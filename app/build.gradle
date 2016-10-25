@@ -46,6 +46,7 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile files('libs/gson-2.7-javadoc.jar')
     compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.google.android.gms:play-services-appindexing:9.6.1'
     compile project(path: ':backend')
 }
 
