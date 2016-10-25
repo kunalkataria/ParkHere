@@ -12,6 +12,11 @@
     <string name="sign_out">Sign Out</string>
     <string name="listing_name">Name of your listing</string>
     <string name="listing_description">Describe your listing</string>
+    <string name="handicap_label">Handicap label</string>
+    <string name="covered_label">Covered label</string>
+    <string name="compact_label">Compact label</string>
+    <string name="start_time_label">Start Time Label</string>
+    <string name="end_time_label">End Time Label</string>
 
     <string name="post_listing">Post a listing!</string>
     <string name="search">Search</string>
