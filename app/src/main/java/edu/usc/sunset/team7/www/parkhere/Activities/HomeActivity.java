@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +28,8 @@ import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 public class HomeActivity extends AppCompatActivity {
+
+    @BindView(R.id.home_toolbar) Toolbar homeToolbar;
 
     public static final String FRAGMENT_TAG = "fragment_tag";
     private static final String[] fragmentTitles = new String[] {"Search", "Listings", "Bookings"};
@@ -51,6 +54,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(homeToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -79,6 +86,7 @@ public class HomeActivity extends AppCompatActivity {
                     // create the fragment if it doesn't exist
                     currentFragment = new SearchFragment();
                 }
+                setToolbarTitle(getResources().getString(R.string.search));
         }
 
         // use the fragment manager to move to the fragment selected by the switch statement
@@ -88,6 +96,17 @@ public class HomeActivity extends AppCompatActivity {
             //TODO: figure out what do in this case
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    private void setToolbarTitle(String title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 
     @Override
@@ -121,12 +140,15 @@ public class HomeActivity extends AppCompatActivity {
             switch (fragmentTag) {
                 case Consts.SEARCH_FRAGMENT_TAG:
                     currentFragment = new SearchFragment();
+                    setToolbarTitle(getResources().getString(R.string.search));
                     break;
                 case Consts.LISTING_FRAGMENT_TAG:
                     currentFragment = new ListingFragment();
+                    setToolbarTitle(getResources().getString(R.string.listing));
                     break;
                 case Consts.BOOKING_FRAGMENT_TAG:
                     currentFragment = new BookingFragment();
+                    setToolbarTitle(getResources().getString(R.string.booking));
                     break;
             }
         }
