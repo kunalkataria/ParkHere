@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 
 /**
@@ -142,18 +143,18 @@ public class RegisterActivity extends AppCompatActivity {
                             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                             //Add user to users database
-                            mDatabase.child("users").child(uid).child("firstname").setValue(firstName);
-                            mDatabase.child("users").child(uid).child("lastname").setValue(lastName);
-                            mDatabase.child("users").child(uid).child("email").setValue(email);
-                            mDatabase.child("users").child(uid).child("phonenumber").setValue(phoneNumber);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_FIRSTNAME).setValue(firstName);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_LASTNAME).setValue(lastName);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_EMAIL).setValue(email);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_PHONENUMBER).setValue(phoneNumber);
 
                             //Add user to public user database
-                            mDatabase.child("publicusers").child(uid).child("firstname").setValue(firstName);
-                            mDatabase.child("publicusers").child(uid).child("rating").setValue(0);
+                            mDatabase.child(Consts.PUBLIC_PROFILE_DATABASE).child(uid).child(Consts.DATABASE_FIRSTNAME).setValue(firstName);
+                            mDatabase.child(Consts.PUBLIC_PROFILE_DATABASE).child(uid).child(Consts.DATABASE_RATING).setValue(0);
 
                             if(sourceImageUri!=null){
-                                StorageReference storageRef = storage.getReferenceFromUrl("gs://parkhere-ceccb.appspot.com");
-                                StorageReference profileRef = storageRef.child("profile_pictures/");
+                                StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
+                                StorageReference profileRef = storageRef.child(Consts.STORAGE_PROFILE_PICTURES);
                                 UploadTask uploadTask = profileRef.child(uid).putFile(sourceImageUri);
                                 uploadTask.addOnFailureListener(new OnFailureListener() {
                                     @Override
