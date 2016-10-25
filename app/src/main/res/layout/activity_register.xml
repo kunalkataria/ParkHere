@@ -64,6 +64,12 @@
             android:inputType="textPassword"/>
     </android.support.design.widget.TextInputLayout>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/upload_button"
+        android:text="@string/upload_picture" />
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/register_button"
         android:layout_width="wrap_content"
