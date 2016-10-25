@@ -48,6 +48,7 @@ dependencies {
     compile files('libs/gson-2.7-javadoc.jar')
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.google.android.gms:play-services-appindexing:9.6.1'
+    compile project(path: ':backend')
 }
 
 apply plugin: 'com.google.gms.google-services'

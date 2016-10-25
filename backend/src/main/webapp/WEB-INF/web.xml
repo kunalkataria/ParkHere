@@ -2,7 +2,7 @@
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
     <servlet>
         <servlet-name>SearchServlet</servlet-name>
-        <servlet-class>edu.usc.sunset.team7.www.parkhere.backend.MyServlet</servlet-class>
+        <servlet-class>edu.usc.sunset.team7.www.parkhere.backend.SearchServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SearchServlet</servlet-name>

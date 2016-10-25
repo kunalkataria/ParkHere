@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Places;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
@@ -28,14 +31,16 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 public class HomeActivity extends AppCompatActivity {
 
+    @BindView(R.id.home_toolbar) Toolbar homeToolbar;
+
     public static final String FRAGMENT_TAG = "fragment_tag";
+    public GoogleApiClient mGoogleApiClient;
     private static final String[] fragmentTitles = new String[] {"Search", "Listings", "Bookings"};
     private static final String[] fragmentTags = new String[]
             {Consts.SEARCH_FRAGMENT_TAG, Consts.LISTING_FRAGMENT_TAG, Consts.BOOKING_FRAGMENT_TAG};
-
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-
+    
     // call this static method if you want the homeactivity to start with the search fragment
     public static void startActivityForSearch(Context context) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -51,6 +56,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(homeToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -64,6 +73,13 @@ public class HomeActivity extends AppCompatActivity {
                 moveFragments(adapterView, view, i, l);
             }
         });
+
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, null)
+                .build();
 
         String currentFragmentTag = getIntent().getStringExtra(FRAGMENT_TAG);
 
@@ -79,6 +95,7 @@ public class HomeActivity extends AppCompatActivity {
                     // create the fragment if it doesn't exist
                     currentFragment = new SearchFragment();
                 }
+                setToolbarTitle(getResources().getString(R.string.search));
         }
 
         // use the fragment manager to move to the fragment selected by the switch statement
@@ -88,6 +105,17 @@ public class HomeActivity extends AppCompatActivity {
             //TODO: figure out what do in this case
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    private void setToolbarTitle(String title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 
     @Override
@@ -121,12 +149,15 @@ public class HomeActivity extends AppCompatActivity {
             switch (fragmentTag) {
                 case Consts.SEARCH_FRAGMENT_TAG:
                     currentFragment = new SearchFragment();
+                    setToolbarTitle(getResources().getString(R.string.search));
                     break;
                 case Consts.LISTING_FRAGMENT_TAG:
                     currentFragment = new ListingFragment();
+                    setToolbarTitle(getResources().getString(R.string.listing));
                     break;
                 case Consts.BOOKING_FRAGMENT_TAG:
                     currentFragment = new BookingFragment();
+                    setToolbarTitle(getResources().getString(R.string.booking));
                     break;
             }
         }

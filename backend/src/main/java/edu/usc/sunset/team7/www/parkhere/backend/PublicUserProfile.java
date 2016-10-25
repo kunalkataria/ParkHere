@@ -1,4 +1,4 @@
-package edu.usc.sunset.team7.www.parkhere.Objects;
+package edu.usc.sunset.team7.www.parkhere.backend;
 
 import java.util.List;
 
