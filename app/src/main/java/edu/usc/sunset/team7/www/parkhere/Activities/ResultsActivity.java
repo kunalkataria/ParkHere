@@ -3,15 +3,12 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.usc.sunset.team7.www.parkhere.R;
-import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
-import edu.usc.sunset.team7.www.parkhere.backend.Listing;
 
 /**
  * Created by Acer on 10/25/2016.
