@@ -59,7 +59,7 @@ public class SearchServlet extends HttpServlet {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    Log.info(child.getKey() + " : " + child.getValue());
+                    System.out.println(child);
                 }
             }
 
