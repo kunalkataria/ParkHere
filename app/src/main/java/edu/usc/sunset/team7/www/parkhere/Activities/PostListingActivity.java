@@ -112,6 +112,8 @@ public class PostListingActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private Uri sourceImageUri = null;
 
+    //NEED TO ADD DATE AND TIME PICKERS
+
     public static void startActivity(Context context) {
         Intent i = new Intent(context, PostListingActivity.class);
         context.startActivity(i);
@@ -178,7 +180,6 @@ public class PostListingActivity extends AppCompatActivity {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = currentUser.getUid();
 
-            //Add user to users database
             DatabaseReference nameRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child("name");
             nameRef.setValue(nameString);
             nameRef.child("description").setValue(descriptionString);

@@ -1,6 +1,5 @@
 package edu.usc.sunset.team7.www.parkhere.Objects;
 
-import edu.usc.sunset.team7.www.parkhere.backend.Listing;
 
 /**
  * Created by johnsonhui on 10/23/16.
