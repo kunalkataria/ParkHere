@@ -9,8 +9,8 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
-import edu.usc.sunset.team7.www.parkhere.Objects.SearchResult;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;

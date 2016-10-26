@@ -1,4 +1,4 @@
-package edu.usc.sunset.team7.www.parkhere.Objects;
+package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
 /**
  * Created by johnsonhui on 10/14/16.

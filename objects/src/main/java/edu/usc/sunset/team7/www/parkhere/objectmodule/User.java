@@ -1,8 +1,8 @@
-package edu.usc.sunset.team7.www.parkhere.Objects;
-
-import android.media.Image;
+package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
 import java.util.List;
+
+import javax.swing.ImageIcon;
 
 /**
  * Created by Acer on 10/14/2016.
@@ -12,10 +12,10 @@ public class User extends PublicUserProfile {
     private String lastName;
     private String userID;
     private String phoneNumber;
-    private Image profilePicture; //need import
+    private ImageIcon profilePicture; //need import
     private String email;
 
-    public User(String firstName, String lastName, double rating, List<Review> reviews, String phoneNumber, Image profilePicture, String email){
+    public User(String firstName, String lastName, double rating, List<Review> reviews, String phoneNumber, ImageIcon profilePicture, String email){
         super(firstName, rating, reviews);
         this.email = email;
         this.lastName = lastName;
@@ -44,11 +44,11 @@ public class User extends PublicUserProfile {
         this.phoneNumber = phoneNumber;
     }
 
-    public Image getProfilePicture () {
+    public ImageIcon getProfilePicture () {
         return this.profilePicture;
     }
 
-    public void setProfilePicture (Image profilePicture){
+    public void setProfilePicture (ImageIcon profilePicture){
         this.profilePicture = profilePicture;
     }
 

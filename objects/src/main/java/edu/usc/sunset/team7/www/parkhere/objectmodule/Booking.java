@@ -1,12 +1,10 @@
-package edu.usc.sunset.team7.www.parkhere.Objects;
+package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
 /**
  * Created by Acer on 10/18/2016.
  */
 
-
 public class Booking {
-
 
     private Listing mListing;
     private PublicUserProfile seeker;

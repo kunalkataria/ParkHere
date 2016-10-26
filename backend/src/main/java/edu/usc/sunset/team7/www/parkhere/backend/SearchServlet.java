@@ -106,8 +106,6 @@ public class SearchServlet extends HttpServlet {
             }
         });
 
-
-
     }
 
     private boolean isWithinRadius(double lat1, double lon1, double lat2, double lon2) {
