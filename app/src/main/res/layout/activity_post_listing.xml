@@ -112,7 +112,7 @@
                 android:text="@string/upload_parking_image" />
 
             <ImageView
-                android:id="@+id/uploadImage"
+                android:id="@+id/parkingImage"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_gravity="center_horizontal"
