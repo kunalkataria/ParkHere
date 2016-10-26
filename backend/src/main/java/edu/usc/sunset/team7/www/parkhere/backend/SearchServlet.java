@@ -68,7 +68,6 @@ public class SearchServlet extends HttpServlet {
                 System.out.println("Error: " + databaseError);
             }
         });
-
         
 
     }

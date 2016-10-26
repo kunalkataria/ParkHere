@@ -1,4 +1,4 @@
-package edu.usc.sunset.team7.www.parkhere.Objects;
+package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
