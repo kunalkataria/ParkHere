@@ -12,4 +12,12 @@ public class Consts {
     public static final String LISTING_FRAGMENT_TAG = "listing_fragment";
 
     public static final String IMAGE_URI = "image_uri";
+
+    public static final String LATITUDE_EXTRA = "latitude_extra";
+    public static final String LONGITUDE_EXTRA = "longitude_extra";
+    public static final String START_TIME_EXTRA = "start_time_extra";
+    public static final String STOP_TIME_EXTRA = "stop_time_extra";
+
+    public static final String BASE_URL = "http://parkhere-ceccb.appspot.com";
+
 }
