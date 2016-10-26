@@ -6,9 +6,7 @@
 
 package edu.usc.sunset.team7.www.parkhere.backend;
 
-import com.google.appengine.repackaged.com.google.api.client.json.Json;
 import com.google.appengine.repackaged.com.google.gson.stream.JsonReader;
-import com.google.appengine.repackaged.com.google.gson.stream.JsonWriter;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -17,13 +15,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Logger;
@@ -50,7 +45,11 @@ public class SearchServlet extends HttpServlet {
                 .setServiceAccount(getServletContext().getResourceAsStream("/WEB-INF/ParkHere-9f6082855b14.json"))
                 .setDatabaseUrl("https://parkhere-ceccb.firebaseio.com/")
                 .build();
-        FirebaseApp.initializeApp(options);
+        try {
+            FirebaseApp.initializeApp(options);
+        } catch(Exception error) {
+            Log.info("already exists...");
+        }
 
         DatabaseReference ref = FirebaseDatabase
                 .getInstance()
@@ -61,6 +60,7 @@ public class SearchServlet extends HttpServlet {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
                     Log.info("Got in here!");
+                    System.out.println(child);
                 }
             }
 
