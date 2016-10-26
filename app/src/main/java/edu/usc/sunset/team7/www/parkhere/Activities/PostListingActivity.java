@@ -34,6 +34,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
@@ -86,7 +87,8 @@ public class PostListingActivity extends AppCompatActivity {
     //Parking image controls
     @BindView(R.id.upload_parking_button)
     Button uploadParkingImageButton;
-    @BindView(R.id.uploadImage)
+
+    @BindView(R.id.parkingImage)
     ImageView parkingImageView;
 
     //Parking Type Buttons
@@ -123,6 +125,7 @@ public class PostListingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_listing);
+        ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -217,8 +220,8 @@ public class PostListingActivity extends AppCompatActivity {
         //possible invalid number format here
         price = Double.parseDouble(priceEditText.getText().toString());
 
-        if(nameString.equals("")){
-            if(descriptionString.equals("")){
+        if(!nameString.equals("")){
+            if(!descriptionString.equals("")){
                 if(price>=0){
                     if(sourceImageUri!=null) {
                         if (radioGroup.getCheckedRadioButtonId() != -1) {
