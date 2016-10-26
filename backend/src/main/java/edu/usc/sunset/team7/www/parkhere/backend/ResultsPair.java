@@ -1,10 +1,10 @@
-package edu.usc.sunset.team7.www.parkhere.Objects;
+package edu.usc.sunset.team7.www.parkhere.backend;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by johnsonhui on 10/23/16.
+ * Created by kunal on 10/25/16.
  */
 
 public class ResultsPair {
