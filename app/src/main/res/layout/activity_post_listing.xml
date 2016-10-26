@@ -1,109 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include layout="@layout/base_toolbar"
         android:id="@+id/post_listing_toolbar"/>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/Listing_name_textinputlayout"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/Listing_name_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/listing_name" />
-    </android.support.design.widget.TextInputLayout>
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/start_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/description_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/listing_description"
-            android:inputType="textMultiLine"/>
-    </android.support.design.widget.TextInputLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="ScrollViewSize">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/start_time_textinputlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/start_time_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/start_time_label" />
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/name_textinputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/name_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/listing_name" />
+            </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/end_time_textinputlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/end_time_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/end_time_label" />
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/description_textinputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/description_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/listing_description"
+                    android:inputType="textMultiLine"/>
+            </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_small">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/price_textinputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/price_edittext"
+                    android:hint="@string/listing_price" />
+            </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/handicap_toggle_button_control"
-            android:text="@string/handicap_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true" />
+            <TextView
+                android:text="@string/cancellation_policies"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cancellation_textView"
+                android:clickable="true"/>
 
-    </LinearLayout>
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/myRadioGroup"
+                android:checkedButton="@+id/selectedCancellationPolicy">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_small">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/flexible_rButton"
+                    android:text="@string/flexible_policy" />
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/covered_toggle_button_control"
-            android:text="@string/covered_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/moderate_rButton"
+                    android:text="@string/moderate_policy" />
 
-    </LinearLayout>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/strict_rButton"
+                    android:text="@string/strict_policy" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_small">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/superstrict30_rButton"
+                    android:text="@string/superstrict30_policy" />
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/compact_toggle_button_control"
-            android:text="@string/compact_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/superstrict60_rButton"
+                    android:text="@string/superstrict60_policy" />
 
-    </LinearLayout>
-    
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/longTerm_rButton"
+                    android:text="@string/longterm_policy" />
 
+            </RadioGroup>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/upload_parking_button"
+                android:text="@string/upload_parking_image" />
 
+            <ImageView
+                android:id="@+id/uploadImage"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/profile_image_description"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_small">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/covered_button_control"
+                    android:text="@string/covered_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_small">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/compact_button_control"
+                    android:text="@string/compact_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_small">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/handicap_button_control"
+                    android:text="@string/handicap_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_small">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/suv_button_control"
+                    android:text="@string/suv_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_small">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/truck_button_control"
+                    android:text="@string/truck_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/upload_listing_button"
+                android:text="@string/submit"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

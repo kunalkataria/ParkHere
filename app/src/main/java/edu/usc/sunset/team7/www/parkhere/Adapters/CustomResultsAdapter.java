@@ -7,15 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import edu.usc.sunset.team7.www.parkhere.Objects.Listing;
 import edu.usc.sunset.team7.www.parkhere.Objects.ResultsPair;
-import edu.usc.sunset.team7.www.parkhere.Objects.SearchResult;
 import edu.usc.sunset.team7.www.parkhere.R;
 
 /**

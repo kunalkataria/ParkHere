@@ -12,4 +12,49 @@ public class Consts {
     public static final String LISTING_FRAGMENT_TAG = "listing_fragment";
 
     public static final String IMAGE_URI = "image_uri";
+
+
+
+    //Parking types
+    public static final String HANDICAP = "handicap";
+    public static final String COMPACT = "compact";
+    public static final String COVERED = "covered";
+    public static final String SUV = "suv";
+    public static final String TRUCK = "truck";
+
+    //Cancellation Types
+    public static final String FLEXIBLE = "flexible";
+    public static final String MODERATE = "moderate";
+    public static final String STRICT = "strict";
+    public static final String SUPERSTRICT30 = "superstrict30";
+    public static final String SUPERSTRICT60 = "superstrict60";
+    public static final String LONGTERM = "longterm";
+
+    public static final String CANCELLATION_DETAILS = "Flexible: Full refund 1 day prior to arrival, except fees\n" +
+            "Moderate: Full refund 5 days prior to arrival, except fees\n" +
+            "Strict: 50% refund up until 1 week prior to arrival, except fees\n" +
+            "Super Strict 30: 50% refund up until 30 days prior to arrival, except fees\n" +
+            "Super Strict 60: 50% refund up until 60 days prior to arrival, except fees\n" +
+            "Long Term: First month not refundable, 30 day notice for cancellation";
+
+
+    //Firebase Storage
+    public static final String STORAGE_URL = "gs://parkhere-ceccb.appspot.com";
+    public static final String STORAGE_PROFILE_PICTURES = "profile_pictures/";
+    public static final String STORAGE_PARKING_SPACES = "parking_spaces/";
+
+
+
+    //Firebase Databases
+    public static final String USERS_DATABASE = "users";
+    public static final String LISTINGS_DATABASE = "listings";
+    public static final String PUBLIC_PROFILE_DATABASE = "publicusers";
+    public static final String BOOKINGS_DATABASE = "bookings";
+    public static final String TRANSACTIONS_DATABASE = "transactions";
+
+    public static final String DATABASE_FIRSTNAME = "firstname";
+    public static final String DATABASE_LASTNAME = "lastname";
+    public static final String DATABASE_PHONENUMBER = "phoneumber";
+    public static final String DATABASE_EMAIL= "email";
+    public static final String DATABASE_RATING = "rating";
 }

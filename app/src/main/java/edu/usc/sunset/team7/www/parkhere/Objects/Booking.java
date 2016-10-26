@@ -7,7 +7,9 @@ import edu.usc.sunset.team7.www.parkhere.backend.PublicUserProfile;
  * Created by Acer on 10/18/2016.
  */
 
+
 public class Booking {
+
 
     private Listing mListing;
     private PublicUserProfile seeker;
@@ -74,5 +76,6 @@ public class Booking {
     public void setBookEndTime(long bookEndTime) {
         this.bookEndTime = bookEndTime;
     }
+
 
 }
