@@ -14,7 +14,7 @@ public class Listing {
     private boolean compact;
     private long startTime;
     private long stopTime;
-    private PublicUserProfile owner;
+    private String ownerId;
     private boolean active;
     private boolean refundable;
     private String listingID;
@@ -84,12 +84,12 @@ public class Listing {
         this.stopTime = stopTime;
     }
 
-    public PublicUserProfile getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(PublicUserProfile owner) {
-        this.owner = owner;
+    public void setOwner(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public boolean isRefundable() {
