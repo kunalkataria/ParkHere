@@ -45,17 +45,10 @@ public class SearchServlet extends HttpServlet {
                 .setServiceAccount(getServletContext().getResourceAsStream("/WEB-INF/ParkHere-9f6082855b14.json"))
                 .setDatabaseUrl("https://parkhere-ceccb.firebaseio.com/")
                 .build();
-
-        try {
-            FirebaseApp.getInstance();
-        } catch (Exception error) {
-            Log.info("doesn't exist...");
-        }
-
         try {
             FirebaseApp.initializeApp(options);
-        } catch (Exception error) {
-            Log.info("already exists");
+        } catch(Exception error) {
+            Log.info("already exists...");
         }
 
         DatabaseReference ref = FirebaseDatabase
@@ -65,8 +58,9 @@ public class SearchServlet extends HttpServlet {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Listing listing = dataSnapshot.getValue(Listing.class);
-                System.out.println(listing);
+                for(DataSnapshot child : dataSnapshot.getChildren()) {
+                    Log.info(child.getKey() + " : " + child.getValue());
+                }
             }
 
             @Override
@@ -75,7 +69,8 @@ public class SearchServlet extends HttpServlet {
             }
         });
 
-        System.out.println("Got here!");
+        
+
     }
 
     @Override
