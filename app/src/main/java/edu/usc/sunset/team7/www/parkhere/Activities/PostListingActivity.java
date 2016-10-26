@@ -45,7 +45,7 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 public class PostListingActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisterActivity";
+    private static final String TAG = "PostListingActivity";
 
     @BindView(R.id.name_textinputlayout)
     TextInputLayout parkingNameTextInputLayout;
