@@ -17,6 +17,11 @@ public class Consts {
     public static final String LONGITUDE_EXTRA = "longitude_extra";
     public static final String START_TIME_EXTRA = "start_time_extra";
     public static final String STOP_TIME_EXTRA = "stop_time_extra";
+    public static final String SEARCH_RESULT_EXTRA = "search_result_extra";
+
+    public static final String SEARCH_INTENT_FILTER = "search_intent_filter";
+
+    public static final String SEARCH_SERVICE = "Search Service";
 
     public static final String BASE_URL = "http://parkhere-ceccb.appspot.com";
 

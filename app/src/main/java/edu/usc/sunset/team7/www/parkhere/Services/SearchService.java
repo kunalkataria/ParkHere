@@ -24,8 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchService extends IntentService {
 
-    public SearchService(String name) {
-        super(name);
+    public SearchService() {
+        super(Consts.SEARCH_SERVICE);
     }
 
     @Override
