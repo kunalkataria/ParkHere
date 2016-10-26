@@ -2,8 +2,6 @@ package edu.usc.sunset.team7.www.parkhere.Objects;
 
 import java.util.ArrayList;
 
-import edu.usc.sunset.team7.www.parkhere.backend.Listing;
-
 /**
  * Created by johnsonhui on 10/14/16.
  */

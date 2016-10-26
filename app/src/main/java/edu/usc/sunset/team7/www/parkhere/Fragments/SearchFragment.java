@@ -1,15 +1,7 @@
 package edu.usc.sunset.team7.www.parkhere.Fragments;
 
-import android.annotation.TargetApi;
 import android.app.Fragment;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.AppCompatEditText;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,32 +9,13 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.appengine.repackaged.com.google.gson.stream.JsonReader;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Locale;
-
-import butterknife.BindView;
-import edu.usc.sunset.team7.www.parkhere.Activities.HomeActivity;
-import edu.usc.sunset.team7.www.parkhere.Activities.LoginActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 
 import static com.google.android.gms.internal.zzs.TAG;
@@ -94,27 +67,27 @@ public class SearchFragment extends Fragment {
         LatLng latLng = locationSelected.getLatLng();
 
         //send it over
-        try {
-            String url = "http://www.parkhere-ceccb.appspot.com/?"+
-                    "lat="+latLng.latitude+
-                    "&long="+latLng.longitude;
-            URL servletURL = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) servletURL.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Content-Type", "text/plain");
-            connection.setRequestProperty("charset", "utf-8");
-            connection.connect();
-
-            //reading back listings as json
-            InputStream is = connection.getInputStream();
-            JsonReader reader = new JsonReader(new InputStreamReader(is));
-            while(reader.hasNext()) {
-                reader.beginObject();
-
-            }
-        } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
-        }
+//        try {
+//            String url = "http://www.parkhere-ceccb.appspot.com/?"+
+//                    "lat="+latLng.latitude+
+//                    "&long="+latLng.longitude;
+//            URL servletURL = new URL(url);
+//            HttpURLConnection connection = (HttpURLConnection) servletURL.openConnection();
+//            connection.setRequestMethod("GET");
+//            connection.setRequestProperty("Content-Type", "text/plain");
+//            connection.setRequestProperty("charset", "utf-8");
+//            connection.connect();
+//
+//            //reading back listings as json
+//            InputStream is = connection.getInputStream();
+//            JsonReader reader = new JsonReader(new InputStreamReader(is));
+//            while(reader.hasNext()) {
+//                reader.beginObject();
+//
+//            }
+//        } catch (IOException ioe) {
+//            System.out.println(ioe.getMessage());
+//        }
     }
 
 }

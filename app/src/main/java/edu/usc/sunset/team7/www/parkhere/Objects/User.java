@@ -4,9 +4,6 @@ import android.media.Image;
 
 import java.util.List;
 
-import edu.usc.sunset.team7.www.parkhere.backend.PublicUserProfile;
-import edu.usc.sunset.team7.www.parkhere.backend.Review;
-
 /**
  * Created by Acer on 10/14/2016.
  */
