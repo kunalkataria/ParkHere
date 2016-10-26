@@ -1,5 +1,8 @@
 package edu.usc.sunset.team7.www.parkhere.Objects;
 
+import edu.usc.sunset.team7.www.parkhere.backend.Listing;
+import edu.usc.sunset.team7.www.parkhere.backend.PublicUserProfile;
+
 /**
  * Created by Acer on 10/18/2016.
  */
