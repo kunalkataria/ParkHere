@@ -16,6 +16,9 @@
         <activity android:name=".Activities.HomeActivity"></activity>
         <activity android:name=".Activities.RegisterActivity"></activity>
         <activity android:name=".Activities.PostListingActivity"></activity>
+        <activity android:name=".Activities.PaypalActivity"></activity>
+        <activity android:name=".Activities.TransactionActivity"></activity>
+        <activity android:name=".Activities.ResultsActivity"></activity>
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

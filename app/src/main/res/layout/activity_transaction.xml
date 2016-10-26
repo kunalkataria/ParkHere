@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/base_toolbar"
+        android:id="@+id/post_listing_toolbar"/>
+
+    <TextView
+        android:text="@string/choose_payment"
+        android:textSize="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/choose_payment"
+        android:gravity="center"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/paypal_button"
+        android:text="@string/paypal_button"
+        android:textSize="25dp"
+        android:layout_marginBottom="100dp"
+        android:padding="25dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/credit_card_button"
+        android:text="@string/credit_card_button"
+        android:textSize="25dp"
+        android:padding="25dp"/>
+
+</LinearLayout>
