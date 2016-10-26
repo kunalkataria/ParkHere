@@ -1,4 +1,9 @@
-package edu.usc.sunset.team7.www.parkhere.Objects;
+package edu.usc.sunset.team7.www.parkhere.objectmodule;
+
+import java.util.ArrayList;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
@@ -7,18 +12,29 @@ import java.util.ArrayList;
  */
 
 public class SearchResult {
+
+    @SerializedName("averageParkPrice")
+    @Expose
     private double averageParkPrice;
-    private ArrayList<Listing> allListings;
+
+    @SerializedName("allListings")
+    @Expose
+    private ArrayList<ResultsPair> allListings;
+
+    @SerializedName("latitude")
+    @Expose
     private long latitude;
+
+    @SerializedName("longitude")
+    @Expose
     private long longitude;
-    private double distanceFromSearchLocation;
+
 
     public SearchResult(double averageParkPrice, long latitude, long longitude, double distanceFromSearchLocation){
-        allListings = new ArrayList<Listing>();
+        allListings = new ArrayList<ResultsPair>();
         this.averageParkPrice = averageParkPrice;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.distanceFromSearchLocation = distanceFromSearchLocation;
     }
 
     public long getLatitude() {
@@ -29,11 +45,19 @@ public class SearchResult {
         this.latitude = latitude;
     }
 
-    public ArrayList<Listing> getAllListings() {
+    public long getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(long longitude) {
+        this.longitude = longitude;
+    }
+
+    public ArrayList<ResultsPair> getAllListings() {
         return allListings;
     }
 
-    public void addListings(Listing addListing) {
+    public void addListings(ResultsPair addListing) {
         allListings.add(addListing);
     }
 
@@ -43,14 +67,6 @@ public class SearchResult {
 
     public void setAverageParkPrice(double averageParkPrice) {
         this.averageParkPrice = averageParkPrice;
-    }
-
-    public double getDistanceFromSearchLocation() {
-        return this.distanceFromSearchLocation;
-    }
-
-    public void setDistanceFromSearchLocation(double distanceFromSearchLocation) {
-        this.distanceFromSearchLocation = distanceFromSearchLocation;
     }
 
 }

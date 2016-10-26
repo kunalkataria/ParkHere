@@ -9,8 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import edu.usc.sunset.team7.www.parkhere.Objects.Booking;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
 
 /**
  * Created by johnsonhui on 10/23/16.

@@ -1,14 +1,23 @@
-package edu.usc.sunset.team7.www.parkhere.Objects;
+package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by johnsonhui on 10/23/16.
  */
 
 public class ResultsPair {
+
+    @SerializedName("Listing")
+    @Expose
     private Listing listing;
+
+    @SerializedName("distance")
+    @Expose
     private double distance;
-    public ResultsPair(Listing listing, double distance){
+
+    public ResultsPair(Listing listing, double distance) {
         this.listing = listing;
         this.distance = distance;
     }
@@ -28,6 +37,5 @@ public class ResultsPair {
     public void setDistance(double distance) {
         this.distance = distance;
     }
-
 
 }

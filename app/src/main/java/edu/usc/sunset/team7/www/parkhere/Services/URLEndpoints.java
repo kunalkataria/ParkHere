@@ -1,6 +1,6 @@
 package edu.usc.sunset.team7.www.parkhere.Services;
 
-import edu.usc.sunset.team7.www.parkhere.Objects.SearchResult;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;

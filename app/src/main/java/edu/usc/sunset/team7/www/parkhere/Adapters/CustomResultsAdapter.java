@@ -11,16 +11,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import edu.usc.sunset.team7.www.parkhere.Objects.ResultsPair;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 
 /**
  * Created by johnsonhui on 10/23/16.
  */
 
 public class CustomResultsAdapter extends BaseAdapter {
-    //private Listing[] allResults;
-    //private HashMap<Listing, Double> allResults;
     private ArrayList<ResultsPair> allResults;
     private static LayoutInflater inflater = null;
     private Context context;
