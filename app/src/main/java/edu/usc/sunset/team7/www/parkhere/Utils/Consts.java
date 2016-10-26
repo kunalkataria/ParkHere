@@ -13,7 +13,12 @@ public class Consts {
 
     public static final String IMAGE_URI = "image_uri";
 
+    public static final String LATITUDE_EXTRA = "latitude_extra";
+    public static final String LONGITUDE_EXTRA = "longitude_extra";
+    public static final String START_TIME_EXTRA = "start_time_extra";
+    public static final String STOP_TIME_EXTRA = "stop_time_extra";
 
+    public static final String BASE_URL = "http://parkhere-ceccb.appspot.com";
 
     //Parking types
     public static final String HANDICAP = "handicap";
@@ -42,8 +47,6 @@ public class Consts {
     public static final String STORAGE_URL = "gs://parkhere-ceccb.appspot.com";
     public static final String STORAGE_PROFILE_PICTURES = "profile_pictures/";
     public static final String STORAGE_PARKING_SPACES = "parking_spaces/";
-
-
 
     //Firebase Databases
     public static final String USERS_DATABASE = "users";
