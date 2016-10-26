@@ -12,9 +12,15 @@
     <string name="sign_out">Sign Out</string>
     <string name="listing_name">Name of your listing</string>
     <string name="listing_description">Describe your listing</string>
-    <string name="handicap_label">Handicap label</string>
-    <string name="covered_label">Covered label</string>
-    <string name="compact_label">Compact label</string>
+    <string name="handicap_label">Handicap-friendly?</string>
+    <string name="covered_label">Covered?</string>
+    <string name="compact_label">Compact?</string>
+    <string name="suv_label">SUV-friendly?</string>
+    <string name="truck_label">Truck-friendly?</string>
+    <string name="upload_parking_image">Upload parking image</string>
+    <string name="submit">Submit</string>
+    <string name="listing_price">$ Price</string>
+
     <string name="start_time_label">Start Time Label</string>
     <string name="end_time_label">End Time Label</string>
 
@@ -33,5 +39,14 @@
     <string name="booking_label">Booking label</string>
     <string name="results_label">Results label</string>
     <string name="distance_label">Distance label</string>
+
+    <!-- Strings for cancellation policies-->
+    <string name="flexible_policy">Flexible</string>
+    <string name="moderate_policy">Moderate</string>
+    <string name="strict_policy">Strict</string>
+    <string name="superstrict30_policy">Super Strict 30</string>
+    <string name="superstrict60_policy">Super Strict 60</string>
+    <string name="longterm_policy">Long Term</string>
+    <string name="cancellation_policies">Cancellation Policies (click for info)</string>
 </resources>
 
