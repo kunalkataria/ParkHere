@@ -1,9 +1,19 @@
 package edu.usc.sunset.team7.www.parkhere.Services;
 
+import edu.usc.sunset.team7.www.parkhere.Objects.SearchResult;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Path;
+
 /**
  * Created by kunal on 10/15/16.
  * This file should contain the URL endpoints for requests sent to our server
  */
 
-public class URLEndpoints {
+public interface URLEndpoints {
+    @GET("/search/{lat}/{lon}/{startTime}/{stopTime}")
+    Call<SearchResult> getResults(@Path("lat") long lat, @Path("long") long lon,
+                                  @Path("startTime") long startTime, @Path("stopTime") long stopTime);
+
 }

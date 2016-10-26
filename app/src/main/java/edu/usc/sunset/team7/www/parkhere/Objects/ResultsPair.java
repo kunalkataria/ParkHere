@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import edu.usc.sunset.team7.www.parkhere.backend.Listing;
 
-
 /**
  * Created by johnsonhui on 10/23/16.
  */
