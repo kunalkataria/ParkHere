@@ -60,7 +60,6 @@ public class SearchServlet extends HttpServlet {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
                     System.out.println(child);
-                    child.
                 }
             }
 
@@ -70,6 +69,7 @@ public class SearchServlet extends HttpServlet {
             }
         });
 
+        
 
     }
 

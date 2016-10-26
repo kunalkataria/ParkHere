@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.usc.sunset.team7.www.parkhere.Activities.PostListingActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 
 /**
@@ -15,6 +18,9 @@ import edu.usc.sunset.team7.www.parkhere.R;
  */
 
 public class ListingFragment extends Fragment {
+
+    @BindView(R.id.post_listing_button)
+    Button postListingButton;
 
     @Override
     public void onCreate(Bundle savedBundleInstance){
@@ -24,12 +30,13 @@ public class ListingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.listing_fragment, container, false);
+        ButterKnife.bind(this, view);
         return view;
     }
 
     @OnClick(R.id.post_listing_button)
     protected void postListing() {
-
+        PostListingActivity.startActivity(getActivity());
     }
 
 }
