@@ -9,11 +9,11 @@ package edu.usc.sunset.team7.www.parkhere.backend;
 import com.google.appengine.repackaged.com.google.gson.stream.JsonReader;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -38,13 +38,19 @@ public class SearchServlet extends HttpServlet {
             throws IOException {
         resp.setContentType("application/json");
 
-        String latitude = req.getParameter("lat");
-        String longitude = req.getParameter("lon");
+        final double latitude = Double.parseDouble(req.getParameter("lat"));
+        final double longitude = Double.parseDouble(req.getParameter("lon"));
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setServiceAccount(getServletContext().getResourceAsStream("/WEB-INF/ParkHere-9f6082855b14.json"))
                 .setDatabaseUrl("https://parkhere-ceccb.firebaseio.com/")
                 .build();
+        try {
+            FirebaseApp.getInstance();
+        } catch (Exception error) {
+            Log.info("doesn't exist...");
+        }
+
         try {
             FirebaseApp.initializeApp(options);
         } catch(Exception error) {
@@ -55,12 +61,43 @@ public class SearchServlet extends HttpServlet {
                 .getInstance()
                 .getReference("listings");
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.orderByChild("latitude").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                double listingLatitude = 0;
+                double listingLongitude = 0;
+
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    System.out.println(child);
+
+                    if (child.getKey().equals("latitude")) {
+                        listingLatitude = Double.parseDouble(child.getValue().toString());
+                    }
+
+                    if (child.getKey().equals("longitude")) {
+                        listingLongitude = Double.parseDouble(child.getValue().toString());
+
+                        System.out.println("parameters: " + latitude + " " + longitude + " " + listingLatitude + " " + listingLongitude);
+
+                        if (isWithinRadius(latitude, longitude, listingLatitude, listingLongitude)) {
+                            System.out.println("Within three miles! Yay!!! :)");
+                        }
+                    }
                 }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -69,8 +106,20 @@ public class SearchServlet extends HttpServlet {
             }
         });
 
-        
 
+
+    }
+
+    private boolean isWithinRadius(double lat1, double lon1, double lat2, double lon2) {
+        double R = 6371;
+        double dLat = (lat2-lat1) * (Math.PI/180);
+        double dLon = (lon2-lon1) * (Math.PI/180);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) *
+                        Math.sin(dLon/2) * Math.sin(dLon/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = R * c;
+        return (d <= 4.82803); //distance less than 3 miles converted to kilometers
     }
 
     @Override
@@ -82,18 +131,6 @@ public class SearchServlet extends HttpServlet {
             resp.getWriter().println("Please enter a name");
         }
         resp.getWriter().println("Hello " + name);
-    }
-
-    private boolean isWithinRadius(double lat1, double lon1, double lat2, double lon2) {
-        double R = 6371;
-        double dLat = (lat2-lat1) * (Math.PI/180);
-        double dLon = (lon2-lon1) * (Math.PI/180);
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                   Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) *
-                   Math.sin(dLon/2) * Math.sin(dLon/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double d = R * c;
-        return (d <= 4.82803); //distance less than 3 miles converted to kilometers
     }
 
     private double avgParkingCost(double lat, double lon) {
