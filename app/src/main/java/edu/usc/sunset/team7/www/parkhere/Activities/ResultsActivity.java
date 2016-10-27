@@ -58,8 +58,8 @@ public class ResultsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(Consts.SEARCH_INTENT_FILTER));
         Intent intent = getIntent();
-        double latitude = intent.getLongExtra(Consts.LATITUDE_EXTRA, 0);
-        double longitude = intent.getLongExtra(Consts.LONGITUDE_EXTRA, 0);
+        double latitude = intent.getDoubleExtra(Consts.LATITUDE_EXTRA, 0);
+        double longitude = intent.getDoubleExtra(Consts.LONGITUDE_EXTRA, 0);
         long startTime = intent.getLongExtra(Consts.START_TIME_EXTRA, 0);
         long stopTime = intent.getLongExtra(Consts.STOP_TIME_EXTRA, 0);
 //        SearchService searchService = new SearchService();
