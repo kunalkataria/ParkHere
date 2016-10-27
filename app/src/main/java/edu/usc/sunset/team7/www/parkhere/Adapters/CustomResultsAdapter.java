@@ -2,6 +2,7 @@ package edu.usc.sunset.team7.www.parkhere.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 
 /**
@@ -48,7 +51,7 @@ public class CustomResultsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ItemShell item;
         View rowView = convertView;
         if(rowView != null) {
@@ -68,6 +71,16 @@ public class CustomResultsAdapter extends BaseAdapter {
         double myDouble = ((ResultsPair) getItem(position)).getDistance();
         item.distanceLabel.setText(Double.toString(myDouble));
         //image stuff later
+
+        rowView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent detailsIntent = new Intent(context, ListingDetailsActivity.class);
+                detailsIntent.putExtra(Consts.LISTING_RESULT_EXTRA, (ResultsPair) getItem(position));
+                context.startActivity(detailsIntent);
+            }
+        });
         return rowView;
     }
 
