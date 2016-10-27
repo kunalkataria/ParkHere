@@ -26,7 +26,6 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 
 public class ResultsActivity extends AppCompatActivity {
 
-    @BindView(R.id.results_view) ListView resultsListView;
     @BindView(R.id.list_content_space) LinearLayout listContentSpace;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -39,9 +38,12 @@ public class ResultsActivity extends AppCompatActivity {
         }
     };
 
-    public static void startActivityForResults(Context context) {
+    public static void startActivity(Context context, double lat, double lon, long startTime, long stopTime) {
         Intent intent = new Intent(context, ResultsActivity.class);
-        //intent.putExtra(FRAGMENT_TAG, Consts.SEARCH_FRAGMENT_TAG);
+        intent.putExtra(Consts.LATITUDE_EXTRA, lat);
+        intent.putExtra(Consts.LONGITUDE_EXTRA, lon);
+        intent.putExtra(Consts.START_TIME_EXTRA, startTime);
+        intent.putExtra(Consts.STOP_TIME_EXTRA, stopTime);
         context.startActivity(intent);
     }
 
@@ -58,8 +60,8 @@ public class ResultsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(Consts.SEARCH_INTENT_FILTER));
         Intent intent = getIntent();
-        long latitude = intent.getLongExtra(Consts.LATITUDE_EXTRA, 0);
-        long longitude = intent.getLongExtra(Consts.LONGITUDE_EXTRA, 0);
+        double latitude = intent.getLongExtra(Consts.LATITUDE_EXTRA, 0);
+        double longitude = intent.getLongExtra(Consts.LONGITUDE_EXTRA, 0);
         long startTime = intent.getLongExtra(Consts.START_TIME_EXTRA, 0);
         long stopTime = intent.getLongExtra(Consts.STOP_TIME_EXTRA, 0);
 //        SearchService searchService = new SearchService();
