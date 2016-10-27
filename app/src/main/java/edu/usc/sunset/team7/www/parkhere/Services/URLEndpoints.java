@@ -12,8 +12,8 @@ import retrofit2.http.Path;
  */
 
 public interface URLEndpoints {
-    @GET("/search/{lat}/{lon}/{startTime}/{stopTime}")
-    Call<SearchResult> getResults(@Path("lat") long lat, @Path("long") long lon,
+    @GET("/search?lat={lat}?lon={lon}?startTime={startTime}?stopTime={stopTime}")
+    Call<SearchResult> getResults(@Path("lat") long lat, @Path("lon") long lon,
                                   @Path("startTime") long startTime, @Path("stopTime") long stopTime);
 
 }
