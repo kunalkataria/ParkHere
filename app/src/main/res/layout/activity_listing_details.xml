@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/base_toolbar"
+        android:id="@+id/listing_details_toolbar"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/book_listing_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/book_listing"/>
+
+    <LinearLayout
+        android:id="@+id/listing_details_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    </LinearLayout>
+
+</LinearLayout>

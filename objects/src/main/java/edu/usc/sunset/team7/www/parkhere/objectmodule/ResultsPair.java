@@ -3,11 +3,18 @@ package edu.usc.sunset.team7.www.parkhere.objectmodule;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 /**
  * Created by johnsonhui on 10/23/16.
  */
 
-public class ResultsPair {
+public class ResultsPair implements Serializable {
+
+
 
     @SerializedName("Listing")
     @Expose
@@ -38,4 +45,13 @@ public class ResultsPair {
         this.distance = distance;
     }
 
-}
+    private void readObject(ObjectInputStream aInputStream)
+            throws ClassNotFoundException, IOException {
+        aInputStream.defaultReadObject();
+    }
+
+    private void writeObject(ObjectOutputStream aOutputStream) throws IOException {
+        aOutputStream.defaultWriteObject();
+    }
+
+    }

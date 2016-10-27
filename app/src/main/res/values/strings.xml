@@ -32,6 +32,7 @@
     <string name="profile_image_description">Profile Image</string>
     <string name="select_picture">Select Picture</string>
     <string name="confirm">Confirm</string>
+    <string name="book_listing">Book this listing!</string>
 
     <!-- Placeholder strings for adapter views. -->
     <string name="location_label">Location label</string>
