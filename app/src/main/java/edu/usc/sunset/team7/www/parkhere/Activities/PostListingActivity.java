@@ -29,9 +29,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,7 +101,7 @@ public class PostListingActivity extends AppCompatActivity {
     @BindView(R.id.suv_button_control)
     SwitchCompat suvSwitch;
 
-    private Map<String, Boolean> parkingTypeMap;
+    boolean isCompact, isSuv, isTruck, isHandicap, isCovered;
 
     @BindView(R.id.upload_listing_button)
     Button uploadListingButton;
@@ -113,6 +111,7 @@ public class PostListingActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private FirebaseUser currentUser;
     private Uri sourceImageUri = null;
+    private String firebaseImageURL = "";
 
     //NEED TO ADD DATE AND TIME PICKERS
 
@@ -142,8 +141,6 @@ public class PostListingActivity extends AppCompatActivity {
         cancellationIds.put(R.id.superstrict30_rButton, Consts.SUPERSTRICT30);
         cancellationIds.put(R.id.superstrict60_rButton, Consts.SUPERSTRICT60);
         cancellationIds.put(R.id.longTerm_rButton, Consts.LONGTERM);
-
-        parkingTypeMap = new HashMap<String, Boolean>();
     }
 
     @OnClick(R.id.upload_parking_button)
@@ -183,11 +180,16 @@ public class PostListingActivity extends AppCompatActivity {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = currentUser.getUid();
 
-            DatabaseReference nameRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child("name");
-            nameRef.setValue(nameString);
+            DatabaseReference nameRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child(nameString);
             nameRef.child("description").setValue(descriptionString);
             nameRef.child("price").setValue(price);
-            nameRef.child("parking_types").setValue(parkingTypeMap);
+
+            nameRef.child("handicap").setValue(isHandicap);
+            nameRef.child("compact").setValue(isCompact);
+            nameRef.child("covered").setValue(isCovered);
+            nameRef.child("suv").setValue(isSuv);
+            nameRef.child("truck").setValue(isTruck);
+
             nameRef.child("cancellation_policy").setValue(cancellationIds.get(radioGroup.getCheckedRadioButtonId()));
             //ALSO STORE PARKING IMAGE!!!!
 
@@ -207,9 +209,10 @@ public class PostListingActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                    //firebaseUri = taskSnapshot.getDownloadUrl();
+                    firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
                 }
             });
+            nameRef.child("imageurl").setValue(firebaseImageURL);
 
         }
     }
@@ -251,10 +254,10 @@ public class PostListingActivity extends AppCompatActivity {
     }
 
     private void saveSwitchValues(){
-        parkingTypeMap.put(Consts.COMPACT, compactSwitch.isChecked());
-        parkingTypeMap.put(Consts.COVERED, coveredSwitch.isChecked());
-        parkingTypeMap.put(Consts.HANDICAP, handicapSwitch.isChecked());
-        parkingTypeMap.put(Consts.SUV, suvSwitch.isChecked());
-        parkingTypeMap.put(Consts.TRUCK, truckSwitch.isChecked());
+        isCompact = compactSwitch.isChecked();
+        isCovered = coveredSwitch.isChecked();
+        isHandicap =  handicapSwitch.isChecked();
+        isSuv =  suvSwitch.isChecked();
+        isTruck = truckSwitch.isChecked();
     }
 }

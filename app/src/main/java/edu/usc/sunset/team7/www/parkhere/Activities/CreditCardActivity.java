@@ -102,7 +102,9 @@ public class CreditCardActivity extends AppCompatActivity {
     protected void confirm() {
         collectValues();
         if(checkValues()){
-            writeToDatabase();
+
+            //Start confirmation
+            //pass data
         }
     }
 
@@ -125,7 +127,6 @@ public class CreditCardActivity extends AppCompatActivity {
                             if(!city.equals("")){
                                 if(!state.equals("")){
                                     if(checkZipCode()){
-                                        writeToDatabase();
                                         return true;
                                     } else{
                                         zipCodeTextInputLayout.setErrorEnabled(true);
@@ -163,22 +164,28 @@ public class CreditCardActivity extends AppCompatActivity {
     }
 
     private boolean checkCreditCard(){
-        return true;
+        return creditCardNumber.length()<19 && creditCardNumber.length()>12 && isInt(creditCardNumber);
     }
 
     private boolean checkSecurityCode(){
-        return true;
+        return securityCode.length()<5 && securityCode.length()>2 && isInt(securityCode);
     }
 
     private boolean checkAddress(){
-        return true;
+        return !address.equals("");
     }
 
     private boolean checkZipCode(){
-        return true;
+        return zipcode.length()!=9 && isInt(zipcode);
     }
 
-    private void writeToDatabase(){
-
+    private boolean isInt(String s){
+        try{
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException nfe){
+            return false;
+        }
     }
+
 }

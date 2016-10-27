@@ -65,4 +65,8 @@ public class Consts {
     public static final String DATABASE_PHONENUMBER = "phoneumber";
     public static final String DATABASE_EMAIL= "email";
     public static final String DATABASE_RATING = "rating";
+
+    //Transaction variables
+    public static final String PAYMENT_TYPE = "payment_type";
+
 }

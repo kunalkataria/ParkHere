@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListViewCompat;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +24,6 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 
 public class ResultsActivity extends AppCompatActivity {
 
-    @BindView(R.id.results_view) ListView resultsListView;
     @BindView(R.id.list_content_space) LinearLayout listContentSpace;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
