@@ -12,6 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 
 /**
@@ -31,6 +32,8 @@ public class PaypalActivity extends AppCompatActivity {
     @BindView(R.id.password_edittext)
     AppCompatEditText passwordEditText;
 
+    private String email, password;
+
     @BindView(R.id.validate_button)
     Button validateButton;
 
@@ -44,26 +47,40 @@ public class PaypalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paypal);
         ButterKnife.bind(this);
+        email = "";
+        password = "";
     }
 
     @OnClick(R.id.validate_button)
     protected void validate() {
-        if (!emailEditText.getText().toString().equals("")){
-            if (Tools.emailValid(emailEditText.getText().toString())) {
-                if (!passwordEditText.getText().toString().equals("")) {
-                    //START CONFIRMATION ACTIVITY
-                    //Pass email address
-                } else {
-                    passwordTextInputLayout.setErrorEnabled(true);
-                    passwordTextInputLayout.setError("Please enter a password.");
-                }
+        collectValues();
+        if (checkValues()) {
+            Intent intent = new Intent(PaypalActivity.this, TransactionConfirmationActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(Consts.PAYMENT_TYPE, "paypal");
+            //bundle listing data too
+        }
+    }
+
+    private void collectValues() {
+        email = emailEditText.getText().toString();
+        password = passwordEditText.getText().toString();
+    }
+
+    private boolean checkValues() {
+        if (Tools.emailValid(emailEditText.getText().toString())) {
+            if (!passwordEditText.getText().toString().equals("")) {
+                return true;
             } else {
-                emailTextInputLayout.setErrorEnabled(true);
-                emailTextInputLayout.setError("Email not valid.");
+                passwordTextInputLayout.setErrorEnabled(true);
+                passwordTextInputLayout.setError("Please enter a password.");
             }
         } else {
             emailTextInputLayout.setErrorEnabled(true);
-            emailTextInputLayout.setError("Please enter an email address.");
+            emailTextInputLayout.setError("Invalid email. Please try again.");
         }
+        return false;
     }
 }
+
+

@@ -73,5 +73,10 @@
     <string name="paypal_email">Paypal Email</string>
     <string name="validate">Validate</string>
     <string name="paypal_instructions">Please enter your paypal information to validate payment.</string>
+
+    <!-- Transaction stuff -->
+    <string name="confirmation_header">Please confirm the following information is correct before you book the listing.</string>
+    <string name="listing_details">Listing Details</string>
+
 </resources>
 
