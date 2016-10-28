@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 /**
  * Created by Jonathan on 10/26/16.
@@ -68,7 +70,14 @@ public class CreditCardActivity extends AppCompatActivity {
     @BindView(R.id.discover_rButton)
     RadioButton discover;
 
-    private String name, creditCardNumber, securityCode, address, city, state, zipcode;
+    @BindView(R.id.month_np)
+    NumberPicker monthNumberPicker;
+
+    @BindView(R.id.year_np)
+    NumberPicker yearNumberPicker;
+
+
+    private String name, creditCardNumber, securityCode, month, year, address, city, state, zipcode, creditCardType;
 
     private Hashtable<Integer, String> creditCardTypes;
 
@@ -92,19 +101,40 @@ public class CreditCardActivity extends AppCompatActivity {
         zipcode="";
 
         creditCardTypes = new Hashtable<Integer, String>();
-        creditCardTypes.put(R.id.visa_rButton, "visa");
-        creditCardTypes.put(R.id.mastercard_rButton, "mastercard");
-        creditCardTypes.put(R.id.discover_rButton, "discover");
-        creditCardTypes.put(R.id.american_express_rButton, "american_express");
+        creditCardTypes.put(R.id.visa_rButton, Consts.VISA);
+        creditCardTypes.put(R.id.mastercard_rButton, Consts.MASTERCARD);
+        creditCardTypes.put(R.id.discover_rButton, Consts.DISCOVER);
+        creditCardTypes.put(R.id.american_express_rButton, Consts.AMERICAN_EXPRESS);
+
+        monthNumberPicker.setMinValue(1); //from array first value
+        monthNumberPicker.setMaxValue(12); //to array last value
+        monthNumberPicker.setWrapSelectorWheel(true);
+
+        yearNumberPicker.setMinValue(2016);
+        yearNumberPicker.setMaxValue(2030);
     }
 
     @OnClick(R.id.confirm_button)
     protected void confirm() {
         collectValues();
         if(checkValues()){
+            Intent i = new Intent(CreditCardActivity.this, TransactionConfirmationActivity.class);
+            Bundle b = new Bundle();
 
             //Start confirmation
             //pass data
+            b.putString(Consts.CREDIT_CARD_NAME, name);
+            b.putString(Consts.CREDIT_CARD_NUMBER, creditCardNumber);
+            b.putString(Consts.SECURITY_CODE, securityCode);
+            b.putString(Consts.ADDRESS, address);
+            b.putString(Consts.CITY, city);
+            b.putString(Consts.STATE, state);
+            b.putString(Consts.ZIPCODE, zipcode);
+            b.putString(Consts.CREDIT_CARD_TYPE, creditCardType);
+            b.putString(Consts.EXPIRATION_MONTH, month);
+            b.putString(Consts.EXPIRATION_YEAR, year);
+            i.putExtras(b);
+            startActivity(i);
         }
     }
 
@@ -116,6 +146,11 @@ public class CreditCardActivity extends AppCompatActivity {
         city = cityEditText.getText().toString();
         state = stateEditText.getText().toString();
         zipcode = zipCodeEditText.getText().toString();
+        creditCardType = creditCardTypes.get(radioGroup.getCheckedRadioButtonId());
+
+        month = ""+monthNumberPicker.getValue();
+        year = ""+yearNumberPicker.getValue();
+
     }
 
     private boolean checkValues(){
@@ -123,27 +158,32 @@ public class CreditCardActivity extends AppCompatActivity {
             if(!name.equals("'")){
                 if(checkCreditCard()){
                     if(checkSecurityCode()){
-                        if(checkAddress()){
-                            if(!city.equals("")){
-                                if(!state.equals("")){
-                                    if(checkZipCode()){
-                                        return true;
-                                    } else{
-                                        zipCodeTextInputLayout.setErrorEnabled(true);
-                                        zipCodeTextInputLayout.setError("Invalid zip code. Please try again.");
-                                    }
-                                } else{
-                                    stateTextInputLayout.setErrorEnabled(true);
-                                    stateTextInputLayout.setError("Please enter a state.");
-                                }
-                            } else{
-                                cityTextInputLayout.setErrorEnabled(true);
-                                cityTextInputLayout.setError("Please enter a city.");
-                            }
-                        } else{
-                            addressTextInputLayout.setErrorEnabled(true);
-                            addressTextInputLayout.setError("Invalid address. Please try again.");
-                        }
+                       if(checkExpirationDate()) {
+                           if (checkAddress()) {
+                               if (!city.equals("")) {
+                                   if (!state.equals("")) {
+                                       if (checkZipCode()) {
+                                           return true;
+                                       } else {
+                                           zipCodeTextInputLayout.setErrorEnabled(true);
+                                           zipCodeTextInputLayout.setError("Invalid zip code. Please try again.");
+                                       }
+                                   } else {
+                                       stateTextInputLayout.setErrorEnabled(true);
+                                       stateTextInputLayout.setError("Please enter a state.");
+                                   }
+                               } else {
+                                   cityTextInputLayout.setErrorEnabled(true);
+                                   cityTextInputLayout.setError("Please enter a city.");
+                               }
+                           } else {
+                               addressTextInputLayout.setErrorEnabled(true);
+                               addressTextInputLayout.setError("Invalid address. Please try again.");
+                           }
+                       } else{
+                           Toast.makeText(CreditCardActivity.this, "Please enter an expiration date.",
+                                   Toast.LENGTH_SHORT).show();
+                       }
                     } else{
                         securityTextInputLayout.setErrorEnabled(true);
                         securityTextInputLayout.setError("Invalid security code. Please try again.");
@@ -171,6 +211,10 @@ public class CreditCardActivity extends AppCompatActivity {
         return securityCode.length()<5 && securityCode.length()>2 && isInt(securityCode);
     }
 
+    private boolean checkExpirationDate(){
+        return !month.equals("") && !year.equals("");
+    }
+
     private boolean checkAddress(){
         return !address.equals("");
     }
@@ -187,5 +231,4 @@ public class CreditCardActivity extends AppCompatActivity {
             return false;
         }
     }
-
 }

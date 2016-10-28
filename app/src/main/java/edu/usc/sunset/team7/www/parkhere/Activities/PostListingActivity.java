@@ -213,7 +213,6 @@ public class PostListingActivity extends AppCompatActivity {
                 }
             });
             nameRef.child("imageurl").setValue(firebaseImageURL);
-
         }
     }
 
