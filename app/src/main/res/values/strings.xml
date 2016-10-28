@@ -25,7 +25,7 @@
     <string name="end_time_label">End Time Label</string>
 
     <string name="post_listing">Post a listing!</string>
-    <string name="search">Search</string>
+    <string name="search">Search via latitude and longitude</string>
     <string name="listing">My Listings</string>
     <string name="booking">My Bookings</string>
     <string name="upload_picture">Upload profile image</string>
@@ -35,6 +35,9 @@
     <string name="book_listing">Book this listing!</string>
 
     <string name="are_you_providing">Will you be providing parking spots?</string>
+
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 
     <!-- Placeholder strings for adapter views. -->
     <string name="location_label">Location label</string>
