@@ -27,8 +27,8 @@ dependencies {
     compile 'com.google.appengine:appengine-api-1.0-sdk:1.9.44'
     compile 'com.google.firebase:firebase-server-sdk:3.0.1'
     compile 'org.apache.httpcomponents:httpclient-osgi:4.5.2'
+    compile project(path: ':objects')
 }
-
 
 appengine {
     downloadSdk = true

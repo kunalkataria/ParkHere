@@ -39,9 +39,11 @@ public class SearchFragment extends Fragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.search_autocomplete_bar);
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        Log.i(TAG, "on create view");
         //set location to be the current location
         if (autocompleteFragment != null) {
+            Log.i(TAG, "Autocomplete Fragment not null");
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(Place place) {
