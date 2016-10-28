@@ -12,7 +12,7 @@ import retrofit2.http.Path;
  */
 
 public interface URLEndpoints {
-    @GET("/search?lat={lat}?lon={lon}?startTime={startTime}?stopTime={stopTime}")
+    @GET("/search?lat={lat}&lon={lon}&startTime={startTime}&stopTime={stopTime}")
     Call<SearchResult> getResults(@Path("lat") double lat, @Path("lon") double lon,
                                   @Path("startTime") long startTime, @Path("stopTime") long stopTime);
 

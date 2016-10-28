@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
                     HomeActivity.startActivityForSearch(LoginActivity.this);
-
+                    finish();
                     /* Verification Code needs to be worked on
                     if(user.isEmailVerified()){
                         // check if user is a seeker or provider
