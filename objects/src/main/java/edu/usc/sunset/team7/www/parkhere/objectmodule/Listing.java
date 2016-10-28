@@ -18,12 +18,14 @@ public class Listing {
     private boolean active;
     private boolean refundable;
     private String listingID;
+    private double price;
 
+    private String imageURL;
+    //need to add functionality for can cancel policy
     //need to add picture functionality & list of pictures
     public Listing() {
 
     }
-
     public String getName() {
         return name;
     }
@@ -107,4 +109,21 @@ public class Listing {
     public void setListingID(String listingID) {
         this.listingID = listingID;
     }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
 }

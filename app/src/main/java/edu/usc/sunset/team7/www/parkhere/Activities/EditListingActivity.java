@@ -6,28 +6,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.Hashtable;
 
@@ -36,15 +28,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 /**
- * Created by kunal on 10/23/16.
+ * Created by johnsonhui on 10/27/16.
  */
 
-public class PostListingActivity extends AppCompatActivity {
+public class EditListingActivity extends AppCompatActivity {
 
-    private static final String TAG = "PostListingActivity";
+    //private static final String EditListingTag = "EditListingActivity";
 
+    //the container for each textfield
     @BindView(R.id.name_textinputlayout)
     TextInputLayout parkingNameTextInputLayout;
     @BindView(R.id.description_textinputlayout)
@@ -52,6 +46,7 @@ public class PostListingActivity extends AppCompatActivity {
     @BindView(R.id.price_textinputlayout)
     TextInputLayout priceTextInputLayout;
 
+    //The actual textfields
     @BindView(R.id.name_edittext)
     AppCompatEditText parkingNameEditText;
     @BindView(R.id.description_edittext)
@@ -62,9 +57,17 @@ public class PostListingActivity extends AppCompatActivity {
     private String nameString, descriptionString;
     private double price;
 
-    //Cancellation controls
-    @BindView(R.id.cancellation_textView)
-    TextView cancellation;
+    //Parking Type Buttons
+    @BindView(R.id.handicap_button_control)
+    SwitchCompat handicapSwitch;
+    @BindView(R.id.compact_button_control)
+    SwitchCompat compactSwitch;
+    @BindView(R.id.covered_button_control)
+    SwitchCompat coveredSwitch;
+
+    boolean isCompact, isHandicap, isCovered;
+
+    //Cancellation policies
     @BindView(R.id.myRadioGroup)
     RadioGroup radioGroup;
     @BindView(R.id.refundable_rButton)
@@ -74,26 +77,13 @@ public class PostListingActivity extends AppCompatActivity {
 
     private static Hashtable<Integer, String> cancellationIds;
 
-    //Parking image controls
-    @BindView(R.id.upload_parking_button)
-    Button uploadParkingImageButton;
 
-    @BindView(R.id.parkingImage)
-    ImageView parkingImageView;
-
-    //Parking Type Buttons
-    @BindView(R.id.handicap_button_control)
-    SwitchCompat handicapSwitch;
-    @BindView(R.id.compact_button_control)
-    SwitchCompat compactSwitch;
-    @BindView(R.id.covered_button_control)
-    SwitchCompat coveredSwitch;
-
-
-    boolean isCompact,isHandicap, isCovered;
-
+    //probably need this to reupload edits
     @BindView(R.id.upload_listing_button)
     Button uploadListingButton;
+
+    private String editNameString, editDescriptionString;
+    private double editPrice;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -102,10 +92,9 @@ public class PostListingActivity extends AppCompatActivity {
     private Uri sourceImageUri = null;
     private String firebaseImageURL = "";
 
-    //NEED TO ADD DATE AND TIME PICKERS
-
+    private Listing editListing;
     public static void startActivity(Context context) {
-        Intent i = new Intent(context, PostListingActivity.class);
+        Intent i = new Intent(context, EditListingActivity.class);
         context.startActivity(i);
     }
 
@@ -117,47 +106,32 @@ public class PostListingActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         currentUser = mAuth.getCurrentUser();
-        parkingImageView.setImageResource(R.mipmap.empty_parking);
-
-        nameString = "";
-        descriptionString = "";
-        price=0.0;
-
+        Listing getEditableListing = (Listing) getIntent().getSerializableExtra(Consts.LISTING_EDIT_EXTRA);
         cancellationIds = new Hashtable<Integer, String>();
         cancellationIds.put(R.id.refundable_rButton, Consts.REFUNDABLE);
         cancellationIds.put(R.id.nonrefundable_rButton, Consts.NONREFUNDABLE);
-
+        populateFields(getEditableListing);
     }
 
-    @OnClick(R.id.upload_parking_button)
-    protected void uploadImage() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, 1);
-    }
-
-    //Method called when user selects a picture
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //Make sure the gallery Intent called this method
-        if(requestCode==1 && resultCode==RESULT_OK && data!=null ){
-            sourceImageUri = data.getData();
-            parkingImageView.setImageURI(sourceImageUri);
+    //For populating the fields
+    protected void populateFields(Listing getListing) {
+        parkingNameEditText.setText(getListing.getName());
+        descriptionEditText.setText(getListing.getDescription());
+        String origPrice = Double.toString(getListing.getPrice());
+        priceEditText.setText(origPrice);
+        handicapSwitch.setChecked(getListing.isHandicap());
+        compactSwitch.setChecked(getListing.isCompact());
+        coveredSwitch.setChecked(getListing.isCovered());
+        boolean isRefundable = getListing.isRefundable();
+        if(isRefundable){
+            ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
         }
-    }
-
-    @OnClick(R.id.cancellation_textView)
-    protected void viewCancellationPolicyDetails() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(Consts.CANCELLATION_DETAILS)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //do something
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+        else{
+            ((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
+        }
+        //need to make an image class for listings to set the image as that
+        //grab the url and grab the image from the database through URL
+        //String imageURL = getListing.getImageURL();
     }
 
     @OnClick(R.id.upload_listing_button)
@@ -175,62 +149,56 @@ public class PostListingActivity extends AppCompatActivity {
             nameRef.child("covered").setValue(isCovered);
 
             nameRef.child("cancellation_policy").setValue(cancellationIds.get(radioGroup.getCheckedRadioButtonId()));
-            //ALSO STORE PARKING IMAGE!!!!
 
-            StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
-            StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
-            //Best way to store the data?
-            UploadTask uploadTask = parkingRef.child(uid).putFile(sourceImageUri);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
-                    Log.d(TAG, exception.toString());
-                    Toast.makeText(PostListingActivity.this, "Unable to upload the image. Please check your internet connection and try again.",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                    firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
-                }
-            });
-            nameRef.child("imageurl").setValue(firebaseImageURL);
+            //Need image url
 
         }
     }
 
-    private boolean checkFields(){
+    @OnClick(R.id.cancellation_textView)
+    protected void viewCancellationPolicyDetails() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(Consts.CANCELLATION_DETAILS)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do something
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private boolean checkFields() {
         nameString = parkingNameEditText.getText().toString();
         descriptionString =descriptionEditText.getText().toString();
         //possible invalid number format here
         price = Double.parseDouble(priceEditText.getText().toString());
 
         if(!nameString.equals("")){
-            if(!descriptionString.equals("")){
+            if(!descriptionString.equals("")) {
                 if(price>=0){
                     if(sourceImageUri!=null) {
                         if (radioGroup.getCheckedRadioButtonId() != -1) {
                             saveSwitchValues();
                             return true;
                         } else {
-                            Toast.makeText(PostListingActivity.this, "Please select a cancellation policy.",
+                            Toast.makeText(EditListingActivity.this, "Please select a cancellation policy.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     } else{
-                        Toast.makeText(PostListingActivity.this, "Please upload a picture of your parking spot.",
+                        Toast.makeText(EditListingActivity.this, "Please upload a picture of your parking spot.",
                                 Toast.LENGTH_SHORT).show();
                     }
-                } else{
+                } else {
                     priceTextInputLayout.setErrorEnabled(true);
                     priceTextInputLayout.setError("Please enter a price greater than $0");
                 }
-            } else{
+            } else {
                 descriptionTextInputLayout.setErrorEnabled(true);
                 descriptionTextInputLayout.setError("Please enter a description.");
             }
-        } else{
+        } else {
             parkingNameTextInputLayout.setErrorEnabled(true);
             parkingNameTextInputLayout.setError("Please enter a name.");
         }
