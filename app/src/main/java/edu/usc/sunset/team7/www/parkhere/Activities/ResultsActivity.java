@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListViewCompat;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 public class ResultsActivity extends AppCompatActivity {
 
     @BindView(R.id.list_content_space) LinearLayout listContentSpace;
+    @BindView(R.id.avg_parking_price_value) TextView avgParkingView;
 
     private boolean covered = false;
     private boolean compact = false;

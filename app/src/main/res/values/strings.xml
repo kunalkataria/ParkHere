@@ -34,6 +34,7 @@
     <string name="confirm">Confirm</string>
     <string name="book_listing">Book this listing!</string>
     <string name="filter">Filter</string>
+    <string name="avg_parking_price">Average Parking Price:</string>
 
     <string name="are_you_providing">Will you be providing parking spots?</string>
 
