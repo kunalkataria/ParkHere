@@ -1,6 +1,8 @@
 package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import edu.usc.sunset.team7.www.parkhere.Activities.ResultsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 
 import static com.google.android.gms.internal.zzs.TAG;
@@ -38,8 +43,9 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
+        ButterKnife.bind(this, view);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+                getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         Log.i(TAG, "on create view");
         //set location to be the current location
         if (autocompleteFragment != null) {
@@ -59,8 +65,15 @@ public class SearchFragment extends Fragment {
             });
 
         }
-        Log.i(TAG, "Returning view.");
         return view;
+    }
+
+    @OnClick(R.id.search_button)
+    protected void startSearch() {
+        if (locationSelected != null) {
+            LatLng latLng = locationSelected.getLatLng();
+            ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, 0, 0);
+        }
     }
 
     public void sendLocationToFirebase() {
@@ -91,5 +104,6 @@ public class SearchFragment extends Fragment {
 //            System.out.println(ioe.getMessage());
 //        }
     }
+
 
 }

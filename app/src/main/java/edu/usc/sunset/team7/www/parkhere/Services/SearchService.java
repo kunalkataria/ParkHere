@@ -24,15 +24,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchService extends IntentService {
 
-    public SearchService(String name) {
-        super(name);
+    public SearchService() {
+        super(Consts.SEARCH_SERVICE);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        long latitude = intent.getLongExtra(Consts.LATITUDE_EXTRA, 0);
-        long longitude = intent.getLongExtra(Consts.LONGITUDE_EXTRA, 0);
+        double latitude = intent.getDoubleExtra(Consts.LATITUDE_EXTRA, 0);
+        double longitude = intent.getDoubleExtra(Consts.LONGITUDE_EXTRA, 0);
         long startTime = intent.getLongExtra(Consts.START_TIME_EXTRA, 0);
         long stopTime = intent.getLongExtra(Consts.STOP_TIME_EXTRA, 0);
 

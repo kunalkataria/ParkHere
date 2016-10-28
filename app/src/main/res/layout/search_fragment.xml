@@ -10,11 +10,17 @@
         android:id="@+id/search_autocomplete_layout">
 
         <fragment
+            android:id="@+id/search_autocomplete_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            android:id="@+id/place_autocomplete_fragment"
             android:focusable="true" />
     </FrameLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/search_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search"/>
 
 </LinearLayout>

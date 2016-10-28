@@ -23,11 +23,11 @@ public class SearchResult {
 
     @SerializedName("latitude")
     @Expose
-    private long latitude;
+    private double latitude;
 
     @SerializedName("longitude")
     @Expose
-    private long longitude;
+    private double longitude;
 
 
     public SearchResult(double averageParkPrice, long latitude, long longitude, double distanceFromSearchLocation){
@@ -37,7 +37,7 @@ public class SearchResult {
         this.longitude = longitude;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
@@ -45,7 +45,7 @@ public class SearchResult {
         this.latitude = latitude;
     }
 
-    public long getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 

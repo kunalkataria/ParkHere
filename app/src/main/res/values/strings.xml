@@ -2,10 +2,10 @@
     <string name="app_name">ParkHere</string>
 
     <!-- Field Hints/Labels. -->
-    <string name="email">e-mail</string>
-    <string name="password">password</string>
-    <string name="register">register</string>
-    <string name="login">login</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="phone_number">Phone number</string>
@@ -31,7 +31,8 @@
     <string name="upload_picture">Upload profile image</string>
     <string name="profile_image_description">Profile Image</string>
     <string name="select_picture">Select Picture</string>
-    <string name="confirm">Confirm Picture</string>
+    <string name="confirm">Confirm</string>
+    <string name="book_listing">Book this listing!</string>
 
     <!-- Placeholder strings for adapter views. -->
     <string name="location_label">Location label</string>
@@ -48,5 +49,34 @@
     <string name="superstrict60_policy">Super Strict 60</string>
     <string name="longterm_policy">Long Term</string>
     <string name="cancellation_policies">Cancellation Policies (click for info)</string>
+
+    <!-- Transaction strings-->
+    <string name="choose_payment">Choose your payment method</string>
+    <string name="paypal_button">Paypal</string>
+    <string name="credit_card_button">Credit Card</string>
+    <string name="credit_card_type">Credit Card Information</string>
+    <string name="name_on_card">Name on Card</string>
+    <string name="credit_card_number">Credit Card Number</string>
+    <string name="security_number">Security Number</string>
+    <string name="expiration_data">Expiration Date</string>
+    <string name="mastercard">Mastercard</string>
+    <string name="visa">Visa</string>
+    <string name="american_express">American Express</string>
+    <string name="discover">Discover</string>
+    <string name="billing_address">Billing Address</string>
+
+    <string name="address_line">Address</string>
+    <string name="city_line">City</string>
+    <string name="state_line">State</string>
+    <string name="zipcode_line">Zip Code</string>
+
+    <string name="paypal_email">Paypal Email</string>
+    <string name="validate">Validate</string>
+    <string name="paypal_instructions">Please enter your paypal information to validate payment.</string>
+
+    <!-- Transaction stuff -->
+    <string name="confirmation_header">Please confirm the following information is correct before you book the listing.</string>
+    <string name="listing_details">Listing Details</string>
+
 </resources>
 
