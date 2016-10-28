@@ -64,6 +64,7 @@ public class ResultsActivity extends AppCompatActivity {
         ListViewCompat listView = new ListViewCompat(this);
         listView.setAdapter(new CustomResultsAdapter(this, searchResult.getAllListings()));
         listContentSpace.addView(listView);
+        avgParkingView.setText(Double.toString(mSearchResult.getAverageParkPrice()));
     }
 
     private void populateResultsList(List<ResultsPair> listings) {
