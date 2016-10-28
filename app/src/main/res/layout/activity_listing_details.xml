@@ -6,19 +6,59 @@
     <include layout="@layout/base_toolbar"
         android:id="@+id/listing_details_toolbar"/>
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/book_listing_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/book_listing"/>
 
-    <LinearLayout
-        android:id="@+id/listing_details_content"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/listing_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="40dp"/>
+
+            <TextView
+                android:id="@+id/provider_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/first_name"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:clickable="true"
+                android:layout_marginTop="40dp"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <ImageView
+                android:id="@+id/parking_image"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/profile_image_description"/>
+
+            <TextView
+                android:id="@+id/listing_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/book_listing_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/book_listing"
+                android:layout_marginTop="20dp"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
