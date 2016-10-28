@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 
 /**
@@ -56,8 +57,19 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     private String listingDetailsString(){
         //Format information for listing!!!
-        String s = "";
-        return s;
+        Listing listing = listingResult.getListing();
+        String listingString = "Name: " + listing.getName();
+        listingString += "Price: " + listing.getPrice();
+        listingString += "Owner: " + listing.getOwner().getFirstName();
+        listingString += "Description: " + listing.getDescription();
+        listingString += "Latitude and Longitude: " + listing.getLatitude() + ", " + listing.getLongitude();
+        listingString += "Handicap: " + listing.isHandicap();
+        listingString += "Covered: " + listing.isCovered();
+        listingString += "Compact: " + listing.isCompact();
+        listingString += "Refundable: " + listing.isRefundable();
+        listingString += "Start Time and End Time: " + listing.getStartTime() + " - " + listing.getStopTime();
+
+        return listingString;
     }
 
     @Override

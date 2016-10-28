@@ -6,6 +6,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,6 +37,10 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
 
     private String billingText, listingText;
 
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private FirebaseUser currentUser;
+
     @BindView(R.id.listing_details_textview)
     TextView listingDetailsTextView;
 
@@ -52,6 +61,9 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_confirmation);
         ButterKnife.bind(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null && bundle.containsKey(Consts.PAYMENT_TYPE)){
@@ -95,12 +107,21 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
 
     private String billingAddressText(){
         //format the billing address text
-        return "";
+        String billingAddress = address + "\n" + city + " " + state + " " + zipcode;
+        return billingAddress;
     }
 
     @OnClick(R.id.place_booking_button)
     protected void placeBooking() {
         //Write to database here
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        String uid = currentUser.getUid();
+
+        DatabaseReference nameRef = mDatabase.child(Consts.BOOKINGS_DATABASE).child(uid).child(listing.getName());
+        nameRef.child("seeker").setValue(name);
+        nameRef.child("bookStartTime").setValue(listing.getStartTime());
+        nameRef.child("bookEndTime").setValue(listing.getStopTime());
+
         finish();
     }
 }
