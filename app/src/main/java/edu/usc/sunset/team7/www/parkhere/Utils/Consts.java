@@ -66,8 +66,31 @@ public class Consts {
     public static final String DATABASE_PHONENUMBER = "phoneumber";
     public static final String DATABASE_EMAIL= "email";
     public static final String DATABASE_RATING = "rating";
+    public static final String DATABASE_IS_PROVIDING = "is_provider";
 
     //Transaction variables
     public static final String PAYMENT_TYPE = "payment_type";
+    public static final String CREDIT_CARD = "credit_card";
+    public static final String PAYPAL = "paypal";
+
+    public static final String CREDIT_CARD_TYPE = "credit_card_type";
+    public static final String VISA = "visa";
+    public static final String DISCOVER = "discover";
+    public static final String AMERICAN_EXPRESS = "american_express";
+    public static final String MASTERCARD = "mastercard";
+
+
+    public static final String CREDIT_CARD_NUMBER = "credit_card_number";
+    public static final String CREDIT_CARD_NAME = "name_on_card";
+    public static final String SECURITY_CODE = "security_code";
+    public static final String EXPIRATION_MONTH = "month";
+    public static final String EXPIRATION_YEAR  = "year";
+    public static final String ADDRESS = "address";
+    public static final String CITY = "city";
+    public static final String STATE = "state";
+    public static final String ZIPCODE = "zipcode";
+
+    public static final String PAYPAL_EMAIL = "paypal_email";
+
 
 }

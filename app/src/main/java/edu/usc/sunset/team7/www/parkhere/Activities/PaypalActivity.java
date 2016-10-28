@@ -57,7 +57,7 @@ public class PaypalActivity extends AppCompatActivity {
         if (checkValues()) {
             Intent intent = new Intent(PaypalActivity.this, TransactionConfirmationActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString(Consts.PAYMENT_TYPE, "paypal");
+            bundle.putString(Consts.PAYMENT_TYPE, Consts.PAYPAL);
             //bundle listing data too
         }
     }
