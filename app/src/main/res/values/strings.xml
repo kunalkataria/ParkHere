@@ -25,7 +25,7 @@
     <string name="end_time_label">End Time Label</string>
 
     <string name="post_listing">Post a listing!</string>
-    <string name="search">Search</string>
+    <string name="search">Search via latitude and longitude</string>
     <string name="listing">My Listings</string>
     <string name="booking">My Bookings</string>
     <string name="upload_picture">Upload profile image</string>
@@ -35,6 +35,11 @@
     <string name="book_listing">Book this listing!</string>
     <string name="filter">Filter</string>
 
+    <string name="are_you_providing">Will you be providing parking spots?</string>
+
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+
     <!-- Placeholder strings for adapter views. -->
     <string name="location_label">Location label</string>
     <string name="date_range">startDate - endDate</string>
@@ -43,6 +48,8 @@
     <string name="distance_label">Distance label</string>
 
     <!-- Strings for cancellation policies-->
+    <string name = "refundable_policy">Refundable</string>
+    <string name = "nonrefundable_policy">Nonrefundable</string>
     <string name="flexible_policy">Flexible</string>
     <string name="moderate_policy">Moderate</string>
     <string name="strict_policy">Strict</string>
@@ -59,7 +66,7 @@
     <string name="name_on_card">Name on Card</string>
     <string name="credit_card_number">Credit Card Number</string>
     <string name="security_number">Security Number</string>
-    <string name="expiration_data">Expiration Date</string>
+    <string name="expiration_date">Expiration Date</string>
     <string name="mastercard">Mastercard</string>
     <string name="visa">Visa</string>
     <string name="american_express">American Express</string>
@@ -76,8 +83,12 @@
     <string name="paypal_instructions">Please enter your paypal information to validate payment.</string>
 
     <!-- Transaction stuff -->
-    <string name="confirmation_header">Please confirm the following information is correct before you book the listing.</string>
+    <string name="confirmation_header">Please confirm the following information is correct.</string>
     <string name="listing_details">Listing Details</string>
+    <string name="billing_information">Billing Information</string>
+
+    <string name="place_booking">Place Booking</string>
+    <string name="expiration_date_month_year"> Expiration Date (Month and Year)</string>
 
 </resources>
 

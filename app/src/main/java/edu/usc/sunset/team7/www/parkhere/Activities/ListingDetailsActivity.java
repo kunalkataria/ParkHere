@@ -38,7 +38,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.book_listing_button)
     protected void bookListing() {
-
+        TransactionActivity.startActivity(ListingDetailsActivity.this);
     }
 
 }

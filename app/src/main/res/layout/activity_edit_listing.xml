@@ -53,6 +53,7 @@
                     android:hint="@string/listing_price" />
             </android.support.design.widget.TextInputLayout>
 
+
             <TextView
                 android:text="@string/cancellation_policies"
                 android:textColor="@color/colorPrimaryDark"

@@ -45,7 +45,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
         ButterKnife.bind(this, view);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+                getChildFragmentManager().findFragmentById(R.id.search_autocomplete_fragment);
         Log.i(TAG, "on create view");
         //set location to be the current location
         if (autocompleteFragment != null) {

@@ -90,6 +90,33 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/security_number"
                 android:inputType="number"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/expiration_date_month_year"
+                android:gravity="center"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <NumberPicker
+                    android:id="@+id/month_np"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <NumberPicker
+                    android:id="@+id/year_np"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -98,7 +125,6 @@
                 android:gravity="center"
                 android:textSize="20sp"
                 android:layout_marginTop="50dp"/>
-            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/address_textinputlayout"

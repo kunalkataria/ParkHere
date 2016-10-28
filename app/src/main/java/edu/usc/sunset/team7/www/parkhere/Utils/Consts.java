@@ -22,6 +22,7 @@ public class Consts {
     public static final String COVERED_EXTRA = "covered_extra";
     public static final String HANDICAP_EXTRA = "handicap_extra";
     public static final String COMPACT_EXTRA = "compact_extra";
+    public static final String LISTING_EDIT_EXTRA = "listing_edit_extra";
 
     public static final String SEARCH_INTENT_FILTER = "search_intent_filter";
 
@@ -40,12 +41,8 @@ public class Consts {
     public static final String TRUCK = "truck";
 
     //Cancellation Types
-    public static final String FLEXIBLE = "flexible";
-    public static final String MODERATE = "moderate";
-    public static final String STRICT = "strict";
-    public static final String SUPERSTRICT30 = "superstrict30";
-    public static final String SUPERSTRICT60 = "superstrict60";
-    public static final String LONGTERM = "longterm";
+    public static final String REFUNDABLE = "refundable";
+    public static final String NONREFUNDABLE = "nonrefundable";
 
     public static final String CANCELLATION_DETAILS = "Flexible: Full refund 1 day prior to arrival, except fees\n" +
             "Moderate: Full refund 5 days prior to arrival, except fees\n" +
@@ -72,8 +69,31 @@ public class Consts {
     public static final String DATABASE_PHONENUMBER = "phoneumber";
     public static final String DATABASE_EMAIL= "email";
     public static final String DATABASE_RATING = "rating";
+    public static final String DATABASE_IS_PROVIDING = "is_provider";
 
     //Transaction variables
     public static final String PAYMENT_TYPE = "payment_type";
+    public static final String CREDIT_CARD = "credit_card";
+    public static final String PAYPAL = "paypal";
+
+    public static final String CREDIT_CARD_TYPE = "credit_card_type";
+    public static final String VISA = "visa";
+    public static final String DISCOVER = "discover";
+    public static final String AMERICAN_EXPRESS = "american_express";
+    public static final String MASTERCARD = "mastercard";
+
+
+    public static final String CREDIT_CARD_NUMBER = "credit_card_number";
+    public static final String CREDIT_CARD_NAME = "name_on_card";
+    public static final String SECURITY_CODE = "security_code";
+    public static final String EXPIRATION_MONTH = "month";
+    public static final String EXPIRATION_YEAR  = "year";
+    public static final String ADDRESS = "address";
+    public static final String CITY = "city";
+    public static final String STATE = "state";
+    public static final String ZIPCODE = "zipcode";
+
+    public static final String PAYPAL_EMAIL = "paypal_email";
+
 
 }

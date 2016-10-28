@@ -139,7 +139,7 @@ public class SearchServlet extends HttpServlet {
     private boolean isWithinRadius(DataSnapshot child, double latitude, double longitude) {
         double listingLat = -1, listingLong = -1;
         for(DataSnapshot childSnap : child.getChildren()) {
-            Log.info(childSnap.getKey());
+            Log.info(childSnap.getKey() + " : " + childSnap.getValue());
             if(childSnap.getKey().equals("latitude")) listingLat = Double.valueOf(childSnap.getValue().toString());
             else if(childSnap.getKey().equals("longitude")) listingLong = Double.valueOf(childSnap.getValue().toString());
         }

@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -57,6 +58,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     @BindView(R.id.uploadImage) ImageView imageView;
 
+    @BindView(R.id.provider_switch)
+    SwitchCompat provideSwitch;
+
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
@@ -88,6 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
         String phoneNumber = phoneNumberEditText.getText().toString();
+
 
         if (Tools.emailValid(email)) {
             if (Tools.nameValid(firstName)) {
@@ -147,10 +152,12 @@ public class RegisterActivity extends AppCompatActivity {
                             mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_LASTNAME).setValue(lastName);
                             mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_EMAIL).setValue(email);
                             mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_PHONENUMBER).setValue(phoneNumber);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_IS_PROVIDING).setValue(provideSwitch.isChecked());
 
                             //Add user to public user database
                             mDatabase.child(Consts.PUBLIC_PROFILE_DATABASE).child(uid).child(Consts.DATABASE_FIRSTNAME).setValue(firstName);
                             mDatabase.child(Consts.PUBLIC_PROFILE_DATABASE).child(uid).child(Consts.DATABASE_RATING).setValue(0);
+
 
                             if(sourceImageUri!=null){
                                 StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
