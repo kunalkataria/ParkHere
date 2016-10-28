@@ -40,10 +40,9 @@ public class Listing {
         return longitude;
     }
 
-    public void setLocation(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
+    public void setLatitude (double latitude) { this.latitude = latitude; }
+
+    public void setLongitude (double longitude) { this.longitude = longitude; }
 
     public String getDescription() {
         return description;
@@ -65,11 +64,11 @@ public class Listing {
         return compact;
     }
 
-    public void setFilters(boolean handicap, boolean covered, boolean compact){
-        this.handicap = handicap;
-        this.covered = covered;
-        this.compact = compact;
-    }
+    public void setHandicap(boolean handicap) { this.handicap = handicap; }
+
+    public void setCovered(boolean covered) { this.covered = covered; }
+
+    public void setCompact(boolean compact) { this.compact = compact; }
 
     public long getStartTime() {
         return startTime;
@@ -79,10 +78,9 @@ public class Listing {
         return stopTime;
     }
 
-    public void setTime(long startTime, long stopTime) {
-        this.startTime = startTime;
-        this.stopTime = stopTime;
-    }
+    public void setStartTime(long startTime) { this.startTime = startTime; }
+
+    public void setStopTime(long endTime) { this.stopTime = endTime; }
 
     public PublicUserProfile getOwner() {
         return owner;

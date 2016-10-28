@@ -1,6 +1,7 @@
 package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,17 +38,18 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedBundleInstance) {
         super.onCreate(savedBundleInstance);
-        locationSelected = null;
     }
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.search_autocomplete_bar);
         ButterKnife.bind(this, view);
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        Log.i(TAG, "on create view");
         //set location to be the current location
         if (autocompleteFragment != null) {
+            Log.i(TAG, "Autocomplete Fragment not null");
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(Place place) {
@@ -63,7 +65,6 @@ public class SearchFragment extends Fragment {
             });
 
         }
-        Log.i(TAG, "Returning view.");
         return view;
     }
 
