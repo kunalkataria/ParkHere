@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
@@ -22,11 +22,11 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
  */
 
 public class CustomResultsAdapter extends BaseAdapter {
-    private ArrayList<ResultsPair> allResults;
+    private List<ResultsPair> allResults;
     private static LayoutInflater inflater = null;
     private Context context;
 
-    public CustomResultsAdapter(Activity activity, ArrayList<ResultsPair> allResults) {
+    public CustomResultsAdapter(Activity activity, List<ResultsPair> allResults) {
         this.context = activity;
         this.allResults = allResults;
     }
