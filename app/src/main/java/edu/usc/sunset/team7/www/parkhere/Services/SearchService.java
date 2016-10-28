@@ -2,6 +2,8 @@ package edu.usc.sunset.team7.www.parkhere.Services;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -68,9 +70,22 @@ public class SearchService extends IntentService {
             if (searchResultResponse.isSuccessful()) {
                 SearchResult searchResult = searchResultResponse.body();
 
+                Intent dataIntent = new Intent(Consts.SEARCH_INTENT_FILTER);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Consts.SEARCH_RESULT_EXTRA, searchResult);
+                dataIntent.putExtras(bundle);
+                LocalBroadcastManager.getInstance(SearchService.this).sendBroadcast(dataIntent);
+            } else {
+                Log.i("TESTING*********", "REQUEST UNSUCCESSFUL");
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent,flags,startId);
+    }
+
 }

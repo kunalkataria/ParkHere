@@ -1,5 +1,6 @@
 package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * Created by johnsonhui on 10/14/16.
  */
 
-public class SearchResult {
+public class SearchResult implements Serializable {
 
     @SerializedName("averageParkPrice")
     @Expose

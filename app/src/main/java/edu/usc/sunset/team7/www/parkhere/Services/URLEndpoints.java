@@ -5,6 +5,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by kunal on 10/15/16.
@@ -12,8 +13,10 @@ import retrofit2.http.Path;
  */
 
 public interface URLEndpoints {
-    @GET("/search?lat={lat}&lon={lon}&startTime={startTime}&stopTime={stopTime}")
-    Call<SearchResult> getResults(@Path("lat") double lat, @Path("lon") double lon,
-                                  @Path("startTime") long startTime, @Path("stopTime") long stopTime);
+    @GET("/search")
+    Call<SearchResult> getResults(@Query("lat") double lat,
+                                  @Query("lon") double lon,
+                                  @Query("startTime") long startTime,
+                                  @Query("stopTime") long stopTime);
 
 }
