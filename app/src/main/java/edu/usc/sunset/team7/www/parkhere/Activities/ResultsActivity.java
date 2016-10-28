@@ -10,12 +10,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListViewCompat;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.Adapters.CustomResultsAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Services.SearchService;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 
 /**
@@ -25,6 +31,12 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 public class ResultsActivity extends AppCompatActivity {
 
     @BindView(R.id.list_content_space) LinearLayout listContentSpace;
+
+    private boolean covered = false;
+    private boolean compact = false;
+    private boolean handicap = false;
+
+    private SearchResult mSearchResult;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
 
@@ -46,8 +58,16 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void populateResults(SearchResult searchResult) {
+        mSearchResult = searchResult;
         ListViewCompat listView = new ListViewCompat(this);
         listView.setAdapter(new CustomResultsAdapter(this, searchResult.getAllListings()));
+        listContentSpace.addView(listView);
+    }
+
+    private void populateResultsList(List<ResultsPair> listings) {
+        listContentSpace.removeAllViewsInLayout();
+        ListViewCompat listView = new ListViewCompat(this);
+        listView.setAdapter(new CustomResultsAdapter(this, listings));
         listContentSpace.addView(listView);
     }
 
@@ -69,6 +89,47 @@ public class ResultsActivity extends AppCompatActivity {
         serviceIntent.putExtra(Consts.START_TIME_EXTRA, startTime);
         serviceIntent.putExtra(Consts.STOP_TIME_EXTRA, stopTime);
         startService(serviceIntent);
+    }
+
+    // public static void startActivityForResult(int requestCode, Context context, boolean covered, boolean handicap, boolean compact
+    @OnClick (R.id.filter_button)
+    protected void startFiltering() {
+        FilterActivity.startActivityForResult(1, this, covered, handicap, compact);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Consts.FILTERS_CHANGED) {
+                handicap = data.getBooleanExtra(Consts.HANDICAP_EXTRA, false);
+                covered = data.getBooleanExtra(Consts.COVERED_EXTRA, false);
+                compact = data.getBooleanExtra(Consts.COMPACT_EXTRA, false);
+                filterResults();
+            }
+        }
+    }
+
+    private void filterResults() {
+        if (mSearchResult != null) {
+            List<ResultsPair> searchResultListings = mSearchResult.getAllListings();
+            // if all are set to false, set back to original results
+            if (!covered && !handicap && !compact) {
+                populateResultsList(searchResultListings);
+            } else {
+                List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
+                for (ResultsPair currentPair : searchResultListings) {
+                    Listing currentListing = currentPair.getListing();
+                    if (currentListing.isCompact() == compact &&
+                            currentListing.isCovered() == covered &&
+                            currentListing.isHandicap() == handicap) {
+
+                        filteredResults.add(currentPair);
+                    }
+                }
+                populateResultsList(filteredResults);
+            }
+
+        }
     }
 
     @Override

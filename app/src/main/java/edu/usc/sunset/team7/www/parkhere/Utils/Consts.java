@@ -19,8 +19,14 @@ public class Consts {
     public static final String STOP_TIME_EXTRA = "stop_time_extra";
     public static final String SEARCH_RESULT_EXTRA = "search_result_extra";
     public static final String LISTING_RESULT_EXTRA = "listing_result_extra";
+    public static final String COVERED_EXTRA = "covered_extra";
+    public static final String HANDICAP_EXTRA = "handicap_extra";
+    public static final String COMPACT_EXTRA = "compact_extra";
 
     public static final String SEARCH_INTENT_FILTER = "search_intent_filter";
+
+    public static final int FILTERS_CHANGED = 1001;
+    public static final int FILTERS_UNCHANGED = 1002;
 
     public static final String SEARCH_SERVICE = "Search Service";
 

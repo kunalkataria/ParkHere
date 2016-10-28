@@ -4,6 +4,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <include layout="@layout/base_toolbar"
+        android:id="@+id/results_toolbar"/>
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,6 +17,12 @@
             android:layout_height="match_parent" />
 
     </LinearLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/filter_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/filter"/>
 
     <LinearLayout
         android:id="@+id/list_content_space"

@@ -33,6 +33,7 @@
     <string name="select_picture">Select Picture</string>
     <string name="confirm">Confirm</string>
     <string name="book_listing">Book this listing!</string>
+    <string name="filter">Filter</string>
 
     <!-- Placeholder strings for adapter views. -->
     <string name="location_label">Location label</string>

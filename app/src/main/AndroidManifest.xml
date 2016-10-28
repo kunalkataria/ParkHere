@@ -20,6 +20,7 @@
         <activity android:name=".Activities.TransactionActivity"></activity>
         <activity android:name=".Activities.ResultsActivity"></activity>
         <activity android:name=".Activities.TransactionConfirmationActivity"></activity>
+        <activity android:name=".Activities.FilterActivity"></activity>
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
