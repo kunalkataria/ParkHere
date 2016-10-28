@@ -19,6 +19,7 @@ public class Consts {
     public static final String STOP_TIME_EXTRA = "stop_time_extra";
     public static final String SEARCH_RESULT_EXTRA = "search_result_extra";
     public static final String LISTING_RESULT_EXTRA = "listing_result_extra";
+    public static final String LISTING_EDIT_EXTRA = "listing_edit_extra";
 
     public static final String SEARCH_INTENT_FILTER = "search_intent_filter";
 
@@ -34,12 +35,8 @@ public class Consts {
     public static final String TRUCK = "truck";
 
     //Cancellation Types
-    public static final String FLEXIBLE = "flexible";
-    public static final String MODERATE = "moderate";
-    public static final String STRICT = "strict";
-    public static final String SUPERSTRICT30 = "superstrict30";
-    public static final String SUPERSTRICT60 = "superstrict60";
-    public static final String LONGTERM = "longterm";
+    public static final String REFUNDABLE = "refundable";
+    public static final String NONREFUNDABLE = "nonrefundable";
 
     public static final String CANCELLATION_DETAILS = "Flexible: Full refund 1 day prior to arrival, except fees\n" +
             "Moderate: Full refund 5 days prior to arrival, except fees\n" +

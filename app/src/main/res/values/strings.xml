@@ -44,6 +44,8 @@
     <string name="distance_label">Distance label</string>
 
     <!-- Strings for cancellation policies-->
+    <string name = "refundable_policy">Refundable</string>
+    <string name = "nonrefundable_policy">Nonrefundable</string>
     <string name="flexible_policy">Flexible</string>
     <string name="moderate_policy">Moderate</string>
     <string name="strict_policy">Strict</string>
