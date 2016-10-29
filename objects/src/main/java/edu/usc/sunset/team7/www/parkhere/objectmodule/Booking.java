@@ -5,18 +5,18 @@ package edu.usc.sunset.team7.www.parkhere.objectmodule;
  */
 
 public class Booking {
-    //DONT NEED THIS
+
     private Listing mListing;
-    private PublicUserProfile seeker;
-    private int providerRating;
+    //private PublicUserProfile seeker;
     private int spaceRating;
+    private String seekerID;
     private String review;
     private long bookStartTime;
     private long bookEndTime;
 
-    public Booking(Listing mListing, PublicUserProfile seeker) {
+    public Booking(Listing mListing) {
         this.mListing = mListing;
-        this.seeker = seeker;
+        //this.seeker = seeker;
     }
 
     public Listing getMListing() {
@@ -27,33 +27,12 @@ public class Booking {
         this.mListing = mListing;
     }
 
-    public PublicUserProfile getSeeker() {
-        return this.seeker;
-    }
-
-    public void setSeeker(PublicUserProfile seeker) {
-        this.seeker = seeker;
-    }
-
-    public int getProviderRating() {
-        return this.providerRating;
-    }
-
-    public void setProviderRating(int providerRating) {
-        this.providerRating = providerRating;
-    }
-
     public int getSpaceRating() {
         return this.spaceRating;
     }
 
     public String getReview() {
         return this.review;
-    }
-
-    public void rate(int providerRating, String review) {
-        this.providerRating = providerRating;
-        this.review = review;
     }
 
     public long getBookStartTime() {
@@ -72,5 +51,20 @@ public class Booking {
         this.bookEndTime = bookEndTime;
     }
 
+    public String getSeekerID() {
+        return seekerID;
+    }
+
+    public void setSeekerID(String seekerID) {
+        this.seekerID = seekerID;
+    }
+
+    public void setSpaceRating(int spaceRating) {
+        this.spaceRating = spaceRating;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
+    }
 
 }

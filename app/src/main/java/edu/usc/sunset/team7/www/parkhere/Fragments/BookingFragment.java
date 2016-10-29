@@ -32,16 +32,16 @@ public class BookingFragment extends Fragment {
     private DatabaseReference mDatabase;
     private FirebaseUser currentUser;
 
-    private ArrayList<Listing> allBookings;
+    private ArrayList<Booking> allBookings;
     @Override
     public void onCreate(Bundle savedBundleInstance) {
         super.onCreate(savedBundleInstance);
         //Get booking from database
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        allBookings = new ArrayList<Listing>();
+        allBookings = new ArrayList<Booking>();
         getAllBookings();
-        Listing[] sendToAdapter = allBookings.toArray(new Listing[allBookings.size()]);
+        Booking[] sendToAdapter = allBookings.toArray(new Booking[allBookings.size()]);
         //need to call the adapter now
 
     }
@@ -61,7 +61,7 @@ public class BookingFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Listing toAdd = parseListing(child);
+                    Booking toAdd = parseBooking(child);
                     allBookings.add(toAdd);
                 }
             }
@@ -88,56 +88,68 @@ public class BookingFragment extends Fragment {
         });
     }
 
-    private Listing parseListing (DataSnapshot snapshot) {
-        Listing listing = new Listing();
-        for (DataSnapshot child : snapshot.getChildren()) {
+    private Booking parseBooking (DataSnapshot snapshot) {
+        Booking toAddBooking = new Booking(null);
+        for(DataSnapshot child : snapshot.getChildren()) {
             switch (child.getKey()) {
-                case "name":
-                    listing.setName(child.getValue().toString());
+                case Consts.BOOKING_SEEKER_ID:
+                    toAddBooking.setSeekerID(child.getValue().toString());
                     break;
-                case "description":
-                    listing.setDescription(child.getValue().toString());
+                case Consts.BOOKING_SPACE_RATING:
+                    toAddBooking.setSpaceRating(Integer.parseInt(child.getValue().toString()));
                     break;
-                case "refundable":
-                    listing.setRefundable(Boolean.parseBoolean(child.getValue().toString()));
-                case "compact":
-                    listing.setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                case Consts.BOOKING_SPACE_REVIEW:
+                    toAddBooking.setReview(child.getValue().toString());
                     break;
-                case "covered":
-                    listing.setCovered(Boolean.parseBoolean(child.getValue().toString()));
-                    break;
-                case "handicap":
-                    listing.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
-                    break;
-                case "price":
-                    listing.setPrice(Double.parseDouble(child.getValue().toString()));
-                    break;
-                case "latitude":
-                    listing.setLatitude(Double.parseDouble(child.getValue().toString()));
-                    break;
-                case "longitude":
-                    listing.setLongitude(Double.parseDouble(child.getValue().toString()));
-                    break;
-                case "providerID":
-                    listing.setProviderID(child.getValue().toString());
-                    break;
-                case "startTime":
-                    listing.setStartTime(Long.valueOf(child.getValue().toString()));
-                    break;
-                case "stopTime":
-                    listing.setStopTime(Long.valueOf(child.getValue().toString()));
-                    break;
-                case "seekerID":
-                    listing.setSeekerID(child.getValue().toString());
-                    break;
-                case "rating":
-                    listing.setSpaceRating(Integer.parseInt(child.getValue().toString()));
-                    break;
-                case "review":
-                    listing.setReview(child.getValue().toString());
+                case Consts.LISTING_ID:
+                    toAddBooking.setMListing(parseListing(child));
                     break;
             }
         }
-        return listing;
+        return toAddBooking;
+    }
+
+    private Listing parseListing (DataSnapshot snapshot) {
+        Listing currBooking = new Listing();
+        for (DataSnapshot child : snapshot.getChildren()) {
+            switch (child.getKey()) {
+                case Consts.LISTING_NAME:
+                    currBooking.setName(child.getValue().toString());
+                    break;
+                case Consts.LISTING_DESCRIPTION:
+                    currBooking.setDescription(child.getValue().toString());
+                    break;
+                case Consts.LISTING_REFUNDABLE:
+                    currBooking.setRefundable(Boolean.parseBoolean(child.getValue().toString()));
+                case Consts.LISTING_COMPACT:
+                    currBooking.setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_COVERED:
+                    currBooking.setCovered(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_HANDICAP:
+                    currBooking.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_PRICE:
+                    currBooking.setPrice(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_LATITUDE:
+                    currBooking.setLatitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_LONGITUDE:
+                    currBooking.setLongitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_SEEKER:
+                    currBooking.setProviderID(child.getValue().toString());
+                    break;
+                case Consts.LISTING_START_TIME:
+                    currBooking.setStartTime(Long.valueOf(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_END_TIME:
+                    currBooking.setStopTime(Long.valueOf(child.getValue().toString()));
+                    break;
+            }
+        }
+        return currBooking;
     }
 }

@@ -18,11 +18,11 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
  */
 
 public class CustomBookingAdapter extends BaseAdapter {
-    private Listing[] allBookings;
+    private Booking[] allBookings;
     private static LayoutInflater inflater = null;
     private Context context;
 
-    public CustomBookingAdapter(Activity activity, Listing[] allBookings) {
+    public CustomBookingAdapter(Activity activity, Booking[] allBookings) {
         this.context = activity;
         this.allBookings = allBookings;
     }
