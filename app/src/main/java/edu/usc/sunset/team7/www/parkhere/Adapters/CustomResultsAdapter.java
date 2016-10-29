@@ -15,6 +15,7 @@ import java.util.List;
 import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 
 /**
@@ -23,7 +24,6 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 
 public class CustomResultsAdapter extends BaseAdapter {
     private List<ResultsPair> allResults;
-    private static LayoutInflater inflater = null;
     private Context context;
 
     public CustomResultsAdapter(Activity activity, List<ResultsPair> allResults) {
@@ -54,20 +54,24 @@ public class CustomResultsAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ItemShell item;
         View rowView = convertView;
-        if(rowView != null) {
-            inflater = ((Activity)context).getLayoutInflater();
+        if(rowView == null) {
+            LayoutInflater inflater=((Activity)context).getLayoutInflater();
             rowView = inflater.inflate(R.layout.results_view, parent, false);
 
             item = new ItemShell();
             item.searchLabel = (TextView) rowView.findViewById(R.id.results_label);
             item.distanceLabel = (TextView) rowView.findViewById(R.id.distance_label);
             item.imgView = (ImageView) rowView.findViewById(R.id.results_image);
+
+            rowView.setTag(item);
         }
         else {
             item = (ItemShell) rowView.getTag();
         }
 
-        item.searchLabel.setText(((ResultsPair)getItem(position)).getListing().getName());
+        String currentResult = ((ResultsPair) getItem(position)).getListing().getName();
+
+        item.searchLabel.setText(currentResult);
         double myDouble = ((ResultsPair) getItem(position)).getDistance();
         item.distanceLabel.setText(Double.toString(myDouble));
         //image stuff later

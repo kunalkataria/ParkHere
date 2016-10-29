@@ -61,9 +61,6 @@ public class PostListingActivity extends AppCompatActivity {
     private String nameString, descriptionString;
     private double price;
 
-    //Cancellation controls
-    @BindView(R.id.cancellation_textView)
-    TextView cancellation;
     @BindView(R.id.myRadioGroup)
     RadioGroup radioGroup;
     @BindView(R.id.refundable_rButton)
@@ -172,6 +169,7 @@ public class PostListingActivity extends AppCompatActivity {
             newListingRef.child(Consts.LISTING_START_TIME).setValue(startTime);
             newListingRef.child(Consts.LISTING_END_TIME).setValue(endTime);
             newListingRef.child(Consts.LISTING_PROVIDER).setValue(uid);
+            //dont need this
             newListingRef.child(Consts.LISTING_SEEKER).setValue(null);
             newListingRef.child(Consts.LISTING_RATING).setValue(null);
             newListingRef.child(Consts.LISTING_REVIEW).setValue(null);

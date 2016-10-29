@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 public class ResultsPair implements Serializable {
 
-
+    private static final long serialVersionUID = 1L;
 
     @SerializedName("Listing")
     @Expose
@@ -45,13 +45,4 @@ public class ResultsPair implements Serializable {
         this.distance = distance;
     }
 
-    private void readObject(ObjectInputStream aInputStream)
-            throws ClassNotFoundException, IOException {
-        aInputStream.defaultReadObject();
-    }
-
-    private void writeObject(ObjectOutputStream aOutputStream) throws IOException {
-        aOutputStream.defaultWriteObject();
-    }
-
-    }
+}

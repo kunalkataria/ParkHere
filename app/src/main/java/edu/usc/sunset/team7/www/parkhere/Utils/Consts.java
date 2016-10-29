@@ -50,13 +50,14 @@ public class Consts {
     public static final String USERS_DATABASE = "Users";
     public static final String LISTINGS_DATABASE = "Listings";
     public static final String BOOKINGS_DATABASE = "Bookings";
+    public static final String REVIEWS_DATABASE = "Reviews";
 
     //User Database
     public static final String USER_FIRSTNAME = "First Name";
     public static final String USER_LASTNAME = "Last Name";
     public static final String USER_PHONENUMBER = "Phone Number";
     public static final String USER_EMAIL= "Email";
-    public static final String USER_RATING = "Eating";
+    public static final String USER_RATING = "Rating";
     public static final String USER_IS_PROVIDER = "Is Provider";
     public static final String USER_BALANCE = "Balance";
     public static final String USER_PROFILE_PIC = "Profile Picture URL";
@@ -111,6 +112,8 @@ public class Consts {
     public static final String ZIPCODE = "zipcode";
 
     public static final String PAYPAL_EMAIL = "paypal_email";
+
+    public static final String USER_ID = "User ID";
 
 
 }

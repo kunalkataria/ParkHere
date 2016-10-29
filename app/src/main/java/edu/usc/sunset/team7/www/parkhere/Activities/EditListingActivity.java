@@ -4,23 +4,35 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Hashtable;
 
 import butterknife.BindView;
@@ -57,6 +69,10 @@ public class EditListingActivity extends AppCompatActivity {
 
     private String nameString, descriptionString;
     private double price;
+
+    ///Image
+    @BindView(R.id.parking_image)
+    ImageView parkingImageView;
 
     //Parking Type Buttons
     @BindView(R.id.handicap_button_control)
@@ -124,6 +140,22 @@ public class EditListingActivity extends AppCompatActivity {
         compactSwitch.setChecked(getListing.isCompact());
         coveredSwitch.setChecked(getListing.isCovered());
         listingId = getListing.getListingID();
+
+        //not exactly sure if this is right
+        URL url = null;
+        try {
+            url = new URL(getListing.getImageURL());
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            parkingImageView.setImageBitmap(bmp);
+        } catch (MalformedURLException e) {
+            parkingImageView.setImageResource(R.mipmap.empty_parking);
+            e.printStackTrace();
+        } catch (IOException e) {
+            parkingImageView.setImageResource(R.mipmap.empty_parking);
+            e.printStackTrace();
+        }
+
+        //imageView.setImageBitmap(bmp);
         boolean isRefundable = getListing.isRefundable();
         if(isRefundable){
             ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
@@ -153,6 +185,25 @@ public class EditListingActivity extends AppCompatActivity {
             nameRef.child(Consts.LISTING_REFUNDABLE).setValue(cancellationIds.get(radioGroup.getCheckedRadioButtonId()));
 
             //Need image url
+            StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
+            StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
+            //Best way to store the data?
+            UploadTask uploadTask = parkingRef.child(uid).putFile(sourceImageUri);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    Toast.makeText(EditListingActivity.this, "Unable to upload the image. Please check your internet connection and try again.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
+                }
+            });
+            nameRef.child(Consts.LISTING_IMAGE).setValue(firebaseImageURL);
 
         }
     }

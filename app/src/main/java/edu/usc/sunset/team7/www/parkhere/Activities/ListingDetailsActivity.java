@@ -32,7 +32,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
     ImageView parkingImageView;
     @BindView(R.id.book_listing_button)
     Button bookListingButton;
-    @BindView(R.id.post_listing_toolbar) Toolbar postListingToolbar;
+    @BindView(R.id.listing_details_toolbar) Toolbar postListingToolbar;
 
     private ResultsPair listingResult;
 
@@ -51,7 +51,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
         listingResult = (ResultsPair) getIntent().getSerializableExtra(Consts.LISTING_RESULT_EXTRA);
         listingNameTextView.setText(listingResult.getListing().getName());
-        //providerNameTextView.setText(listingResult.getListing().getOwner().getFirstName());
+//        providerNameTextView.setText(listingResult.getListing().getOwner().getFirstName());
         listingDetailsTextView.setText(listingDetailsString());
     }
 
@@ -60,7 +60,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         Listing listing = listingResult.getListing();
         String listingString = "\nName: " + listing.getName();
         listingString += "\nPrice: " + listing.getPrice();
-        //listingString += "\nOwner: " + listing.getOwner().getFirstName();
+//        listingString += "\nOwner: " + listing.getOwner().getFirstName();
         listingString += "\nDescription: " + listing.getDescription();
         listingString += "\nLatitude and Longitude: " + listing.getLatitude() + ", " + listing.getLongitude();
         listingString += "\nHandicap: " + listing.isHandicap();
