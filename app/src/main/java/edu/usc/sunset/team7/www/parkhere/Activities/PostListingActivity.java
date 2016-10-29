@@ -173,8 +173,7 @@ public class PostListingActivity extends AppCompatActivity {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = currentUser.getUid();
             String listingID = mDatabase.child(Consts.LISTINGS_DATABASE).push().getKey();;
-            DatabaseReference newListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listingID);
-
+            DatabaseReference newListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(Consts.PROVIDER_ID).child(Consts.ACTIVE_LISTINGS).child(listingID);
             newListingRef.child(Consts.LISTING_NAME).setValue(nameString);
             newListingRef.child(Consts.LISTING_DESCRIPTION).setValue(descriptionString);
             newListingRef.child(Consts.LISTING_REFUNDABLE).setValue(isRefundable);
@@ -186,11 +185,6 @@ public class PostListingActivity extends AppCompatActivity {
             newListingRef.child(Consts.LISTING_LONGITUDE).setValue(longitude);
             newListingRef.child(Consts.LISTING_START_TIME).setValue(startTime);
             newListingRef.child(Consts.LISTING_END_TIME).setValue(endTime);
-            newListingRef.child(Consts.LISTING_PROVIDER).setValue(uid);
-            //dont need this
-            newListingRef.child(Consts.LISTING_SEEKER).setValue(null);
-            newListingRef.child(Consts.LISTING_RATING).setValue(null);
-            newListingRef.child(Consts.LISTING_REVIEW).setValue(null);
 
             StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
             StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
