@@ -143,14 +143,14 @@ public class EditListingActivity extends AppCompatActivity {
             String uid = currentUser.getUid();
 
             DatabaseReference nameRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listingId);
-            nameRef.child("description").setValue(descriptionString);
-            nameRef.child("price").setValue(price);
+            nameRef.child(Consts.LISTING_DESCRIPTION).setValue(descriptionString);
+            nameRef.child(Consts.LISTING_PRICE).setValue(price);
 
-            nameRef.child("handicap").setValue(isHandicap);
-            nameRef.child("compact").setValue(isCompact);
-            nameRef.child("covered").setValue(isCovered);
-            nameRef.child("name").setValue(nameString);
-            nameRef.child("refundable").setValue(cancellationIds.get(radioGroup.getCheckedRadioButtonId()));
+            nameRef.child(Consts.LISTING_HANDICAP).setValue(isHandicap);
+            nameRef.child(Consts.LISTING_COMPACT).setValue(isCompact);
+            nameRef.child(Consts.LISTING_COVERED).setValue(isCovered);
+            nameRef.child(Consts.LISTING_NAME).setValue(nameString);
+            nameRef.child(Consts.LISTING_REFUNDABLE).setValue(cancellationIds.get(radioGroup.getCheckedRadioButtonId()));
 
             //Need image url
 
