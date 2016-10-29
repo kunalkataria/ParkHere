@@ -5,7 +5,7 @@ package edu.usc.sunset.team7.www.parkhere.objectmodule;
  */
 
 public class Booking {
-
+    //DONT NEED THIS
     private Listing mListing;
     private PublicUserProfile seeker;
     private int providerRating;

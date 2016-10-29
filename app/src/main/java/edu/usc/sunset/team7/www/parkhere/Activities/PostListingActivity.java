@@ -41,7 +41,7 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 /**
  * Created by kunal on 10/23/16.
  */
-
+//NEED TO CHANGE HOW TO POST LISTING DUE TO DB RESTRUCTURING
 public class PostListingActivity extends AppCompatActivity {
 
     private static final String TAG = "PostListingActivity";
