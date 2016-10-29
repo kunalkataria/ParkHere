@@ -57,7 +57,7 @@
     <string name="superstrict30_policy">Super Strict 30</string>
     <string name="superstrict60_policy">Super Strict 60</string>
     <string name="longterm_policy">Long Term</string>
-    <string name="cancellation_policies">Cancellation Policies (click for info)</string>
+    <string name="cancellation_policy">Cancellation Policy</string>
 
     <!-- Transaction strings-->
     <string name="choose_payment">Choose your payment method</string>

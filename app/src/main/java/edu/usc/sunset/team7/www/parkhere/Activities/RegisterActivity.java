@@ -65,8 +65,9 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
     private FirebaseStorage storage;
-    private Uri firebaseUri = null;
     private Uri sourceImageUri = null;
+    private String email, password, firstName, lastName, phoneNumber, profilePictureURL;
+    private boolean isProvider;
 
     private static final int RESULT_LOAD_IMAGE = 1;
 
@@ -87,18 +88,34 @@ public class RegisterActivity extends AppCompatActivity {
     @OnClick(R.id.register_button)
     protected void register() {
         removeErrors();
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        String firstName = firstNameEditText.getText().toString();
-        String lastName = lastNameEditText.getText().toString();
-        String phoneNumber = phoneNumberEditText.getText().toString();
+        collectValues();
+        if(checkValues()){
+            writeToDatabase();
+        }
+    }
 
+    private void removeErrors() {
+        emailTextInputLayout.setErrorEnabled(false);
+        firstNameTextInputLayout.setErrorEnabled(false);
+        lastNameTextInputLayout.setErrorEnabled(false);
+        phoneNumberTextInputLayout.setErrorEnabled(false);
+    }
 
+    private void collectValues() {
+        email = emailEditText.getText().toString();
+        password = passwordEditText.getText().toString();
+        firstName = firstNameEditText.getText().toString();
+        lastName = lastNameEditText.getText().toString();
+        phoneNumber = phoneNumberEditText.getText().toString();
+        isProvider = provideSwitch.isChecked();
+    }
+
+    private boolean checkValues(){
         if (Tools.emailValid(email)) {
             if (Tools.nameValid(firstName)) {
                 if (Tools.nameValid(lastName)) {
                     if (Tools.phoneValid(phoneNumber)) {
-                        registerUser(email, password, firstName, lastName, phoneNumber);
+                        return true;
                     } else {
                         // phone number not valid
                         phoneNumberTextInputLayout.setErrorEnabled(true);
@@ -119,45 +136,30 @@ public class RegisterActivity extends AppCompatActivity {
             emailTextInputLayout.setErrorEnabled(true);
             emailTextInputLayout.setError("Email not valid");
         }
-
+        return false;
     }
 
-    private void removeErrors() {
-        emailTextInputLayout.setErrorEnabled(false);
-        firstNameTextInputLayout.setErrorEnabled(false);
-        lastNameTextInputLayout.setErrorEnabled(false);
-        phoneNumberTextInputLayout.setErrorEnabled(false);
-    }
-
-    private void registerUser(final String email, final String password, final String firstName, final String lastName, final String phoneNumber) {
+    private void writeToDatabase(){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-
                         if (!task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Registration failed. Please try again.",
                                     Toast.LENGTH_SHORT).show();
-                        }
-                        else {
+                        } else{
                             mDatabase = FirebaseDatabase.getInstance().getReference();
                             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                             //Add user to users database
-                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_FIRSTNAME).setValue(firstName);
-                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_LASTNAME).setValue(lastName);
-                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_EMAIL).setValue(email);
-                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_PHONENUMBER).setValue(phoneNumber);
-                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.DATABASE_IS_PROVIDING).setValue(provideSwitch.isChecked());
-
-                            //Add user to public user database
-                            mDatabase.child(Consts.PUBLIC_PROFILE_DATABASE).child(uid).child(Consts.DATABASE_FIRSTNAME).setValue(firstName);
-                            mDatabase.child(Consts.PUBLIC_PROFILE_DATABASE).child(uid).child(Consts.DATABASE_RATING).setValue(0);
-
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_FIRSTNAME).setValue(firstName);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_LASTNAME).setValue(lastName);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_EMAIL).setValue(email);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_PHONENUMBER).setValue(phoneNumber);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_IS_PROVIDER).setValue(isProvider);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_RATING).setValue(0);
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_BALANCE).setValue(0);
 
                             if(sourceImageUri!=null){
                                 StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
@@ -175,10 +177,14 @@ public class RegisterActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                                        firebaseUri = taskSnapshot.getDownloadUrl();
+                                         profilePictureURL = taskSnapshot.getDownloadUrl().toString();
                                     }
                                 });
+                            } else {
+                                profilePictureURL = Consts.USER_DEFAULT_PROFILE_PIC_URL;
                             }
+
+                            mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_PROFILE_PIC).setValue(profilePictureURL);
                             finish();
                         }
                     }

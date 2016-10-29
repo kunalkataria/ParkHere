@@ -67,12 +67,9 @@
             </android.support.design.widget.TextInputLayout>
 
             <TextView
-                android:text="@string/cancellation_policies"
-                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/cancellation_policy"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/cancellation_textView"
-                android:clickable="true"/>
+                android:layout_height="wrap_content" />
 
             <RadioGroup
                 android:layout_width="wrap_content"
@@ -150,38 +147,6 @@
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/handicap_button_control"
                     android:text="@string/handicap_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/suv_button_control"
-                    android:text="@string/suv_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/truck_button_control"
-                    android:text="@string/truck_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
