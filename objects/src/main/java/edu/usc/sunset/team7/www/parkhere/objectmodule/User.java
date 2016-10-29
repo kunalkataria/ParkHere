@@ -9,11 +9,17 @@ import javax.swing.ImageIcon;
  */
 
 public class User extends PublicUserProfile {
+
+    public enum defaultScreen {
+        SEEKER, PROVIDER
+    }
+
     private String lastName;
     private String userID;
     private String phoneNumber;
     private ImageIcon profilePicture; //need import
     private String email;
+    private defaultScreen accountType;
 
     public User(String firstName, String lastName, double rating, List<Review> reviews, String phoneNumber, ImageIcon profilePicture, String email){
         super(firstName, rating, reviews);
@@ -34,6 +40,14 @@ public class User extends PublicUserProfile {
         if (lastName != null) {
             this.lastName = lastName;
         }
+    }
+
+    public void setDefaultScreen(defaultScreen accountType) {
+        this.accountType = accountType;
+    }
+
+    public defaultScreen getAccountType() {
+        return this.accountType;
     }
 
     public String getPhoneNumber() {
