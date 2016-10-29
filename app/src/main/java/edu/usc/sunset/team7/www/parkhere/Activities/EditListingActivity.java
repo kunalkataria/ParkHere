@@ -42,6 +42,8 @@ import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
+import com.squareup.picasso.Picasso;
+
 /**
  * Created by johnsonhui on 10/27/16.
  */
