@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -99,46 +100,46 @@ public class SearchFragment extends Fragment {
     protected void startSearch() {
         if (locationSelected != null) {
             LatLng latLng = locationSelected.getLatLng();
-            ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, 0, 0);
+            ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, startDate, stopDate);
         }
     }
 
-    @OnClick(R.id.start_date_inputlayout)
+    @OnClick(R.id.start_time_edittext)
     protected void startDateDialog() {
         if (searchDateCheckbox.isChecked()) {
-            LocalDate localDate = LocalDate.now();
+            Calendar c = Calendar.getInstance();
             DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                     DateTime datetime = new DateTime(year, month, day, 0, 0);
                     startDate = datetime.getMillis() / 1000; // save this
                     startTimeEditText.setText(Tools.getDateString(year, month, day));
-                    Log.i("TESTING******", "START DATE IS " + startDate);
                 }
             };
             startDatePicker = new DatePickerDialog
-                    (getActivity(), startDateListener, localDate.getYear(), localDate.getMonthOfYear() - 1, localDate.getDayOfYear());
+                    (getActivity(), startDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+            startDatePicker.show();
 
         }
     }
 
-    @OnClick(R.id.stop_date_inputlayout)
+    @OnClick(R.id.stop_time_edittext)
     protected void stopDateDialog() {
         if (searchDateCheckbox.isChecked()) {
             if (searchDateCheckbox.isChecked()) {
-                LocalDate localDate = LocalDate.now();
+//                LocalDate localDate = LocalDate.now();
+                Calendar c = Calendar.getInstance();
                 DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         DateTime datetime = new DateTime(year, month, day, 23, 59);
                         stopDate = datetime.getMillis() / 1000;
                         stopTimeEditText.setText(Tools.getDateString(year, month, day));
-                        Log.i("TESTING******", "STOP DATE IS " + stopDate);
                     }
                 };
-                startDatePicker = new DatePickerDialog
-                        (getActivity(), startDateListener, localDate.getYear(), localDate.getMonthOfYear() - 1, localDate.getDayOfYear());
-
+                stopDatePicker = new DatePickerDialog
+                        (getActivity(), startDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                stopDatePicker.show();
             }
         }
     }
@@ -154,42 +155,12 @@ public class SearchFragment extends Fragment {
 
     private void clearStart() {
         startDate = 0;
-        startTimeEditText.clearComposingText();
+        startTimeEditText.setText("");
     }
 
     private void clearStop() {
         stopDate = 0;
-        stopTimeEditText.clearComposingText();
+        stopTimeEditText.setText("");
     }
-
-    public void sendLocationToFirebase() {
-        if(locationSelected == null) return;
-
-        LatLng latLng = locationSelected.getLatLng();
-
-        //send it over
-//        try {
-//            String url = "http://www.parkhere-ceccb.appspot.com/?"+
-//                    "lat="+latLng.latitude+
-//                    "&long="+latLng.longitude;
-//            URL servletURL = new URL(url);
-//            HttpURLConnection connection = (HttpURLConnection) servletURL.openConnection();
-//            connection.setRequestMethod("GET");
-//            connection.setRequestProperty("Content-Type", "text/plain");
-//            connection.setRequestProperty("charset", "utf-8");
-//            connection.connect();
-//
-//            //reading back listings as json
-//            InputStream is = connection.getInputStream();
-//            JsonReader reader = new JsonReader(new InputStreamReader(is));
-//            while(reader.hasNext()) {
-//                reader.beginObject();
-//
-//            }
-//        } catch (IOException ioe) {
-//            System.out.println(ioe.getMessage());
-//        }
-    }
-
 
 }
