@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import java.text.DecimalFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.PublicUserProfile;
 
 /**
@@ -26,12 +28,26 @@ public class UserProfileActivity extends AppCompatActivity {
     @BindView(R.id.user_name_view) TextView userName;
     @BindView(R.id.user_rating_bar) RatingBar userRating;
 
-    private PublicUserProfile user;
+    private String uid, name, rating, imageURL,
+
+    private static final String TAG = "UserProfileActivity";
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activty_public_profile);
         ButterKnife.bind(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null && bundle.containsKey(Consts.USER_ID)){
+            uid = (String)bundle.get(Consts.USER_ID);
+            getValuesFromDatabase();
+            setValues();
+        } else{
+            Log.d(TAG, "BUNDLE WAS EMPTY!");
+        }
+
+
 
         userName.setText(user.getFirstName());
 
@@ -40,6 +56,14 @@ public class UserProfileActivity extends AppCompatActivity {
 
         Drawable drawable = userRating.getProgressDrawable();
         drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
+
+    }
+
+    private void getValuesFromDatabase(){
+
+    }
+
+    private void setValues(){
 
     }
 }
