@@ -32,7 +32,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
     ImageView parkingImageView;
     @BindView(R.id.book_listing_button)
     Button bookListingButton;
-    @BindView(R.id.post_listing_toolbar) Toolbar postListingToolbar;
+    @BindView(R.id.listing_details_toolbar) Toolbar postListingToolbar;
 
     private ResultsPair listingResult;
 

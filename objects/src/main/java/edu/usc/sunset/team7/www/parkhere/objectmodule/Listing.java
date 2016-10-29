@@ -1,10 +1,15 @@
 package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
+import java.io.Serializable;
+
 /**
  * Created by kunal on 10/12/16.
  */
 
-public class Listing {
+public class Listing implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private String name;
     private double latitude;
     private double longitude;
