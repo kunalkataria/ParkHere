@@ -30,6 +30,7 @@ public class SearchResult implements Serializable {
     }
 
     public void addListing(ResultsPair addListing) {
+        System.out.println(addListing.getListing().getName());
         allListings.add(addListing);
     }
 
