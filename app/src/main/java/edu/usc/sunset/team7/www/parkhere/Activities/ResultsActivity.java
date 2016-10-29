@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListViewCompat;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class ResultsActivity extends AppCompatActivity {
 
     @BindView(R.id.list_content_space) LinearLayout listContentSpace;
     @BindView(R.id.avg_parking_price_value) TextView avgParkingView;
+    @BindView(R.id.loading_panel) RelativeLayout loadingPanel;
 
     private boolean covered = false;
     private boolean compact = false;
@@ -60,6 +63,7 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void populateResults(SearchResult searchResult) {
+        removeLoadingAnimation();
         mSearchResult = searchResult;
         ListViewCompat listView = new ListViewCompat(this);
         listView.setAdapter(new CustomResultsAdapter(this, searchResult.getAllListings()));
@@ -73,7 +77,6 @@ public class ResultsActivity extends AppCompatActivity {
         listView.setAdapter(new CustomResultsAdapter(this, listings));
         listContentSpace.addView(listView);
     }
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +136,10 @@ public class ResultsActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    private void removeLoadingAnimation() {
+        loadingPanel.setVisibility(View.GONE);
     }
 
     @Override

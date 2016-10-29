@@ -61,9 +61,6 @@ public class PostListingActivity extends AppCompatActivity {
     private String nameString, descriptionString;
     private double price;
 
-    //Cancellation controls
-    @BindView(R.id.cancellation_textView)
-    TextView cancellation;
     @BindView(R.id.myRadioGroup)
     RadioGroup radioGroup;
     @BindView(R.id.refundable_rButton)

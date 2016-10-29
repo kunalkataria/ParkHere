@@ -8,6 +8,26 @@
     <include layout="@layout/base_toolbar"
         android:id="@+id/results_toolbar"/>
 
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/filter_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/filter"/>
+
+    <RelativeLayout
+        android:id="@+id/loading_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"/>
+
+    </RelativeLayout>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -16,7 +36,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:text="@string/avg_parking_price"
-            android:textSize="20sp"
+            android:textSize="16.5sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/avg_parking_price_title"
@@ -24,7 +44,6 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_marginStart="5dp"
-            android:text="$ 0.00"
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,13 +51,6 @@
             android:gravity="center_vertical"/>
 
     </LinearLayout>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/filter_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/filter"/>
-
 
     <LinearLayout
         android:id="@+id/list_content_space"
