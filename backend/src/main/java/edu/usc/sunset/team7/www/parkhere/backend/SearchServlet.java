@@ -8,7 +8,6 @@ package edu.usc.sunset.team7.www.parkhere.backend;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,8 +25,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Scanner;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -123,7 +120,7 @@ public class SearchServlet extends HttpServlet {
                 Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) *
                         Math.sin(dLon/2) * Math.sin(dLon/2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double d = R * c;
+        double d = R * c * 0.621371;
         return d;
     }
 
@@ -134,7 +131,7 @@ public class SearchServlet extends HttpServlet {
             else if(childSnap.getKey().equals("longitude")) listingLong = Double.valueOf(childSnap.getValue().toString());
         }
         if(listingLat == -1 || listingLong == -1) return false;
-        return (distance(listingLat, listingLong, latitude, longitude) < 4828.03);
+        return (distance(listingLat, listingLong, latitude, longitude) <= 3);
     }
 
     @Override
