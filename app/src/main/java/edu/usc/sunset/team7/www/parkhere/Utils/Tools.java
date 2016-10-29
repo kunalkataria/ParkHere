@@ -29,4 +29,8 @@ public class Tools {
         return true;
     }
 
+    public static String getDateString(int year, int month, int day) {
+        return month + "/" + day + "/" + year;
+    }
+
 }

@@ -41,6 +41,49 @@
             android:inputType="numberDecimal"/>
     </android.support.design.widget.TextInputLayout>
 
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/search_date_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_within_daterange"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/start_date_inputlayout"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:hint="@string/start_date">
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/start_time_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="false"
+                android:longClickable="false"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/stop_date_inputlayout"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:hint="@string/stop_date">
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/stop_time_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="false"
+                android:longClickable="false"/>
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/search_button"
         android:layout_width="match_parent"
