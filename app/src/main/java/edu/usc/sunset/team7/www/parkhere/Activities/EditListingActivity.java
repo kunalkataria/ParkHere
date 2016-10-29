@@ -92,7 +92,7 @@ public class EditListingActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private Uri sourceImageUri = null;
     private String firebaseImageURL = "";
-
+    private String listingId;
     private Listing editListing;
     public static void startActivity(Context context) {
         Intent i = new Intent(context, EditListingActivity.class);
@@ -123,6 +123,7 @@ public class EditListingActivity extends AppCompatActivity {
         handicapSwitch.setChecked(getListing.isHandicap());
         compactSwitch.setChecked(getListing.isCompact());
         coveredSwitch.setChecked(getListing.isCovered());
+        listingId = getListing.getListingID();
         boolean isRefundable = getListing.isRefundable();
         if(isRefundable){
             ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
@@ -141,15 +142,15 @@ public class EditListingActivity extends AppCompatActivity {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = currentUser.getUid();
 
-            DatabaseReference nameRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child(nameString);
+            DatabaseReference nameRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listingId);
             nameRef.child("description").setValue(descriptionString);
             nameRef.child("price").setValue(price);
 
             nameRef.child("handicap").setValue(isHandicap);
             nameRef.child("compact").setValue(isCompact);
             nameRef.child("covered").setValue(isCovered);
-
-            nameRef.child("cancellation_policy").setValue(cancellationIds.get(radioGroup.getCheckedRadioButtonId()));
+            nameRef.child("name").setValue(nameString);
+            nameRef.child("refundable").setValue(cancellationIds.get(radioGroup.getCheckedRadioButtonId()));
 
             //Need image url
 
