@@ -6,9 +6,7 @@
 
 package edu.usc.sunset.team7.www.parkhere.backend;
 
-import com.google.api.client.json.Json;
 import com.google.appengine.repackaged.com.google.gson.stream.JsonReader;
-import com.google.appengine.repackaged.com.google.gson.stream.JsonWriter;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.ChildEventListener;
@@ -23,10 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -35,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 
 public class SearchServlet extends HttpServlet {
     //parkhere-ceccb.appspot.com
@@ -43,6 +40,7 @@ public class SearchServlet extends HttpServlet {
     public DatabaseReference listingsReference;
     public Gson gson = new Gson();
     public boolean isInitialized;
+    public SearchResult searchResult;
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -54,6 +52,7 @@ public class SearchServlet extends HttpServlet {
 
         System.out.println("Lat: " + latitude + " Long: " + longitude);
 
+        searchResult = new SearchResult(avgParkingCost(latitude, longitude));
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setServiceAccount(getServletContext().getResourceAsStream("/WEB-INF/ParkHere-9f6082855b14.json"))
@@ -80,29 +79,24 @@ public class SearchServlet extends HttpServlet {
                 .getInstance()
                 .getReference("listings");
 
-        final Writer pw = resp.getWriter();
+        final PrintWriter pw = resp.getWriter();
 
         ref.orderByChild("latitude").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 for(DataSnapshot childSnap : dataSnapshot.getChildren()) {
                     if(childSnap.hasChildren()) {
-                        Log.info("has children");
                         if(isWithinRadius(childSnap, latitude, longitude)) {
-                            Log.info("Got inside radius");
                             Listing listing = parseListing(childSnap);
                             double distance = distance(listing.getLatitude(), listing.getLongitude(), latitude, longitude);
                             ResultsPair resultsPair = new ResultsPair(listing, distance);
-                            try {
-                                pw.write("Writing to pw");
-                                pw.write(gson.toJson(resultsPair));
-                                pw.flush();
-                            } catch (IOException e) {
-                                Log.info(e.getMessage());
-                            }
+                            searchResult.addListing(resultsPair);
                         }
                     }
                 }
+                pw.write("Writing to pw");
+                pw.write(gson.toJson(searchResult));
+                pw.flush();
             }
 
             @Override
@@ -139,7 +133,6 @@ public class SearchServlet extends HttpServlet {
     private boolean isWithinRadius(DataSnapshot child, double latitude, double longitude) {
         double listingLat = -1, listingLong = -1;
         for(DataSnapshot childSnap : child.getChildren()) {
-            Log.info(childSnap.getKey() + " : " + childSnap.getValue());
             if(childSnap.getKey().equals("latitude")) listingLat = Double.valueOf(childSnap.getValue().toString());
             else if(childSnap.getKey().equals("longitude")) listingLong = Double.valueOf(childSnap.getValue().toString());
         }
