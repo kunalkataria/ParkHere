@@ -55,7 +55,7 @@
 
 
             <TextView
-                android:text="@string/cancellation_policies"
+                android:text="@string/refundable_policy"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

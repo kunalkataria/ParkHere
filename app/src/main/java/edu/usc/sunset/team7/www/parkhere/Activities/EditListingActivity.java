@@ -157,20 +157,6 @@ public class EditListingActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.cancellation_textView)
-    protected void viewCancellationPolicyDetails() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(Consts.CANCELLATION_DETAILS)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //do something
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     private boolean checkFields() {
         nameString = parkingNameEditText.getText().toString();
         descriptionString =descriptionEditText.getText().toString();
