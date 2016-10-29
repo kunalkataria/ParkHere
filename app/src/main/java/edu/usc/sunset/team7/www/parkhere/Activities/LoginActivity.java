@@ -78,8 +78,13 @@ public class LoginActivity extends AppCompatActivity {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
+                    //if seeker
                     HomeActivity.startActivityForSearch(LoginActivity.this);
                     finish();
+
+                    //else
+                    //homeactivity startactivity for listing
+
                     /* Verification Code needs to be worked on
                     if(user.isEmailVerified()){
                         // check if user is a seeker or provider
