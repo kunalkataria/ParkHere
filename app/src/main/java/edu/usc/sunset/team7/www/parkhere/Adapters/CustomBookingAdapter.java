@@ -11,17 +11,18 @@ import android.widget.TextView;
 
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 /**
  * Created by johnsonhui on 10/23/16.
  */
 
 public class CustomBookingAdapter extends BaseAdapter {
-    private Booking[] allBookings;
+    private Listing[] allBookings;
     private static LayoutInflater inflater = null;
     private Context context;
 
-    public CustomBookingAdapter(Activity activity, Booking[] allBookings) {
+    public CustomBookingAdapter(Activity activity, Listing[] allBookings) {
         this.context = activity;
         this.allBookings = allBookings;
     }
