@@ -36,8 +36,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/user_rating_bar"
                 android:numStars="5"
-                android:rating="0.0f"
-                android:stepSize = "0.1f"
+                android:rating="0.0"
+                android:stepSize = "0.1"
                 android:layout_weight="1"/>
 
         </LinearLayout>
