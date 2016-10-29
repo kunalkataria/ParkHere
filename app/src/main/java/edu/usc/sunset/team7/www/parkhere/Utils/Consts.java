@@ -50,19 +50,21 @@ public class Consts {
     public static final String USERS_DATABASE = "Users";
     public static final String LISTINGS_DATABASE = "Listings";
     public static final String BOOKINGS_DATABASE = "Bookings";
+    public static final String REVIEWS_DATABASE = "Reviews";
 
     //User Database
     public static final String USER_FIRSTNAME = "First Name";
     public static final String USER_LASTNAME = "Last Name";
     public static final String USER_PHONENUMBER = "Phone Number";
     public static final String USER_EMAIL= "Email";
-    public static final String USER_RATING = "Eating";
+    public static final String USER_RATING = "Rating";
     public static final String USER_IS_PROVIDER = "Is Provider";
     public static final String USER_BALANCE = "Balance";
     public static final String USER_PROFILE_PIC = "Profile Picture URL";
     public static final String USER_DEFAULT_PROFILE_PIC_URL = "https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2Fdefault_profile-web.png?alt=media&token=4d876ecf-8c3a-42cb-b140-fc8441e9335e";
 
     //Listing Database
+    public static final String LISTING_ID = "Listing ID";
     public static final String LISTING_NAME = "Listing Name";
     public static final String LISTING_DESCRIPTION = "Listing Description";
     public static final String LISTING_REFUNDABLE = "Is Refundable";
@@ -80,7 +82,11 @@ public class Consts {
     public static final String LISTING_REVIEW = "Review";
     public static final String LISTING_IMAGE = "Image URL";
 
-
+    //Booking Database
+    public static final String BOOKING_ID = "Booking ID";
+    public static final String BOOKING_SEEKER_ID = "Seeker ID";
+    public static final String BOOKING_SPACE_RATING = "Space Rating";
+    public static final String BOOKING_SPACE_REVIEW = "Space Review";
 
 
     //Transaction variables
@@ -106,6 +112,8 @@ public class Consts {
     public static final String ZIPCODE = "zipcode";
 
     public static final String PAYPAL_EMAIL = "paypal_email";
+
+    public static final String USER_ID = "User ID";
 
 
 }

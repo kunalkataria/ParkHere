@@ -35,12 +35,13 @@
     <string name="confirm">Confirm</string>
     <string name="book_listing">Book this listing!</string>
     <string name="filter">Filter</string>
-    <string name="avg_parking_price">Average Parking Price:</string>
+    <string name="avg_parking_price">Average Parking Price: (data from ParkWhiz) $</string>
     <string name="start_date">Start date</string>
     <string name="stop_date">Stop date</string>
     <string name="review">Review</string>
-
+    <string name="current_balance">Current Balance</string>
     <string name="are_you_providing">Will you be providing parking spots?</string>
+    <string name="transfer_to_bank">Transfer balance to bank account</string>
 
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
