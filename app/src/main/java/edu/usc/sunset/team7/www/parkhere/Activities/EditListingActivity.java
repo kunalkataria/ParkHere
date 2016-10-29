@@ -34,6 +34,7 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
  * Created by johnsonhui on 10/27/16.
  */
 
+//NEED TO CHANGE HOW YOU POST THE LISTING DUE TO DB RESTRUCTURING
 public class EditListingActivity extends AppCompatActivity {
 
     //private static final String EditListingTag = "EditListingActivity";

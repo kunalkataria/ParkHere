@@ -19,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +41,7 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 /**
  * Created by kunal on 10/23/16.
  */
-
+//NEED TO CHANGE HOW TO POST LISTING DUE TO DB RESTRUCTURING
 public class PostListingActivity extends AppCompatActivity {
 
     private static final String TAG = "PostListingActivity";
@@ -114,6 +115,10 @@ public class PostListingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_listing);
         ButterKnife.bind(this);
+
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.search_autocomplete_fragment);
+
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         currentUser = mAuth.getCurrentUser();

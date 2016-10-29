@@ -38,6 +38,7 @@
     <string name="avg_parking_price">Average Parking Price:</string>
     <string name="start_date">Start date</string>
     <string name="stop_date">Stop date</string>
+    <string name="review">Review</string>
 
     <string name="are_you_providing">Will you be providing parking spots?</string>
 

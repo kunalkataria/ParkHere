@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +36,7 @@ import edu.usc.sunset.team7.www.parkhere.R;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
-
+    private boolean isProvider;
     //Firebase variable declarations
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -78,8 +83,14 @@ public class LoginActivity extends AppCompatActivity {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
-                    HomeActivity.startActivityForSearch(LoginActivity.this);
-                    finish();
+                    checkIsProvider(user);
+                    if(isProvider) {
+                        //start my listings activity
+                    } else {
+                        HomeActivity.startActivityForSearch(LoginActivity.this);
+                        finish();
+                    }
+
                     /* Verification Code needs to be worked on
                     if(user.isEmailVerified()){
                         // check if user is a seeker or provider
@@ -179,6 +190,27 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private void checkIsProvider(FirebaseUser user) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("user/"+user.getUid());
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    if(child.getKey().equals("is_provider")) {
+                        isProvider = Boolean.parseBoolean(child.getValue().toString());
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.i(TAG, error.getMessage());
+            }
+        });
+
     }
 
 }

@@ -14,12 +14,15 @@ public class Listing {
     private boolean compact;
     private long startTime;
     private long stopTime;
-    private PublicUserProfile owner;
+    //private PublicUserProfile owner;
     private boolean active;
     private boolean refundable;
     private String listingID;
     private double price;
-
+    private int spaceRating;
+    private String review;
+    private String providerID;
+    private String seekerID;
     private String imageURL;
     //need to add functionality for can cancel policy
     //need to add picture functionality & list of pictures
@@ -84,14 +87,6 @@ public class Listing {
 
     public void setStopTime(long endTime) { this.stopTime = endTime; }
 
-    public PublicUserProfile getOwner() {
-        return owner;
-    }
-
-    public void setOwner(PublicUserProfile owner) {
-        this.owner = owner;
-    }
-
     public boolean isRefundable() {
         return refundable;
     }
@@ -124,4 +119,35 @@ public class Listing {
         this.imageURL = imageURL;
     }
 
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    public int getSpaceRating() {
+        return spaceRating;
+    }
+
+    public void setSpaceRating(int spaceRating) {
+        this.spaceRating = spaceRating;
+    }
+
+    public String getProviderID() {
+        return providerID;
+    }
+
+    public void setProviderID(String providerID) {
+        this.providerID = providerID;
+    }
+
+    public String getSeekerID() {
+        return seekerID;
+    }
+
+    public void setSeekerID(String seekerID) {
+        this.seekerID = seekerID;
+    }
 }
