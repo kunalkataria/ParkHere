@@ -1,12 +1,14 @@
 package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.app.Fragment;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,16 +45,13 @@ public class BalanceFragment extends Fragment {
     private DatabaseReference mDatabase;
     private String uid;
     @Override
-    public void onCreate(Bundle savedBundleInstance) { super.onCreate(savedBundleInstance); }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.listing_fragment, container, false);
-        ButterKnife.bind(this, view);
+    public void onCreate(Bundle savedBundleInstance) {
+        super.onCreate(savedBundleInstance);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         uid = currentUser.getUid();
+        System.out.println(uid);
         userBalance = 0.0;
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE+"/"+uid);
@@ -61,25 +60,42 @@ public class BalanceFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
                     if(child.getKey().equals(Consts.USER_BALANCE)) {
-                        userBalance = Double.valueOf(child.getValue().toString());
+                        System.out.println(child.getValue().toString());
+                        userBalance = Double.parseDouble(child.getValue().toString());
                         break;
                     }
                 }
+                String formattedBalance = "$" + String.format("%.2f", userBalance);
+                currentBalanceNumber.setText(formattedBalance);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+    }
 
-        return null;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.balance_fragment, container, false);
+
+        ButterKnife.bind(this, view);
+
+        return view;
     }
 
     @OnClick(R.id.transfer_button)
     protected void transferToBank(){
-        //currentUser = the firebase used
+
+        String formattedBalance = "$" + String.format("%.2f", userBalance);
+        Toast.makeText(getActivity().getApplicationContext(),
+                "You transferred " + formattedBalance + " to the bank!",
+                Toast.LENGTH_SHORT).show();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference balanceRef = mDatabase.child(Consts.USERS_DATABASE).child(uid);
         balanceRef.child(Consts.USER_BALANCE).setValue(0.0);
-        currentBalanceNumber.setText("0.0");
+        userBalance = 0.0;
+        formattedBalance = "$" + String.format("%.2f", userBalance);
+        currentBalanceNumber.setText(formattedBalance);
     }
 }
