@@ -10,6 +10,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DecimalFormat;
 
 import butterknife.BindView;
@@ -46,8 +52,6 @@ public class UserProfileActivity extends AppCompatActivity {
             Log.d(TAG, "BUNDLE WAS EMPTY!");
         }
 
-
-
         userName.setText(name);
 
         DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
@@ -59,6 +63,29 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void getValuesFromDatabase(){
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("users/" + uid);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot child : dataSnapshot.getChildren()) {
+                    switch (child.getKey()){
+                        case "firstname":
+                            name = child.getValue().toString();
+                            break;
+                        case "photoURL":
+                            imageURL = child.getValue().toString();
+                            break;
+                        case "avgRating":
+                            rating = child.getValue().toString();
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
 
     }
 
