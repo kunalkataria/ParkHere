@@ -16,7 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
-import edu.usc.sunset.team7.www.parkhere.objectmodule.PublicUserProfile;
 
 /**
  * Created by Jonathan on 10/28/16.
@@ -28,7 +27,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @BindView(R.id.user_name_view) TextView userName;
     @BindView(R.id.user_rating_bar) RatingBar userRating;
 
-    private String uid, name, rating, imageURL,
+    private String uid, name, rating, imageURL;
 
     private static final String TAG = "UserProfileActivity";
 
@@ -49,10 +48,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
 
-        userName.setText(user.getFirstName());
+        userName.setText(name);
 
         DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
-        userRating.setRating(Float.valueOf(oneDigit.format(user.getRating())));
+        userRating.setRating(Float.valueOf(oneDigit.format(rating)));
 
         Drawable drawable = userRating.getProgressDrawable();
         drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);

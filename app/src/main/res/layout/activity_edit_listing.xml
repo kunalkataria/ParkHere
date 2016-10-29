@@ -53,9 +53,8 @@
                     android:hint="@string/listing_price" />
             </android.support.design.widget.TextInputLayout>
 
-
             <TextView
-                android:text="@string/cancellation_policy"
+                android:text="@string/refundable_policy"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

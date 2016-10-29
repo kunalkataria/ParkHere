@@ -64,6 +64,7 @@ public class Consts {
     public static final String USER_DEFAULT_PROFILE_PIC_URL = "https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2Fdefault_profile-web.png?alt=media&token=4d876ecf-8c3a-42cb-b140-fc8441e9335e";
 
     //Listing Database
+    public static final String LISTING_ID = "Listing ID";
     public static final String LISTING_NAME = "Listing Name";
     public static final String LISTING_DESCRIPTION = "Listing Description";
     public static final String LISTING_REFUNDABLE = "Is Refundable";
@@ -81,7 +82,11 @@ public class Consts {
     public static final String LISTING_REVIEW = "Review";
     public static final String LISTING_IMAGE = "Image URL";
 
-
+    //Booking Database
+    public static final String BOOKING_ID = "Booking ID";
+    public static final String BOOKING_SEEKER_ID = "Seeker ID";
+    public static final String BOOKING_SPACE_RATING = "Space Rating";
+    public static final String BOOKING_SPACE_REVIEW = "Space Review";
 
 
     //Transaction variables
