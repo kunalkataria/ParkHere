@@ -21,6 +21,7 @@
     <string name="submit">Submit</string>
     <string name="listing_price">$ Price</string>
     <string name="search_within_daterange">Search within date range</string>
+    <string name="dates_available">Dates space is available</string>
 
     <string name="start_time_label">Start Time Label</string>
     <string name="end_time_label">End Time Label</string>
