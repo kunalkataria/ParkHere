@@ -1,8 +1,6 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -90,8 +88,7 @@ public class PostListingActivity extends AppCompatActivity {
     @BindView(R.id.covered_button_control)
     SwitchCompat coveredSwitch;
 
-
-    boolean isCompact,isHandicap, isCovered;
+    boolean isCompact,isHandicap, isCovered, isRefundable;
 
     @BindView(R.id.upload_listing_button)
     Button uploadListingButton;
@@ -104,6 +101,10 @@ public class PostListingActivity extends AppCompatActivity {
     private String firebaseImageURL = "";
 
     //NEED TO ADD DATE AND TIME PICKERS
+    private long startTime, endTime;
+
+    //NEED TO GET LONGITUDE AND LATITUDE
+    private double longitude, latitude;
 
     public static void startActivity(Context context) {
         Intent i = new Intent(context, PostListingActivity.class);
@@ -151,36 +152,29 @@ public class PostListingActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.cancellation_textView)
-    protected void viewCancellationPolicyDetails() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(Consts.CANCELLATION_DETAILS)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //do something
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     @OnClick(R.id.upload_listing_button)
     protected void submitListing() {
         if(checkFields()) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = currentUser.getUid();
+            String listingID = mDatabase.child(Consts.LISTINGS_DATABASE).push().getKey();;
+            DatabaseReference newListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listingID);
 
-            DatabaseReference nameRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child(nameString);
-            nameRef.child("description").setValue(descriptionString);
-            nameRef.child("price").setValue(price);
-
-            nameRef.child("handicap").setValue(isHandicap);
-            nameRef.child("compact").setValue(isCompact);
-            nameRef.child("covered").setValue(isCovered);
-
-            nameRef.child("cancellation_policy").setValue(cancellationIds.get(radioGroup.getCheckedRadioButtonId()));
-            //ALSO STORE PARKING IMAGE!!!!
+            newListingRef.child(Consts.LISTING_NAME).setValue(nameString);
+            newListingRef.child(Consts.LISTING_DESCRIPTION).setValue(descriptionString);
+            newListingRef.child(Consts.LISTING_REFUNDABLE).setValue(isRefundable);
+            newListingRef.child(Consts.LISTING_PRICE).setValue(price);
+            newListingRef.child(Consts.LISTING_COMPACT).setValue(isCompact);
+            newListingRef.child(Consts.LISTING_COVERED).setValue(isCovered);
+            newListingRef.child(Consts.LISTING_HANDICAP).setValue(isHandicap);
+            newListingRef.child(Consts.LISTING_LATITUDE).setValue(latitude);
+            newListingRef.child(Consts.LISTING_LONGITUDE).setValue(longitude);
+            newListingRef.child(Consts.LISTING_START_TIME).setValue(startTime);
+            newListingRef.child(Consts.LISTING_END_TIME).setValue(endTime);
+            newListingRef.child(Consts.LISTING_PROVIDER).setValue(uid);
+            newListingRef.child(Consts.LISTING_SEEKER).setValue(null);
+            newListingRef.child(Consts.LISTING_RATING).setValue(null);
+            newListingRef.child(Consts.LISTING_REVIEW).setValue(null);
 
             StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
             StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
@@ -201,7 +195,7 @@ public class PostListingActivity extends AppCompatActivity {
                     firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
                 }
             });
-            nameRef.child("imageurl").setValue(firebaseImageURL);
+            newListingRef.child(Consts.LISTING_IMAGE).setValue(firebaseImageURL);
         }
     }
 
@@ -245,5 +239,6 @@ public class PostListingActivity extends AppCompatActivity {
         isCompact = compactSwitch.isChecked();
         isCovered = coveredSwitch.isChecked();
         isHandicap =  handicapSwitch.isChecked();
+        isRefundable = radioGroup.getCheckedRadioButtonId() == R.id.refundable_rButton;
     }
 }

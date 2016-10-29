@@ -58,16 +58,16 @@ public class ListingDetailsActivity extends AppCompatActivity {
     private String listingDetailsString(){
         //Format information for listing!!!
         Listing listing = listingResult.getListing();
-        String listingString = "Name: " + listing.getName();
-        listingString += "Price: " + listing.getPrice();
-        listingString += "Owner: " + listing.getOwner().getFirstName();
-        listingString += "Description: " + listing.getDescription();
-        listingString += "Latitude and Longitude: " + listing.getLatitude() + ", " + listing.getLongitude();
-        listingString += "Handicap: " + listing.isHandicap();
-        listingString += "Covered: " + listing.isCovered();
-        listingString += "Compact: " + listing.isCompact();
-        listingString += "Refundable: " + listing.isRefundable();
-        listingString += "Start Time and End Time: " + listing.getStartTime() + " - " + listing.getStopTime();
+        String listingString = "\nName: " + listing.getName();
+        listingString += "\nPrice: " + listing.getPrice();
+        listingString += "\nOwner: " + listing.getOwner().getFirstName();
+        listingString += "\nDescription: " + listing.getDescription();
+        listingString += "\nLatitude and Longitude: " + listing.getLatitude() + ", " + listing.getLongitude();
+        listingString += "\nHandicap: " + listing.isHandicap();
+        listingString += "\nCovered: " + listing.isCovered();
+        listingString += "\nCompact: " + listing.isCompact();
+        listingString += "\nRefundable: " + listing.isRefundable();
+        listingString += "\nStart Time and End Time: " + listing.getStartTime() + " - " + listing.getStopTime();
 
         return listingString;
     }

@@ -30,27 +30,16 @@ public class Consts {
     public static final int FILTERS_UNCHANGED = 1002;
 
     public static final String SEARCH_SERVICE = "Search Service";
-
     public static final String BASE_URL = "http://parkhere-ceccb.appspot.com";
 
     //Parking types
     public static final String HANDICAP = "handicap";
     public static final String COMPACT = "compact";
     public static final String COVERED = "covered";
-    public static final String SUV = "suv";
-    public static final String TRUCK = "truck";
 
     //Cancellation Types
     public static final String REFUNDABLE = "refundable";
     public static final String NONREFUNDABLE = "nonrefundable";
-
-    public static final String CANCELLATION_DETAILS = "Flexible: Full refund 1 day prior to arrival, except fees\n" +
-            "Moderate: Full refund 5 days prior to arrival, except fees\n" +
-            "Strict: 50% refund up until 1 week prior to arrival, except fees\n" +
-            "Super Strict 30: 50% refund up until 30 days prior to arrival, except fees\n" +
-            "Super Strict 60: 50% refund up until 60 days prior to arrival, except fees\n" +
-            "Long Term: First month not refundable, 30 day notice for cancellation";
-
 
     //Firebase Storage
     public static final String STORAGE_URL = "gs://parkhere-ceccb.appspot.com";
@@ -58,18 +47,41 @@ public class Consts {
     public static final String STORAGE_PARKING_SPACES = "parking_spaces/";
 
     //Firebase Databases
-    public static final String USERS_DATABASE = "users";
-    public static final String LISTINGS_DATABASE = "listings";
-    public static final String PUBLIC_PROFILE_DATABASE = "publicusers";
-    public static final String BOOKINGS_DATABASE = "bookings";
-    public static final String TRANSACTIONS_DATABASE = "transactions";
+    public static final String USERS_DATABASE = "Users";
+    public static final String LISTINGS_DATABASE = "Listings";
+    public static final String BOOKINGS_DATABASE = "Bookings";
 
-    public static final String DATABASE_FIRSTNAME = "firstname";
-    public static final String DATABASE_LASTNAME = "lastname";
-    public static final String DATABASE_PHONENUMBER = "phoneumber";
-    public static final String DATABASE_EMAIL= "email";
-    public static final String DATABASE_RATING = "rating";
-    public static final String DATABASE_IS_PROVIDING = "is_provider";
+    //User Database
+    public static final String USER_FIRSTNAME = "First Name";
+    public static final String USER_LASTNAME = "Last Name";
+    public static final String USER_PHONENUMBER = "Phone Number";
+    public static final String USER_EMAIL= "Email";
+    public static final String USER_RATING = "Eating";
+    public static final String USER_IS_PROVIDER = "Is Provider";
+    public static final String USER_BALANCE = "Balance";
+    public static final String USER_PROFILE_PIC = "Profile Picture URL";
+    public static final String USER_DEFAULT_PROFILE_PIC_URL = "https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2Fdefault_profile-web.png?alt=media&token=4d876ecf-8c3a-42cb-b140-fc8441e9335e";
+
+    //Listing Database
+    public static final String LISTING_NAME = "Listing Name";
+    public static final String LISTING_DESCRIPTION = "Listing Description";
+    public static final String LISTING_REFUNDABLE = "Is Refundable";
+    public static final String LISTING_COMPACT = "Compact";
+    public static final String LISTING_COVERED = "Covered";
+    public static final String LISTING_HANDICAP = "Handicap";
+    public static final String LISTING_PRICE = "Price";
+    public static final String LISTING_LONGITUDE = "Longitude";
+    public static final String LISTING_LATITUDE = "Latitude";
+    public static final String LISTING_PROVIDER = "Provider";
+    public static final String LISTING_START_TIME = "Start Time";
+    public static final String LISTING_END_TIME = "End Time";
+    public static final String LISTING_SEEKER = "Seeker";
+    public static final String LISTING_RATING = "Rating";
+    public static final String LISTING_REVIEW = "Review";
+    public static final String LISTING_IMAGE = "Image URL";
+
+
+
 
     //Transaction variables
     public static final String PAYMENT_TYPE = "payment_type";

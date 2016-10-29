@@ -92,7 +92,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         billingText = "Payment Type: Credit Card" + "\nCredit Card Number: " + hideCreditCardNumber() +
                 "\n";
         billingText += billingAddressText();
-
+        billingInformationTextView.setText(billingText);
     }
 
     private String hideCreditCardNumber(){
@@ -107,7 +107,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
 
     private String billingAddressText(){
         //format the billing address text
-        String billingAddress = address + "\n" + city + " " + state + " " + zipcode;
+        String billingAddress = address + "\n" + city + ", " + state + " " + zipcode;
         return billingAddress;
     }
 
