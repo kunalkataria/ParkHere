@@ -1,5 +1,7 @@
 package edu.usc.sunset.team7.www.parkhere.Utils;
 
+import java.util.Date;
+
 /**
  * Created by kunal on 10/14/16.
  */
@@ -23,6 +25,12 @@ public class Tools {
     // returns true if phone number passed is 10 digits long ONLY
     public static boolean phoneValid(String phoneNumber) {
         return phoneNumber.matches(PHONE_REGEX);
+    }
+
+    public static String convertUnixTimeToDateString(long unix_time){
+        Date date = new Date ();
+        date.setTime((long)unix_time*1000);
+        return date.toString();
     }
 
     public static boolean passwordValid(String password) {

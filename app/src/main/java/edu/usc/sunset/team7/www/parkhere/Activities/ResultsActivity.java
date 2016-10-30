@@ -89,6 +89,8 @@ public class ResultsActivity extends AppCompatActivity {
         long startTime = intent.getLongExtra(Consts.START_TIME_EXTRA, 0);
         long stopTime = intent.getLongExtra(Consts.STOP_TIME_EXTRA, 0);
 //        SearchService searchService = new SearchService();
+
+
         Intent serviceIntent = new Intent(this, SearchService.class);
         serviceIntent.putExtra(Consts.LATITUDE_EXTRA, latitude);
         serviceIntent.putExtra(Consts.LONGITUDE_EXTRA, longitude);

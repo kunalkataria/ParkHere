@@ -16,7 +16,6 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -44,8 +43,6 @@ import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
-
-import static com.google.android.gms.internal.zzs.TAG;
 
 /**
  * Created by kunal on 10/23/16.
@@ -196,7 +193,7 @@ public class PostListingActivity extends AppCompatActivity {
         if(checkFields()) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = currentUser.getUid();
-            String listingID = mDatabase.child(Consts.LISTINGS_DATABASE).push().getKey();;
+            String listingID = mDatabase.child(Consts.LISTINGS_DATABASE).push().getKey();
             final DatabaseReference newListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child(Consts.ACTIVE_LISTINGS).child(listingID);
             newListingRef.child(Consts.LISTING_NAME).setValue(nameString);
             newListingRef.child(Consts.LISTING_DESCRIPTION).setValue(descriptionString);
