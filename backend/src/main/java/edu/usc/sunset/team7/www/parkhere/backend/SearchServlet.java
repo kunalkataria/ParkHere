@@ -149,10 +149,10 @@ public class SearchServlet extends HttpServlet {
         for(DataSnapshot childSnap : child.getChildren()) {
             if(childSnap.getKey().equals("Start Time")) {
                 long listingStartTime = Long.parseLong(childSnap.getValue().toString());
-                if(listingStartTime < startTime) return false;
+                if(listingStartTime > startTime) return false;
             } else if(childSnap.getKey().equals("End Time")) {
                 long listingStopTime = Long.parseLong(childSnap.getValue().toString());
-                if(stopTime != -1 && listingStopTime > stopTime) return false;
+                if(stopTime != -1 && listingStopTime < stopTime) return false;
             }
         }
         return true;
