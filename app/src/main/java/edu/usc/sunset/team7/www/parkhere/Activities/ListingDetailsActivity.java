@@ -80,20 +80,21 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     private String listingDetailsString(){
         Listing listing = listingResult.getListing();
-        String listingString = "Name of Listing: " + listing.getName() +
-                "\nListing Description: "  + listing.getDescription() +
-                "\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()) +
-                "\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()) +
-                "\nDistance Away: " + listingResult.getDistance() +
-                "\nListing provider: " + providerFirstName +
-                "\n\nParking Information" +
-                "\nPrice: " + listing.getPrice() + "+10% ParkHere fee" +
-                "\nRefundable? " +listing.isRefundable() +
-                "\nHandicap? " + listing.isHandicap() +
-                "\nCovered? " + listing.isCovered() +
-                "\nCompact? " + listing.isCompact();
+        StringBuilder descriptionBuilder = new StringBuilder();
+        descriptionBuilder.append("Name of Listing: " + listing.getName());
+        descriptionBuilder.append("\nListing Description: "  + listing.getDescription());
+        descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()));
+        descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
+        descriptionBuilder.append("\nDistance Away: " + listingResult.getDistance());
+        descriptionBuilder.append("\nListing provider: " + providerFirstName);
+        descriptionBuilder.append("\n\nParking Information");
+        descriptionBuilder.append("\nPrice: " + listing.getPrice());
+        descriptionBuilder.append("\nRefundable? " +listing.isRefundable());
+        descriptionBuilder.append("\nHandicap? " + listing.isHandicap());
+        descriptionBuilder.append("\nCovered? " + listing.isCovered());
+        descriptionBuilder.append("\nCompact? " + listing.isCompact());
 
-        return listingString;
+        return descriptionBuilder.toString();
     }
 
     @Override
