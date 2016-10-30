@@ -29,9 +29,10 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    @BindView(R.id.userProfileImage) ImageView profilePic;
+    @BindView(R.id.profile_image) ImageView profilePic;
     @BindView(R.id.user_name_view) TextView userName;
     @BindView(R.id.user_rating_bar) RatingBar userRating;
+
 
     private String uid, name, rating, imageURL;
 
@@ -44,10 +45,10 @@ public class UserProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Bundle bundle = getIntent().getExtras();
+
         if(bundle!=null && bundle.containsKey(Consts.USER_ID)){
             uid = (String)bundle.get(Consts.USER_ID);
             getValuesFromDatabase();
-            setValues();
         } else{
             Log.d(TAG, "BUNDLE WAS EMPTY!");
         }
@@ -63,33 +64,57 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void getValuesFromDatabase(){
-        DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("users/" + uid);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference userRef = FirebaseDatabase.getInstance()
+                .getReference(Consts.USERS_DATABASE).child(uid);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
                     switch (child.getKey()){
-                        case "firstname":
+                        case Consts.USER_FIRSTNAME:
                             name = child.getValue().toString();
                             break;
-                        case "photoURL":
+                        case Consts.USER_PROFILE_PIC:
                             imageURL = child.getValue().toString();
                             break;
-                        case "avgRating":
+                        case Consts.USER_RATING:
                             rating = child.getValue().toString();
                             break;
+                    }
+                }
+                setValues();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE);
+        reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(uid)){
+                    if(dataSnapshot.child(uid).hasChildren()){
+                        for(DataSnapshot child : dataSnapshot.child(uid).getChildren()){
+
+                        }
                     }
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
 
     }
 
     private void setValues(){
+        if(name!=null && imageURL!=null && rating!=null){
 
+        } else{
+            Log.d(TAG, "MISSING VALUES FOR USER PROFILE = NULL");
+        }
     }
 }

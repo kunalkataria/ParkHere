@@ -60,11 +60,11 @@ public class ListingDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Listing details");
         }
 
-        ValueEventListener providerNameListener = new ValueEventListener() {
+        final ValueEventListener providerNameListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 providerFirstName = (String) dataSnapshot.getValue();
-                listingNameTextView.setText(providerFirstName);
+                providerNameTextView.setText(providerFirstName);
                 listingDetailsTextView.setText(listingDetailsString());
             }
 
@@ -120,7 +120,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         //Go to public user profile activity
         Intent intent = new Intent(ListingDetailsActivity.this, UserProfileActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString(Consts.PROVIDER_ID, listingResult.getListing().getProviderID());
+        bundle.putString(Consts.USER_ID, listingResult.getListing().getProviderID());
         intent.putExtras(bundle);
         startActivity(intent);
     }
