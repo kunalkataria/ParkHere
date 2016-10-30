@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
@@ -49,7 +51,7 @@ public class CustomListingAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ItemShell item;
         View rowView = convertView;
-        if(rowView != null) {
+        if(rowView == null) {
             inflater=((Activity)context).getLayoutInflater();
             rowView = inflater.inflate(R.layout.listing_view, parent, false);
 
@@ -65,10 +67,8 @@ public class CustomListingAdapter extends BaseAdapter {
 
         item.locationLabel.setText(((Listing)getItem(position)).getName());
         item.dateLabel.setText(((Listing)getItem(position)).getStartTime() + "--" + ((Listing)getItem(position)).getStopTime());
-        /* for images later
-        String url = userRepos[position].avatarUrl;
-        Picasso.with(context).load(url).into(item.imgView);
-        * */
+        Picasso.with(context).load(((Listing)getItem(position)).getImageURL()).into(item.imgView);
+
         return rowView;
     }
 
