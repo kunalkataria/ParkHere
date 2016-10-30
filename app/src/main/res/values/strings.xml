@@ -98,5 +98,8 @@
     <string name="place_booking">Place Booking</string>
     <string name="expiration_date_month_year"> Expiration Date (Month and Year)</string>
 
+    <string name="reviews">My Reviews</string>
+    <string name="rating">Rating</string>
+
 </resources>
 
