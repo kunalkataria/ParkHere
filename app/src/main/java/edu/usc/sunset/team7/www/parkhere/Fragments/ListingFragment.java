@@ -52,16 +52,10 @@ public class ListingFragment extends Fragment {
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    if(child.hasChildren()) {
-                        for(DataSnapshot childSnap : child.getChildren()) {
-                            if (child.getKey().equals("ownerID")) {
-                                String ownerID = child.getValue().toString();
-                                if (ownerID.equals(userID)) {
-                                    userListings.add(parseListing(child));
-                                }
-                            }
-                        }
+                for(DataSnapshot activeOrPastListings : dataSnapshot.getChildren()) {
+                    for(DataSnapshot listing : activeOrPastListings.getChildren()) {
+                        Listing toAdd = parseListing(listing);
+                        userListings.add(toAdd);
                     }
                 }
             }
@@ -69,7 +63,6 @@ public class ListingFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
-
         return view;
     }
 
