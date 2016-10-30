@@ -26,6 +26,10 @@ public class Consts {
     public static final String COMPACT_EXTRA = "compact_extra";
     public static final String LISTING_EDIT_EXTRA = "listing_edit_extra";
 
+    public static final String LISTING_TO_BE_BOOKED = "listing_to_be_booked";
+    public static final String LISTING_DISTANCE = "listing_distance";
+    public static final String LISTING_DETAILS_STRING = "listing_details_string";
+
     public static final String SEARCH_INTENT_FILTER = "search_intent_filter";
 
     public static final int FILTERS_CHANGED = 1001;
@@ -97,11 +101,10 @@ public class Consts {
     public static final String PAYPAL = "paypal";
 
     public static final String CREDIT_CARD_TYPE = "credit_card_type";
-    public static final String VISA = "visa";
-    public static final String DISCOVER = "discover";
-    public static final String AMERICAN_EXPRESS = "american_express";
-    public static final String MASTERCARD = "mastercard";
-
+    public static final String VISA = "Visa";
+    public static final String DISCOVER = "Discover";
+    public static final String AMERICAN_EXPRESS = "American Express";
+    public static final String MASTERCARD = "Mastercard";
 
     public static final String CREDIT_CARD_NUMBER = "credit_card_number";
     public static final String CREDIT_CARD_NAME = "name_on_card";

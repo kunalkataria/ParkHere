@@ -8,14 +8,18 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 /**
@@ -25,36 +29,32 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
 
     private static final String TAG = "TransactionConfirmation";
 
+    //Listing Information
     private Listing listing;
+    private double distance;
+    private String providerFirstName, startTime, endTime;
 
+
+    private String billingText;
+    //Payment Information
     private String paymentType;
 
     //Paypal variables
     private String paypalEmail;
 
-    //Credit Card
-    private String name, creditCardNumber, securityCode, address, city, state, zipcode, creditCardType;
+    //Credit Card variables
+    private String name, creditCardNumber, securityCode, month, year, address, city, state, zipcode, creditCardType;
 
-    private String billingText, listingText;
+    @BindView(R.id.listing_details_textview)
+    TextView listingDetailsTextView;
+    @BindView(R.id.billing_information_textview)
+    TextView billingInformationTextView;
+    @BindView(R.id.place_booking_button)
+    Button placeBookingButton;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private FirebaseUser currentUser;
-
-    @BindView(R.id.listing_details_textview)
-    TextView listingDetailsTextView;
-
-    @BindView(R.id.billing_information_textview)
-    TextView billingInformationTextView;
-
-    @BindView(R.id.place_booking_button)
-    Button placeBookingButton;
-
-
-//    public static void startActivity(Context context) {
-//        Intent i = new Intent(context, TransactionConfirmationActivity.class);
-//        context.startActivity(i);
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,37 +62,58 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transaction_confirmation);
         ButterKnife.bind(this);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null && bundle.containsKey(Consts.PAYMENT_TYPE)){
-            paymentType = (String)bundle.get(Consts.PAYMENT_TYPE);
-            if(paymentType.equals(Consts.CREDIT_CARD)){
-                name = (String)bundle.get(Consts.CREDIT_CARD_NAME);
-                creditCardNumber = (String)bundle.get(Consts.CREDIT_CARD_NUMBER);
-                securityCode = (String)bundle.get(Consts.SECURITY_CODE);
-                address = (String)bundle.get(Consts.ADDRESS);
-                city = (String)bundle.get(Consts.CITY);
-                state = (String)bundle.get(Consts.STATE);
-                zipcode = (String)bundle.get(Consts.ZIPCODE);
-                creditCardType = (String)bundle.get(Consts.CREDIT_CARD_TYPE);
-                displayCreditCardInfo();
+        if(bundle!=null){
+            if(bundle.containsKey(Consts.LISTING_DISTANCE) && bundle.containsKey(Consts.LISTING_TO_BE_BOOKED)
+                    &&  bundle.containsKey(Consts.LISTING_DETAILS_STRING)) {
+                distance = bundle.getDouble(Consts.LISTING_DISTANCE);
+                listing = (Listing)bundle.getSerializable(Consts.LISTING_TO_BE_BOOKED);
+                listingDetailsTextView.setText(bundle.getString(Consts.LISTING_DETAILS_STRING));
             } else{
-                paypalEmail = (String) bundle.get(Consts.PAYPAL_EMAIL);
-                displayPaypalInfo();
+                Log.d(TAG, "LISTING AND DISTANCE NOT FOUND");
+                placeBookingButton.setEnabled(false);
+            }
+            if(bundle.containsKey(Consts.PAYMENT_TYPE)) {
+                paymentType = (String) bundle.get(Consts.PAYMENT_TYPE);
+                if (paymentType.equals(Consts.CREDIT_CARD)) {
+                    name = bundle.getString(Consts.CREDIT_CARD_NAME);
+                    creditCardNumber = bundle.getString(Consts.CREDIT_CARD_NUMBER);
+                    creditCardType =  bundle.getString(Consts.CREDIT_CARD_TYPE);
+                    securityCode = bundle.getString(Consts.SECURITY_CODE);
+                    month = bundle.getString(Consts.EXPIRATION_MONTH);
+                    year = bundle.getString(Consts.EXPIRATION_YEAR);
+                    address =  bundle.getString(Consts.ADDRESS);
+                    city =  bundle.getString(Consts.CITY);
+                    state =  bundle.getString(Consts.STATE);
+                    zipcode = bundle.getString(Consts.ZIPCODE);
+                    displayCreditCardInfo();
+                } else{
+                    paypalEmail = (String) bundle.get(Consts.PAYPAL_EMAIL);
+                    displayPaypalInfo();
+                }
+            } else{
+                Log.d(TAG, "NO PAYMENT TYPE???");
+                placeBookingButton.setEnabled(false);
             }
         } else{
             Log.d(TAG, "BUNDLE WAS EMPTY!");
+            placeBookingButton.setEnabled(false);
         }
     }
 
     private void displayCreditCardInfo(){
-        //FINISH STRING FORMATTING HERE
-        billingText = "Payment Type: Credit Card" + "\nCredit Card Number: " + hideCreditCardNumber() +
-                "\n";
-        billingText += billingAddressText();
+        billingText = "Payment Type: Credit Card" + "\n" + creditCardType + " - " + hideCreditCardNumber() +
+                "\nSecurity Code:" + securityCode + "\nExpiration Date: " + month +"/" + year +
+                "\n\nBilling Address: \n" + billingAddressText();
         billingInformationTextView.setText(billingText);
+    }
+
+    private String billingAddressText(){
+        return address + "\n" + city + ", " + state + " " + zipcode;
     }
 
     private String hideCreditCardNumber(){
@@ -105,22 +126,51 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         billingInformationTextView.setText(billingText);
     }
 
-    private String billingAddressText(){
-        //format the billing address text
-        String billingAddress = address + "\n" + city + ", " + state + " " + zipcode;
-        return billingAddress;
-    }
-
     @OnClick(R.id.place_booking_button)
     protected void placeBooking() {
         //Write to database here
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         String uid = currentUser.getUid();
+        String bookingID = mDatabase.child(Consts.BOOKINGS_DATABASE).push().getKey();
 
-        DatabaseReference nameRef = mDatabase.child(Consts.BOOKINGS_DATABASE).child(uid).child(listing.getName());
-        nameRef.child("seeker").setValue(name);
-        nameRef.child("bookStartTime").setValue(listing.getStartTime());
-        nameRef.child("bookEndTime").setValue(listing.getStopTime());
+        //Add to Booking database
+        DatabaseReference bookingRef = mDatabase.child(Consts.BOOKINGS_DATABASE).child(uid).child(bookingID);
+        bookingRef.child(Consts.LISTING_ID).setValue(listing.getListingID());
+        bookingRef.child(Consts.LISTING_START_TIME).setValue(Tools.convertUnixTimeToDateString(listing.getStartTime()));
+        bookingRef.child(Consts.LISTING_END_TIME).setValue(Tools.convertUnixTimeToDateString(listing.getStopTime()));
+
+        //Move Listing to inactive
+        DatabaseReference inactiveListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.INACTIVE_LISTINGS).child(listing.getListingID());
+        inactiveListingRef.child(Consts.LISTING_NAME).setValue(listing.getName());
+        inactiveListingRef.child(Consts.LISTING_DESCRIPTION).setValue(listing.getDescription());
+        inactiveListingRef.child(Consts.LISTING_REFUNDABLE).setValue(listing.isRefundable());
+        inactiveListingRef.child(Consts.LISTING_PRICE).setValue(listing.getPrice());
+        inactiveListingRef.child(Consts.LISTING_COMPACT).setValue(listing.isCompact());
+        inactiveListingRef.child(Consts.LISTING_COVERED).setValue(listing.isCovered());
+        inactiveListingRef.child(Consts.LISTING_HANDICAP).setValue(listing.isHandicap());
+        inactiveListingRef.child(Consts.LISTING_LATITUDE).setValue(listing.getLatitude());
+        inactiveListingRef.child(Consts.LISTING_LONGITUDE).setValue(listing.getLongitude());
+        inactiveListingRef.child(Consts.LISTING_START_TIME).setValue(listing.getStartTime());
+        inactiveListingRef.child(Consts.LISTING_END_TIME).setValue(listing.getStopTime());
+
+        //Remove listing from active
+        mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(listing.getListingID()).removeValue();
+
+        final DatabaseReference providerRef = mDatabase.child(Consts.USERS_DATABASE).child(listing.getProviderID());
+
+        //Get and add balance from provider
+        ValueEventListener providerNameListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Double balance = (Double) dataSnapshot.getValue();
+                providerRef.child(Consts.USER_BALANCE).setValue(balance + listing.getPrice());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
+            }
+        };
+        providerRef.addListenerForSingleValueEvent(providerNameListener);
 
         finish();
     }
