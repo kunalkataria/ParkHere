@@ -120,5 +120,9 @@ public class Consts {
 
     public static final String USER_ID = "User ID";
 
+    //Reviews Database
+    public static final String REVIEW_DESCRIPTION = "Review";
+    public static final String REVIEW_RATING = "Rating";
+
 
 }
