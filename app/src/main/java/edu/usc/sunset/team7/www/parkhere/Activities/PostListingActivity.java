@@ -236,7 +236,7 @@ public class PostListingActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                DateTime datetime = new DateTime(year, month, day, 0, 0);
+                DateTime datetime = new DateTime(year, month + 1, day, 0, 0);
                 startDate = datetime.getMillis() / 1000; // save this
                 startTimeBox.setText(Tools.getDateString(year, month + 1, day));
             }
