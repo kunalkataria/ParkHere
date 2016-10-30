@@ -1,10 +1,14 @@
 package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
+import java.io.Serializable;
+
 /**
  * Created by Acer on 10/18/2016.
  */
 
-public class Booking {
+public class Booking implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Listing mListing;
     //private PublicUserProfile seeker;

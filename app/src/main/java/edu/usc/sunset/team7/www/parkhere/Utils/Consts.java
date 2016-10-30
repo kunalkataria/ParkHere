@@ -25,6 +25,7 @@ public class Consts {
     public static final String HANDICAP_EXTRA = "handicap_extra";
     public static final String COMPACT_EXTRA = "compact_extra";
     public static final String LISTING_EDIT_EXTRA = "listing_edit_extra";
+    public static final String BOOKING_EXTRA = "booking_extra";
 
     public static final String LISTING_TO_BE_BOOKED = "listing_to_be_booked";
     public static final String LISTING_DISTANCE = "listing_distance";
