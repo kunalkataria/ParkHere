@@ -144,6 +144,11 @@ public class SearchServlet extends HttpServlet {
         return (distance(listingLat, listingLong, latitude, longitude) <= 3);
     }
 
+    @Override
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        resp.getWriter().println("POST requests are not supported");
+    }
     //checks if a listing is within searched time constraints
     private boolean isWithinTimeConstraints(DataSnapshot child, long startTime, long stopTime) {
         for(DataSnapshot childSnap : child.getChildren()) {
@@ -157,10 +162,6 @@ public class SearchServlet extends HttpServlet {
         }
         return true;
     }
-
-    @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {}
 
     private Listing parseListing (DataSnapshot snapshot) {
         Listing listing = new Listing();
