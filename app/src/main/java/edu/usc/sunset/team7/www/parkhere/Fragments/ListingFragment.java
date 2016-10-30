@@ -2,10 +2,12 @@ package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -22,7 +24,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.Activities.PostListingActivity;
+import edu.usc.sunset.team7.www.parkhere.Adapters.CustomListingAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 /**
@@ -31,8 +35,8 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 public class ListingFragment extends Fragment {
 
-    @BindView(R.id.post_listing_button)
-    Button postListingButton;
+    @BindView(R.id.post_listing_button) Button postListingButton;
+    @BindView(R.id.listing_listview) ListView listingListView;
 
     @Override
     public void onCreate(Bundle savedBundleInstance){
@@ -48,22 +52,22 @@ public class ListingFragment extends Fragment {
         final String userID = mAuth.getCurrentUser().getUid();
         final ArrayList<Listing> userListings = new ArrayList<Listing>();
 
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Listings/"+userID);
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child
+                (Consts.LISTINGS_DATABASE).child(userID).child(Consts.ACTIVE_LISTINGS);
+
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    if(child.hasChildren()) {
-                        for(DataSnapshot childSnap : child.getChildren()) {
-                            if (child.getKey().equals("ownerID")) {
-                                String ownerID = child.getValue().toString();
-                                if (ownerID.equals(userID)) {
-                                    userListings.add(parseListing(child));
-                                }
-                            }
-                        }
-                    }
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Listing currentListing = parseListing(child);
+                    currentListing.setListingID(child.getValue().toString());
+                    userListings.add(currentListing);
                 }
+
+                Listing[] arrayListings = new Listing[userListings.size()];
+                arrayListings = userListings.toArray(arrayListings);
+
+                listingListView.setAdapter(new CustomListingAdapter(getActivity(), arrayListings));
             }
 
             @Override
