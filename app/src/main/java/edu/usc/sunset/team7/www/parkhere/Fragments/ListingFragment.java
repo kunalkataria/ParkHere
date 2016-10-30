@@ -48,8 +48,8 @@ public class ListingFragment extends Fragment {
         final String userID = mAuth.getCurrentUser().getUid();
         final ArrayList<Listing> userListings = new ArrayList<Listing>();
 
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("listings");
-        dbRef.orderByChild("ownerID").addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Listings/"+userID);
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
@@ -67,9 +67,7 @@ public class ListingFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
         return view;
@@ -80,44 +78,44 @@ public class ListingFragment extends Fragment {
         PostListingActivity.startActivity(getActivity());
     }
 
-    private Listing parseListing (DataSnapshot snapshot) {
+    private Listing parseListing (DataSnapshot listingSnapshot) {
         Listing listing = new Listing();
-        for (DataSnapshot child : snapshot.getChildren()) {
+        for (DataSnapshot child : listingSnapshot.getChildren()) {
             switch (child.getKey()) {
-                case "active":
-                    if (!Boolean.parseBoolean(child.getValue().toString())) continue;
-                    break;
-                case "compact":
+                case "Compact":
                     listing.setCompact(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "covered":
+                case "Covered":
                     listing.setCovered(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "description":
+                case "Listing Description":
                     listing.setDescription(child.getValue().toString());
                     break;
-                case "handicap":
+                case "Handicap":
                     listing.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "latitude":
+                case "Image URL":
+                    listing.setImageURL(child.getValue().toString());
+                    break;
+                case "Latitude":
                     listing.setLatitude(Double.parseDouble(child.getValue().toString()));
                     break;
-                case "longitude":
+                case "Longitude":
                     listing.setLongitude(Double.parseDouble(child.getValue().toString()));
                     break;
-                case "name":
+                case "Listing Name":
                     listing.setName(child.getValue().toString());
                     break;
-                case "ownerID":
-                    break;
-                case "refundable":
+                case "Is Refundable":
                     listing.setRefundable(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "startTime":
-                    listing.setStartTime(Long.getLong(child.getValue().toString()));
+                case "Start Time":
+                    String startTime = child.getValue().toString();
+                    listing.setStartTime(Long.valueOf(startTime));
                     break;
-                case "stopTime":
-                    listing.setStopTime(Long.getLong(child.getValue().toString()));
+                case "End Time":
+                    String stopTime = child.getValue().toString();
+                    listing.setStopTime(Long.valueOf(stopTime));
                     break;
             }
         }

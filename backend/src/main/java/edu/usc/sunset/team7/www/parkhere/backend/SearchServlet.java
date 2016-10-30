@@ -94,9 +94,11 @@ public class SearchServlet extends HttpServlet {
                 //looping through providers
                 for(DataSnapshot provider : dataSnapshot.getChildren()) {
                     String providerID = provider.getKey();
+                    //looping through active listings
                     for(DataSnapshot listing : provider.child("Active Listings").getChildren()) {
-                        System.out.println(listing.getKey());
-                        processListing(listing, latitude, longitude, startTime, stopTime, providerID);
+                        String listingID = listing.getKey();
+                        processListing(listing, latitude, longitude,
+                                startTime, stopTime, providerID, listingID);
                     }
                 }
                 done = true;
@@ -205,12 +207,13 @@ public class SearchServlet extends HttpServlet {
     }
 
     private void processListing(DataSnapshot dataSnapshot, double latitude, double longitude,
-                                long startTime, long stopTime, String providerID) {
+                                long startTime, long stopTime, String providerID, String listingID) {
         if(isWithinRadius(dataSnapshot, latitude, longitude) &&
                 isWithinTimeConstraints(dataSnapshot, startTime, stopTime)) {
             System.out.println("Listing processed");
             Listing listing = parseListing(dataSnapshot);
             listing.setProviderID(providerID);
+            listing.setListingID(listingID);
             double distance = distance(listing.getLatitude(), listing.getLongitude(), latitude, longitude);
             ResultsPair resultsPair = new ResultsPair(listing, distance);
             searchResult.addListing(resultsPair);
