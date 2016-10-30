@@ -124,21 +124,21 @@ public class Listing implements Serializable {
         this.imageURL = imageURL;
     }
 
-    public String getReview() {
-        return review;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
-    }
-
-    public int getSpaceRating() {
-        return spaceRating;
-    }
-
-    public void setSpaceRating(int spaceRating) {
-        this.spaceRating = spaceRating;
-    }
+//    public String getReview() {
+//        return review;
+//    }
+//
+//    public void setReview(String review) {
+//        this.review = review;
+//    }
+//
+//    public int getSpaceRating() {
+//        return spaceRating;
+//    }
+//
+//    public void setSpaceRating(int spaceRating) {
+//        this.spaceRating = spaceRating;
+//    }
 
     public String getProviderID() {
         return providerID;
@@ -148,11 +148,11 @@ public class Listing implements Serializable {
         this.providerID = providerID;
     }
 
-    public String getSeekerID() {
-        return seekerID;
-    }
-
-    public void setSeekerID(String seekerID) {
-        this.seekerID = seekerID;
-    }
+//    public String getSeekerID() {
+//        return seekerID;
+//    }
+//
+//    public void setSeekerID(String seekerID) {
+//        this.seekerID = seekerID;
+//    }
 }

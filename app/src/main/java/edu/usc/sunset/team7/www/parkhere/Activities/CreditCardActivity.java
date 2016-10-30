@@ -118,24 +118,30 @@ public class CreditCardActivity extends AppCompatActivity {
     protected void confirm() {
         collectValues();
         if(checkValues()){
+
             Intent i = new Intent(CreditCardActivity.this, TransactionConfirmationActivity.class);
-            Bundle b = new Bundle();
+            Bundle b = getIntent().getExtras();
 
             //Start confirmation
             //pass data
             b.putString(Consts.CREDIT_CARD_NAME, name);
+            b.putString(Consts.CREDIT_CARD_TYPE, creditCardType);
             b.putString(Consts.CREDIT_CARD_NUMBER, creditCardNumber);
             b.putString(Consts.SECURITY_CODE, securityCode);
+            b.putString(Consts.EXPIRATION_MONTH, month);
+            b.putString(Consts.EXPIRATION_YEAR, year);
             b.putString(Consts.ADDRESS, address);
             b.putString(Consts.CITY, city);
             b.putString(Consts.STATE, state);
             b.putString(Consts.ZIPCODE, zipcode);
-            b.putString(Consts.CREDIT_CARD_TYPE, creditCardType);
-            b.putString(Consts.EXPIRATION_MONTH, month);
-            b.putString(Consts.EXPIRATION_YEAR, year);
             i.putExtras(b);
             startActivity(i);
         }
+    }
+
+    private String creditCardInformation(){
+        String s = "";
+        return s;
     }
 
     private void collectValues(){
@@ -150,7 +156,6 @@ public class CreditCardActivity extends AppCompatActivity {
 
         month = ""+monthNumberPicker.getValue();
         year = ""+yearNumberPicker.getValue();
-
     }
 
     private boolean checkValues(){

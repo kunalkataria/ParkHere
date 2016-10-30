@@ -66,6 +66,8 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedBundleInstance) {
         super.onCreate(savedBundleInstance);
+        startDate = -1;
+        stopDate = -1;
     }
 
     @Override
@@ -100,6 +102,11 @@ public class SearchFragment extends Fragment {
     protected void startSearch() {
         if (locationSelected != null) {
             LatLng latLng = locationSelected.getLatLng();
+            // set start date to current time if the time is not selected
+            if (startDate == -1) {
+                Calendar c = Calendar.getInstance();
+                startDate = c.getTimeInMillis() / 1000;
+            }
             ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, startDate, stopDate);
         }
     }
@@ -153,8 +160,7 @@ public class SearchFragment extends Fragment {
 
     // set the time to be the current time when clearing
     private void clearStart() {
-        Calendar c = Calendar.getInstance();
-        startDate = c.getTimeInMillis() / 1000;
+        startDate = -1;
         startTimeEditText.setText("");
     }
 

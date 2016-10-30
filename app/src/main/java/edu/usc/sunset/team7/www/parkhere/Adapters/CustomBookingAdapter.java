@@ -49,7 +49,7 @@ public class CustomBookingAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ItemShell item;
         View rowView = convertView;
-        if(rowView != null){
+        if(rowView == null){
             inflater = ((Activity)context).getLayoutInflater();
             rowView = inflater.inflate(R.layout.booking_view, parent, false);
 

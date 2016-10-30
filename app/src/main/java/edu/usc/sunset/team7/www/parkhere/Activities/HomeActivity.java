@@ -36,12 +36,18 @@ public class HomeActivity extends AppCompatActivity {
 
     public static final String FRAGMENT_TAG = "fragment_tag";
     public GoogleApiClient mGoogleApiClient;
-    private static final String[] fragmentTitles = new String[] {"Search", "Listings", "Bookings", "Balance"};
+    private static final String[] fragmentTitles = new String[]
+                    {"Search",
+                    "Listings",
+                    "Bookings",
+                    "Balance",
+                    "My Profile"};
     private static final String[] fragmentTags = new String[]
                     {Consts.SEARCH_FRAGMENT_TAG,
                     Consts.LISTING_FRAGMENT_TAG,
                     Consts.BOOKING_FRAGMENT_TAG,
-                    Consts.BALANCE_FRAGMENT_TAG};
+                    Consts.BALANCE_FRAGMENT_TAG,
+                    Consts.MY_PROFILE_FRAGMENT_TAG};
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     
@@ -165,7 +171,10 @@ public class HomeActivity extends AppCompatActivity {
                     break;
                 case Consts.BALANCE_FRAGMENT_TAG:
                     currentFragment = new BalanceFragment();
-                    setToolbarTitle("My Balance");
+                    setToolbarTitle(getResources().getString(R.string.balance));
+                    break;
+                case Consts.MY_PROFILE_FRAGMENT_TAG:
+
                     break;
             }
         }

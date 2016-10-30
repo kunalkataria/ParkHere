@@ -139,9 +139,6 @@ public class BookingFragment extends Fragment {
                 case Consts.LISTING_LONGITUDE:
                     currBooking.setLongitude(Double.parseDouble(child.getValue().toString()));
                     break;
-                case Consts.LISTING_SEEKER:
-                    currBooking.setProviderID(child.getValue().toString());
-                    break;
                 case Consts.LISTING_START_TIME:
                     currBooking.setStartTime(Long.valueOf(child.getValue().toString()));
                     break;

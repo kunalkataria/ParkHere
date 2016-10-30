@@ -176,7 +176,7 @@ public class EditListingActivity extends AppCompatActivity {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = currentUser.getUid();
 
-            DatabaseReference nameRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listingId);
+            DatabaseReference nameRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child(Consts.ACTIVE_LISTINGS).child(Consts.LISTING_ID);
             nameRef.child(Consts.LISTING_DESCRIPTION).setValue(descriptionString);
             nameRef.child(Consts.LISTING_PRICE).setValue(price);
 
