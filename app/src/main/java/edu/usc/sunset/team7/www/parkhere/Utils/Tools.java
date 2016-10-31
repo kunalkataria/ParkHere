@@ -1,5 +1,10 @@
 package edu.usc.sunset.team7.www.parkhere.Utils;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.Date;
 
 /**
@@ -37,8 +42,14 @@ public class Tools {
         return password.matches(PASSWORD_REGEX);
     }
 
-    public static String getDateString(int year, int month, int day) {
-        return month + "/" + day + "/" + year;
+    public static String getDateString(DateTime dateTime) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("MM/dd/yyyy hh:mm aa");
+        return dateTimeFormatter.print(dateTime);
+    }
+
+    public static String getDateString(int year, int month, int day, int hour, int minute) {
+
+        return month + "/" + day + "/" + year + " " + hour + ":" + minute;
     }
 
 }

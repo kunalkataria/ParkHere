@@ -2,9 +2,7 @@ package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatCheckBox;
@@ -14,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -25,10 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,16 +46,31 @@ public class SearchFragment extends Fragment {
 
     @BindView(R.id.start_date_inputlayout) TextInputLayout startDateInputlayout;
     @BindView(R.id.stop_date_inputlayout) TextInputLayout stopDateInputLayout;
-    @BindView(R.id.start_time_edittext) AppCompatEditText startTimeEditText;
-    @BindView(R.id.stop_time_edittext) AppCompatEditText stopTimeEditText;
+    @BindView(R.id.start_date_edittext) AppCompatEditText startDateEditText;
+    @BindView(R.id.stop_date_edittext) AppCompatEditText stopDateEditText;
 
     @BindView(R.id.search_date_checkbox) AppCompatCheckBox searchDateCheckbox;
 
     private DatePickerDialog startDatePicker;
     private DatePickerDialog stopDatePicker;
 
+    private TimePickerDialog startTimePicker;
+    private TimePickerDialog stopTimePicker;
+
     private long startDate;
     private long stopDate;
+
+    private int startYear;
+    private int startMonth;
+    private int startDay;
+    private int startHour;
+    private int startMinute;
+
+    private int stopYear;
+    private int stopMonth;
+    private int stopDay;
+    private int stopHour;
+    private int stopMinute;
 
     private Place locationSelected;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -111,16 +124,28 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.start_time_edittext)
+    @OnClick(R.id.start_date_edittext)
     protected void startDateDialog() {
         if (searchDateCheckbox.isChecked()) {
             Calendar c = Calendar.getInstance();
+            TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                    startHour = hourOfDay;
+                    startMinute = minute;
+                    DateTime dateTime = new DateTime(startYear, startMonth, startDay, startHour, startMinute);
+                    startDate = dateTime.getMillis() / 1000;
+                    startDateEditText.setText(Tools.getDateString(dateTime));
+                }
+            };
+            startTimePicker = new TimePickerDialog(getActivity(), startTimeListener, c.get(Calendar.HOUR), c.get(Calendar.MINUTE), false);
             DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    DateTime datetime = new DateTime(year, month + 1, day, 0, 0);
-                    startDate = datetime.getMillis() / 1000; // save this
-                    startTimeEditText.setText(Tools.getDateString(year, month + 1, day));
+                    startYear = year;
+                    startMonth = month + 1;
+                    startDay = day;
+                    startTimePicker.show();
                 }
             };
             startDatePicker = new DatePickerDialog
@@ -130,17 +155,28 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.stop_time_edittext)
+    @OnClick(R.id.stop_date_edittext)
     protected void stopDateDialog() {
         if (searchDateCheckbox.isChecked()) {
-//                LocalDate localDate = LocalDate.now();
             Calendar c = Calendar.getInstance();
+            TimePickerDialog.OnTimeSetListener stopTimeListener = new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                    stopHour = hourOfDay;
+                    stopMinute = minute;
+                    DateTime dateTime = new DateTime(startYear, startMonth, startDay, startHour, startMinute);
+                    stopDate = dateTime.getMillis() / 1000;
+                    stopDateEditText.setText(Tools.getDateString(dateTime));
+                }
+            };
+            stopTimePicker = new TimePickerDialog(getActivity(), stopTimeListener, c.get(Calendar.HOUR), c.get(Calendar.MINUTE), false);
             DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    DateTime datetime = new DateTime(year, month + 1, day, 23, 59);
-                    stopDate = datetime.getMillis() / 1000;
-                    stopTimeEditText.setText(Tools.getDateString(year, month + 1, day));
+                    stopYear = year;
+                    stopMonth = month + 1;
+                    stopDay = day;
+                    stopTimePicker.show();
                 }
             };
             stopDatePicker = new DatePickerDialog
@@ -161,13 +197,13 @@ public class SearchFragment extends Fragment {
     // set the time to be the current time when clearing
     private void clearStart() {
         startDate = -1;
-        startTimeEditText.setText("");
+        startDateEditText.setText("");
     }
 
     // set stop time to -1 for server
     private void clearStop() {
         stopDate = -1;
-        stopTimeEditText.setText("");
+        stopDateEditText.setText("");
     }
 
 }

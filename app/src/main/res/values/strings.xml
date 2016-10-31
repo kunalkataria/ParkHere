@@ -43,6 +43,8 @@
     <string name="avg_parking_price_not_found">Average Parking Price (from ParkWhiz): No data found</string>
     <string name="start_date">Start date</string>
     <string name="stop_date">Stop date</string>
+    <string name="start_time">Start time</string>
+    <string name="stop_time">Stop time</string>
     <string name="review">Review</string>
     <string name="current_balance">Current Balance</string>
     <string name="are_you_providing">Will you be providing parking spots?</string>
