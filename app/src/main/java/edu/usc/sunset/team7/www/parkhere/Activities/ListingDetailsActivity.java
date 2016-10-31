@@ -95,9 +95,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
                             .getValue()
                             .toString();
 
-                    //TODO: provider first name datasnapshot.getValue() is null
                     //TODO: followup - that's because we were using an inconsistent user database
-                    providerFirstName = dataSnapshot.getValue().toString();
+                    providerFirstName = dataSnapshot.child(Consts.USER_FIRSTNAME).getValue().toString();
                     providerNameTextView.setText(providerFirstName);
                 }
                 @Override
