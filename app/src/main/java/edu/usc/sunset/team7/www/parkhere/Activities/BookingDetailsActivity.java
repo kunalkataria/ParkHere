@@ -9,7 +9,6 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +35,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
     @BindView(R.id.parking_image) ImageView parkingImage;
     @BindView(R.id.booking_details) TextView bookingDetails;
     @BindView(R.id.review_booking_button) AppCompatButton reviewBookingButton;
+    @BindView(R.id.cancel_booking_button) AppCompatButton cancelBookingButton;
 
     private static final String TAG = "BookingDetailsActivity";
     private Booking booking;
@@ -53,6 +53,8 @@ public class BookingDetailsActivity extends AppCompatActivity {
             initializeReviewButton();
             getFirebaseData();
             displayBooking();
+        } else {
+            Log.d(TAG, "BOOKING OBJECT IS EMPTY!");
         }
     }
 
@@ -113,6 +115,9 @@ public class BookingDetailsActivity extends AppCompatActivity {
     }
 
     private void displayBooking() {
+        if(!listing.isRefundable()){
+            cancelBookingButton.setEnabled(false);
+        }
         bookingName.setText(listing.getName());
         Picasso.with(this).load(listing.getImageURL()).into(parkingImage);
         bookingDetails.setText(bookingDetailsString());
@@ -145,5 +150,11 @@ public class BookingDetailsActivity extends AppCompatActivity {
         bundle.putString(Consts.USER_ID, listing.getProviderID());
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.cancel_booking_button)
+    protected void cancelBooking() {
+
+        DatabaseReference providerListingRef = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).
     }
 }

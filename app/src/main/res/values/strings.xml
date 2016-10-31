@@ -109,7 +109,7 @@
     <string name="rating">Rating</string>
     <string name="confirm_payment">Confirm Payment</string>
     <string name="confirm_payment_amount">$</string>
-
+    <string name="cancel_booking">Cancel Booking</string>
 
 </resources>
 
