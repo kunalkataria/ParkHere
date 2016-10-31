@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -55,9 +56,6 @@ public class SearchServlet extends HttpServlet {
         final double longitude = Double.parseDouble(req.getParameter("lon"));
         final long startTime = Long.parseLong(req.getParameter("startTime"));
         final long stopTime = Long.parseLong(req.getParameter("stopTime"));
-
-        System.out.println("Lat: " + latitude + " Long: " + longitude);
-        System.out.println("Start: " + startTime + " End: " + stopTime);
 
         searchResult = new SearchResult(avgParkingCost(latitude, longitude));
 
@@ -150,16 +148,24 @@ public class SearchServlet extends HttpServlet {
         resp.getWriter().println("POST requests are not supported");
     }
     //checks if a listing is within searched time constraints
-    private boolean isWithinTimeConstraints(DataSnapshot child, long startTime, long stopTime) {
+    private boolean isWithinTimeConstraints(DataSnapshot child, long startTime, long stopTime,
+                                            String providerID, String listingID) {
+        long listingStartTime = -1;
+        long listingStopTime = -1;
         for(DataSnapshot childSnap : child.getChildren()) {
             if(childSnap.getKey().equals("Start Time")) {
-                long listingStartTime = Long.parseLong(childSnap.getValue().toString());
-                if(listingStartTime > startTime) return false;
+                listingStartTime = Long.parseLong(childSnap.getValue().toString());
             } else if(childSnap.getKey().equals("End Time")) {
-                long listingStopTime = Long.parseLong(childSnap.getValue().toString());
-                if(stopTime != -1 && listingStopTime < stopTime) return false;
+                listingStopTime = Long.parseLong(childSnap.getValue().toString());
             }
         }
+        if(listingStartTime == -1 || listingStopTime == -1) return false;
+        if(listingStopTime < (System.currentTimeMillis()/1000)){
+            moveListingToInactive(child, providerID, listingID);
+            return false;
+        }
+        if(listingStartTime > startTime) return false;
+        if(stopTime != -1 && listingStopTime < stopTime) return false;
         return true;
     }
 
@@ -202,6 +208,8 @@ public class SearchServlet extends HttpServlet {
                     String stopTime = child.getValue().toString();
                     listing.setStopTime(Long.valueOf(stopTime));
                     break;
+                case "Price":
+                    listing.setPrice(Double.parseDouble(child.getValue().toString()));
             }
         }
         return listing;
@@ -210,7 +218,7 @@ public class SearchServlet extends HttpServlet {
     private void processListing(DataSnapshot dataSnapshot, double latitude, double longitude,
                                 long startTime, long stopTime, String providerID, String listingID) {
         if(isWithinRadius(dataSnapshot, latitude, longitude) &&
-                isWithinTimeConstraints(dataSnapshot, startTime, stopTime)) {
+                isWithinTimeConstraints(dataSnapshot, startTime, stopTime, providerID, listingID)) {
             System.out.println("Listing processed");
             Listing listing = parseListing(dataSnapshot);
             listing.setProviderID(providerID);
@@ -219,6 +227,29 @@ public class SearchServlet extends HttpServlet {
             ResultsPair resultsPair = new ResultsPair(listing, distance);
             searchResult.addListing(resultsPair);
         }
+    }
+
+    private void moveListingToInactive(DataSnapshot listing, String providerID, String listingID) {
+        Listing toMove = parseListing(listing);
+        //Move Listing to inactive
+        DatabaseReference inactiveListingRef = FirebaseDatabase.getInstance().getReference()
+                .child("Listings").child(providerID).child("Inactive Listings").child(listingID);
+        inactiveListingRef.child("Listing Name").setValue(toMove.getName());
+        inactiveListingRef.child("Listing Description").setValue(toMove.getDescription());
+        inactiveListingRef.child("Is Refundable").setValue(toMove.isRefundable());
+        inactiveListingRef.child("Price").setValue(toMove.getPrice());
+        inactiveListingRef.child("Compact").setValue(toMove.isCompact());
+        inactiveListingRef.child("Covered").setValue(toMove.isCovered());
+        inactiveListingRef.child("Handicap").setValue(toMove.isHandicap());
+        inactiveListingRef.child("Latitude").setValue(toMove.getLatitude());
+        inactiveListingRef.child("Longitude").setValue(toMove.getLongitude());
+        inactiveListingRef.child("Start Time").setValue(toMove.getStartTime());
+        inactiveListingRef.child("End Time").setValue(toMove.getStopTime());
+
+        //Remove listing from active
+        FirebaseDatabase.getInstance().getReference().child("Listings").child(providerID)
+                .child("Active Listings").child(listingID).removeValue();
+        Log.info("Listing moved from active to inactive due to invalid stop time");
     }
 
     private double avgParkingCost(double lat, double lon) {
