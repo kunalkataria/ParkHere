@@ -11,7 +11,7 @@ public class Tools {
     private static final String EMAIL_REGEX = "^.+\\@.+\\..+$";
     private static final String NAME_REGEX = "^[a-zA-Z ,.'-]+$";
     private static final String PHONE_REGEX = "^[0-9]{10}$";
-    private static final String PASSWORD_REGEX = "^(?=.{10,})(?=.*[@#$%^&+=]).*$";
+    private static final String PASSWORD_REGEX = "^(?=.{10,})(?=.*[@#$%^&+=?]).*$";
     // very basic email regex checker, main validation is done through email confirmation link
     public static boolean emailValid(String email) {
         return email.matches(EMAIL_REGEX);
