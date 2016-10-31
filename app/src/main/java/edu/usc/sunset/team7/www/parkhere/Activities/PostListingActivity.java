@@ -1,6 +1,7 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -94,12 +96,29 @@ public class PostListingActivity extends AppCompatActivity {
     SwitchCompat coveredSwitch;
 
     // Date selector pieces
-    @BindView(R.id.start_date_inputlayout) TextInputLayout startTimeLayout;
-    @BindView(R.id.stop_date_inputlayout) TextInputLayout stopTimeLayout;
-    @BindView(R.id.start_time_edittext) AppCompatEditText startTimeBox;
-    @BindView(R.id.stop_time_edittext) AppCompatEditText stopTimeBox;
+    @BindView(R.id.start_date_inputlayout) TextInputLayout startDateLayout;
+    @BindView(R.id.stop_date_inputlayout) TextInputLayout stopDateLayout;
+    @BindView(R.id.start_time_edittext) AppCompatEditText startDateEditText;
+    @BindView(R.id.stop_time_edittext) AppCompatEditText stopDateEditText;
+
     private DatePickerDialog startDatePicker;
     private DatePickerDialog stopDatePicker;
+
+    private TimePickerDialog startTimePicker;
+    private TimePickerDialog stopTimePicker;
+
+    private int startYear;
+    private int startMonth;
+    private int startDay;
+    private int startHour;
+    private int startMinute;
+
+    private int stopYear;
+    private int stopMonth;
+    private int stopDay;
+    private int stopHour;
+    private int stopMinute;
+
     private long startDate;
     private long stopDate;
 
@@ -234,12 +253,23 @@ public class PostListingActivity extends AppCompatActivity {
     @OnClick(R.id.start_time_edittext)
     protected void selectStartTime() {
         Calendar c = Calendar.getInstance();
+        TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                startHour = hourOfDay;
+                startMinute = minute;
+                DateTime dateTime = new DateTime(startYear, startMonth, startDay, startHour, startMinute);
+                startDate = dateTime.getMillis() / 1000;
+                startDateEditText.setText(Tools.getDateString(dateTime));
+            }
+        };
         DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                DateTime datetime = new DateTime(year, month + 1, day, 0, 0);
-                startDate = datetime.getMillis() / 1000; // save this
-                startTimeBox.setText(Tools.getDateString(year, month + 1, day));
+                startYear = year;
+                startMonth = month + 1;
+                startDay = day;
+                startDatePicker.show();
             }
         };
         startDatePicker = new DatePickerDialog
@@ -250,18 +280,31 @@ public class PostListingActivity extends AppCompatActivity {
     @OnClick(R.id.stop_time_edittext)
     protected void selectStopTime() {
         Calendar c = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+        TimePickerDialog.OnTimeSetListener stopTimeListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                stopHour = hourOfDay;
+                stopMinute = minute;
+                DateTime dateTime = new DateTime(stopYear, stopMonth, stopDay, stopHour, stopMinute);
+                stopDate = dateTime.getMillis() / 1000;
+                stopDateEditText.setText(Tools.getDateString(dateTime));
+            }
+        };
+
+        DatePickerDialog.OnDateSetListener stopDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                DateTime datetime = new DateTime(year, month + 1, day, 23, 59);
-                stopDate = datetime.getMillis() / 1000;
-                stopTimeBox.setText(Tools.getDateString(year, month + 1, day));
+                stopYear = year;
+                stopMonth = month + 1;
+                stopDay = day;
+                stopTimePicker.show();
             }
         };
         stopDatePicker = new DatePickerDialog
-                (this, startDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                (this, stopDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         stopDatePicker.show();
     }
+
 
     private boolean checkFields(){
         nameString = parkingNameEditText.getText().toString();
@@ -287,12 +330,12 @@ public class PostListingActivity extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    stopTimeLayout.setError("Please select a stop date");
-                                    stopTimeLayout.setErrorEnabled(true);
+                                    stopDateLayout.setError("Please select a stop date");
+                                    stopDateLayout.setErrorEnabled(true);
                                 }
                             } else {
-                                startTimeLayout.setError("Please select a start date");
-                                startTimeLayout.setErrorEnabled(true);
+                                startDateLayout.setError("Please select a start date");
+                                startDateLayout.setErrorEnabled(true);
                             }
                         } else {
                             Toast.makeText(PostListingActivity.this, "Please select a cancellation policy.",

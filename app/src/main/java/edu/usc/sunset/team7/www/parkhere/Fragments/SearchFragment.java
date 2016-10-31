@@ -164,7 +164,7 @@ public class SearchFragment extends Fragment {
                 public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
                     stopHour = hourOfDay;
                     stopMinute = minute;
-                    DateTime dateTime = new DateTime(startYear, startMonth, startDay, startHour, startMinute);
+                    DateTime dateTime = new DateTime(stopYear, stopMonth, stopDay, stopHour, stopMinute);
                     stopDate = dateTime.getMillis() / 1000;
                     stopDateEditText.setText(Tools.getDateString(dateTime));
                 }
