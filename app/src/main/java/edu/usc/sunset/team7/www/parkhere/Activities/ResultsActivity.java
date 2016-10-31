@@ -135,20 +135,51 @@ public class ResultsActivity extends AppCompatActivity {
             if (!covered && !handicap && !compact) {
                 populateResultsList(searchResultListings);
             } else {
-                List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
-                for (ResultsPair currentPair : searchResultListings) {
-                    Listing currentListing = currentPair.getListing();
-                    if (currentListing.isCompact() == compact ||
-                            currentListing.isCovered() == covered ||
-                            currentListing.isHandicap() == handicap) {
-
-                        filteredResults.add(currentPair);
-                    }
+                List<ResultsPair> filteredResults = searchResultListings;
+                if (handicap) {
+                    filteredResults = filterResultsOnHandicap(filteredResults);
                 }
+                if (covered) {
+                    filteredResults = filterResultsOnCovered(filteredResults);
+                }
+                if (compact) {
+                    filteredResults = filteredResultsOnCompact(filteredResults);
+                }
+
                 populateResultsList(filteredResults);
             }
 
         }
+    }
+
+    private List<ResultsPair> filterResultsOnHandicap(List<ResultsPair> currentResults) {
+        List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
+        for (ResultsPair currentPair : currentResults) {
+            if (currentPair.getListing().isHandicap()) {
+                filteredResults.add(currentPair);
+            }
+        }
+        return filteredResults;
+    }
+
+    private List<ResultsPair> filterResultsOnCovered(List<ResultsPair> currentResults) {
+        List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
+        for (ResultsPair currentPair : currentResults) {
+            if (currentPair.getListing().isCovered()) {
+                filteredResults.add(currentPair);
+            }
+        }
+        return filteredResults;
+    }
+
+    private List<ResultsPair> filteredResultsOnCompact(List<ResultsPair> currentResults) {
+        List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
+        for (ResultsPair currentPair : currentResults) {
+            if (currentPair.getListing().isCompact()) {
+                filteredResults.add(currentPair);
+            }
+        }
+        return filteredResults;
     }
 
     private void removeLoadingAnimation() {
