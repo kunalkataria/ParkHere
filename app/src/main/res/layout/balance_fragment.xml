@@ -11,6 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/confirm_payment_button"
+        android:text="@string/confirm_payment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

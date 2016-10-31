@@ -40,10 +40,4 @@
 
         </LinearLayout>
     </LinearLayout>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/confirm_payment_button"
-        android:text="@string/confirm_payment"/>
-
 </LinearLayout>
