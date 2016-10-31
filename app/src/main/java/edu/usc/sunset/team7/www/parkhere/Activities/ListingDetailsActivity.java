@@ -2,6 +2,7 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -115,6 +116,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
                 .child(providerID).child(Consts.USER_FIRSTNAME);
         providerNameRef.addListenerForSingleValueEvent(databaseListener);
         listingDetailsTextView.setText(listingDetailsString());
+        parkingImageView.setImageURI(Uri.parse(listingResult.getImageURL()));
     }
 
     private String listingDetailsString() {
