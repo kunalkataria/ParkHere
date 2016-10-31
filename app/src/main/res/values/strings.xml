@@ -103,6 +103,9 @@
 
     <string name="reviews">My Reviews</string>
     <string name="rating">Rating</string>
+    <string name="confirm_payment">Confirm Payment</string>
+    <string name="confirm_payment_amount">$</string>
+
 
 </resources>
 
