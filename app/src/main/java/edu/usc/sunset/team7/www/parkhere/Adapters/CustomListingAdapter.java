@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 /**
@@ -69,7 +70,7 @@ public class CustomListingAdapter extends BaseAdapter {
         }
 
         item.locationLabel.setText(((Listing)getItem(position)).getName());
-        item.dateLabel.setText(((Listing)getItem(position)).getStartTime() + "--" + ((Listing)getItem(position)).getStopTime());
+        item.dateLabel.setText(Tools.convertUnixTimeToDateString(((Listing)getItem(position)).getStartTime()) + " - " + Tools.convertUnixTimeToDateString(((Listing)getItem(position)).getStopTime()));
         Picasso.with(context).load(((Listing)getItem(position)).getImageURL()).into(item.imgView);
 
         rowView.setOnClickListener(new View.OnClickListener() {
