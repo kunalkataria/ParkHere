@@ -42,7 +42,6 @@ public class BookingFragment extends Fragment {
     //for parsing the listing
     private boolean foundListing;
     private DataSnapshot listing;
-    private Listing curListing;
 
     private ArrayList<Booking> allBookings;
     @Override
@@ -54,9 +53,6 @@ public class BookingFragment extends Fragment {
         allBookings = new ArrayList<Booking>();
         done = false;
         getAllBookings();
-        //while(!done) try { Thread.sleep(5); } catch (InterruptedException e) {e.printStackTrace();}
-        //need to call the adapter now
-
     }
 
     @Override
@@ -67,38 +63,38 @@ public class BookingFragment extends Fragment {
     }
 
     protected void getAllBookings(){
-
-        String uid = currentUser.getUid();
+        final String uid = currentUser.getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference ref = mDatabase.child(Consts.BOOKINGS_DATABASE).child(uid);
-        System.out.println("Got here");
-        if(ref == null) System.out.println("FUCK");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot booking : dataSnapshot.getChildren()) {
-                    System.out.println(booking.getKey());
-                    Booking toAdd = parseBooking(booking);
-                    String listingID = booking.child(Consts.BOOKING_ID).getValue().toString();
-                    String providerID = booking.child(Consts.PROVIDER_ID).getValue().toString();
-                    Listing mListing = parseListing(listingID, providerID);
-                    toAdd.setMListing(mListing);
-                    allBookings.add(toAdd);
-                }
-                Booking[] sendToAdapter = allBookings.toArray(new Booking[allBookings.size()]);
-                bookingListview.setAdapter(new CustomBookingAdapter(getActivity(), sendToAdapter));
+                grabBookings(dataSnapshot, uid);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println(databaseError.getMessage());
+
             }
         });
     }
 
-    private Booking parseBooking (DataSnapshot snapshot) {
+    private void grabBookings(DataSnapshot datasnapshot, String uid) {
+        DataSnapshot bookings = datasnapshot.child(Consts.BOOKINGS_DATABASE).child(uid);
+        DataSnapshot listings = datasnapshot.child(Consts.LISTINGS_DATABASE);
+        for(DataSnapshot booking : bookings.getChildren()) {
+            String listingID = booking.child(Consts.LISTING_ID).getValue().toString();
+            String providerID = booking.child(Consts.PROVIDER_ID).getValue().toString();
+            Booking toAdd = parseBooking(datasnapshot, booking,listingID, providerID);
+            allBookings.add(toAdd);
+        }
+        Booking[] sendToAdapter = allBookings.toArray(new Booking[allBookings.size()]);
+        bookingListview.setAdapter(new CustomBookingAdapter(getActivity(), sendToAdapter));
+    }
+
+    private Booking parseBooking (DataSnapshot datasnapshot, DataSnapshot booking,
+                                  String listingID, String providerID) {
         Booking toAddBooking = new Booking(null);
-        for(DataSnapshot child : snapshot.getChildren()) {
+        for(DataSnapshot child : booking.getChildren()) {
             switch (child.getKey()) {
                 case Consts.LISTING_END_TIME:
                     toAddBooking.setBookEndTime(Long.parseLong(child.getValue().toString()));
@@ -106,69 +102,58 @@ public class BookingFragment extends Fragment {
                 case Consts.LISTING_START_TIME:
                     toAddBooking.setBookStartTime(Long.parseLong(child.getValue().toString()));
                     break;
-
             }
         }
+        Listing listing = parseListing(datasnapshot, listingID, providerID);
+        toAddBooking.setMListing(listing);
         return toAddBooking;
     }
 
-    private Listing parseListing (String listingID, String providerID) {
-        foundListing = false;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Consts.LISTINGS_DATABASE)
-                .child(providerID).child(Consts.INACTIVE_LISTINGS).child(listingID);
-        curListing = new Listing();
+    private Listing parseListing (DataSnapshot dataSnapshot, String listingID, String providerID) {
+        DataSnapshot listing = dataSnapshot.child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(listingID);
+        Listing curListing = new Listing();
         curListing.setListingID(listingID);
         curListing.setProviderID(providerID);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                listing = dataSnapshot;
-                for (DataSnapshot child : listing.getChildren()) {
-                    System.out.println("Child: " + child.getKey());
-                    switch (child.getKey()) {
-                        case Consts.LISTING_NAME:
-                            curListing.setName(child.getValue().toString());
-                            break;
-                        case Consts.LISTING_DESCRIPTION:
-                            curListing.setDescription(child.getValue().toString());
-                            break;
-                        case Consts.LISTING_REFUNDABLE:
-                            curListing.setRefundable(Boolean.parseBoolean(child.getValue().toString()));
-                        case Consts.LISTING_COMPACT:
-                            curListing.setCompact(Boolean.parseBoolean(child.getValue().toString()));
-                            break;
-                        case Consts.LISTING_COVERED:
-                            curListing.setCovered(Boolean.parseBoolean(child.getValue().toString()));
-                            break;
-                        case Consts.LISTING_HANDICAP:
-                            curListing.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
-                            break;
-                        case Consts.LISTING_PRICE:
-                            curListing.setPrice(Double.parseDouble(child.getValue().toString()));
-                            break;
-                        case Consts.LISTING_LATITUDE:
-                            curListing.setLatitude(Double.parseDouble(child.getValue().toString()));
-                            break;
-                        case Consts.LISTING_LONGITUDE:
-                            curListing.setLongitude(Double.parseDouble(child.getValue().toString()));
-                            break;
-                        case Consts.LISTING_START_TIME:
-                            curListing.setStartTime(Long.valueOf(child.getValue().toString()));
-                            break;
-                        case Consts.LISTING_END_TIME:
-                            curListing.setStopTime(Long.valueOf(child.getValue().toString()));
-                            break;
-                    }
-                }
-                foundListing = true;
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                foundListing = true;
-                System.out.println("NO!");
+        for (DataSnapshot child : listing.getChildren()) {
+            switch (child.getKey()) {
+                case Consts.LISTING_NAME:
+                    curListing.setName(child.getValue().toString());
+                    break;
+                case Consts.LISTING_DESCRIPTION:
+                    curListing.setDescription(child.getValue().toString());
+                    break;
+                case Consts.LISTING_REFUNDABLE:
+                    curListing.setRefundable(Boolean.parseBoolean(child.getValue().toString()));
+                case Consts.LISTING_COMPACT:
+                    curListing.setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_COVERED:
+                    curListing.setCovered(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_HANDICAP:
+                    curListing.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_PRICE:
+                    curListing.setPrice(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_LATITUDE:
+                    curListing.setLatitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_LONGITUDE:
+                    curListing.setLongitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_START_TIME:
+                    curListing.setStartTime(Long.valueOf(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_END_TIME:
+                    curListing.setStopTime(Long.valueOf(child.getValue().toString()));
+                    break;
+                case Consts.LISTING_IMAGE:
+                    curListing.setImageURL(child.getValue().toString());
+                    break;
             }
-        });
+        }
 
         return curListing;
     }
