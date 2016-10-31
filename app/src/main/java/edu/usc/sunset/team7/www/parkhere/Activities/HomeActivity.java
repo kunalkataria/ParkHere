@@ -26,6 +26,7 @@ import butterknife.OnItemClick;
 import edu.usc.sunset.team7.www.parkhere.Fragments.BalanceFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.BookingFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.ListingFragment;
+import edu.usc.sunset.team7.www.parkhere.Fragments.ProfileFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.SearchFragment;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
@@ -174,7 +175,8 @@ public class HomeActivity extends AppCompatActivity {
                     setToolbarTitle(getResources().getString(R.string.balance));
                     break;
                 case Consts.MY_PROFILE_FRAGMENT_TAG:
-
+                    currentFragment = new ProfileFragment();
+                    setToolbarTitle(getResources().getString(R.string.profile));
                     break;
             }
         }

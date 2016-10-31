@@ -33,7 +33,8 @@
 
     <string name="listing">My Listings</string>
     <string name="booking">My Bookings</string>
-    <string name="balance">"My Balance"</string>
+    <string name="balance">My Balance</string>
+    <string name="profile">My Profile</string>
     <string name="upload_picture">Upload profile image</string>
     <string name="profile_image_description">Profile Image</string>
     <string name="select_picture">Select Picture</string>

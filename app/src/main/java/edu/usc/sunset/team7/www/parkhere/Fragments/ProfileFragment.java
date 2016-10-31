@@ -1,16 +1,18 @@
-package edu.usc.sunset.team7.www.parkhere.Activities;
+package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListViewCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,37 +41,42 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Review;
 
 /**
- * Created by Jonathan on 10/28/16.
+ * Created by Justin on 10/31/2016.
  */
 
-public class UserProfileActivity extends AppCompatActivity {
+public class ProfileFragment extends Fragment{
 
-    @BindView(R.id.userProfileImage) ImageView profilePic;
-    @BindView(R.id.user_name_view) TextView userName;
-    @BindView(R.id.user_rating_bar) RatingBar userRating;
-    @BindView(R.id.review_content_space) LinearLayout reviewContentSpace;
+    @BindView(R.id.userProfileImage_fragment)
+    ImageView profilePic;
+    @BindView(R.id.user_name_view_fragment)
+    TextView userName;
+    @BindView(R.id.user_rating_bar_fragment)
+    RatingBar userRating;
+    @BindView(R.id.review_content_space_fragment)
+    LinearLayout reviewContentSpace;
 
     private String uid, name, imageURL;
     private double rating = -1;
-    private List<Review> reviews;
+    private ArrayList<Review> reviews = new ArrayList<Review>();
 
-    private static final String TAG = "UserProfileActivity";
+    private static final String TAG = "UserProfileFragment";
 
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activty_public_profile);
-        ButterKnife.bind(this);
+    @Override
+    public void onCreate(Bundle savedBundleInstance){
 
-        Bundle bundle = getIntent().getExtras();
-
-        if(bundle!=null && bundle.containsKey(Consts.USER_ID)) {
-            uid = (String)bundle.get(Consts.USER_ID);
-            getValuesFromDatabase();
-        } else {
-            Log.d(TAG, "BUNDLE WAS EMPTY!");
-        }
+        super.onCreate(savedBundleInstance);
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        getValuesFromDatabase();
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.public_profile_fragment, container, false);
+        ButterKnife.bind(this, view);
+        return view;
+    }
+
 
     private void getValuesFromDatabase(){
         DatabaseReference userRef = FirebaseDatabase.getInstance()
@@ -97,13 +105,13 @@ public class UserProfileActivity extends AppCompatActivity {
                     final long ONE_MEGABYTE = 1024 * 1024;
                     storage.getBytes(ONE_MEGABYTE).addOnSuccessListener(
                             new OnSuccessListener<byte[]>() {
-                        @Override
-                        public void onSuccess(byte[] bytes) {
-                            // Data for "images/island.jpg" is returns, use this as needed
-                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            profilePic.setImageBitmap(bmp);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onSuccess(byte[] bytes) {
+                                    // Data for "images/island.jpg" is returns, use this as needed
+                                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                    profilePic.setImageBitmap(bmp);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             // Handle any errors
@@ -151,11 +159,12 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setValues(){
-        if(name!=null && rating!=-1){
+        if(name!=null && imageURL!=null && rating!=-1){
             userName.setText(name);
+            //profilePic.setImageURI(Uri.parse(imageURL));
 
             if (imageURL != null) {
-                Picasso.with(this).load(imageURL).into(profilePic);
+                Picasso.with(getActivity()).load(imageURL).into(profilePic);
             }
 
             DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
@@ -164,10 +173,10 @@ public class UserProfileActivity extends AppCompatActivity {
             drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
             userRating.setRating(Float.valueOf(oneDigit.format(rating)));
 
-            if (reviews != null) {
+            if (reviews != null || reviews.size() > 0) {
                 reviewContentSpace.removeAllViewsInLayout();
-                ListViewCompat listView = new ListViewCompat(this);
-                listView.setAdapter(new CustomReviewAdapter(this, reviews));
+                ListViewCompat listView = new ListViewCompat(getActivity());
+                listView.setAdapter(new CustomReviewAdapter(getActivity(), reviews));
                 reviewContentSpace.addView(listView);
             }
         } else{
