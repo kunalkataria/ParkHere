@@ -94,7 +94,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     StorageReference storage = FirebaseStorage.getInstance()
                             .getReferenceFromUrl(Consts.STORAGE_URL)
                             .child(Consts.STORAGE_PROFILE_PICTURES).child(uid);
-                    final long ONE_MEGABYTE = 1024 * 1024;
+                    final long ONE_MEGABYTE = 5 * 1024 * 1024;
                     storage.getBytes(ONE_MEGABYTE).addOnSuccessListener(
                             new OnSuccessListener<byte[]>() {
                         @Override
@@ -107,6 +107,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             // Handle any errors
+                            Log.d(TAG, "Image did not download");
                         }
                     });
                 }
