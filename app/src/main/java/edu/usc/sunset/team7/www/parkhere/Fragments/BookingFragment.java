@@ -9,7 +9,6 @@ import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -102,6 +101,10 @@ public class BookingFragment extends Fragment {
                 case Consts.LISTING_START_TIME:
                     toAddBooking.setBookStartTime(Long.parseLong(child.getValue().toString()));
                     break;
+                case Consts.BOOKING_PROVIDER_ID:
+                    toAddBooking.setProviderID(child.getValue().toString());
+                    break;
+
             }
         }
         Listing listing = parseListing(datasnapshot, listingID, providerID);
