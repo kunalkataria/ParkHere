@@ -60,7 +60,7 @@ public class ListingFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Listing currentListing = parseListing(child);
-                    currentListing.setListingID(child.getValue().toString());
+                    currentListing.setListingID(child.getKey());
                     userListings.add(currentListing);
                 }
 
@@ -120,6 +120,10 @@ public class ListingFragment extends Fragment {
                 case "End Time":
                     String stopTime = child.getValue().toString();
                     listing.setStopTime(Long.valueOf(stopTime));
+                    break;
+                case "Price":
+                    Double price = Double.parseDouble(child.getValue().toString());
+                    listing.setPrice(price);
                     break;
             }
         }

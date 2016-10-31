@@ -88,6 +88,7 @@ public class CustomResultsAdapter extends BaseAdapter {
             public void onClick(View view) {
                 Intent detailsIntent = new Intent(context, ListingDetailsActivity.class);
                 detailsIntent.putExtra(Consts.LISTING_RESULT_EXTRA, (ResultsPair) getItem(position));
+                detailsIntent.putExtra(Consts.MY_OWN_LISTING_EXTRA, false);
                 context.startActivity(detailsIntent);
             }
         });

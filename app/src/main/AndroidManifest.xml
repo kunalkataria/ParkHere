@@ -23,6 +23,7 @@
         <activity android:name=".Activities.FilterActivity"></activity>
         <activity android:name=".Activities.UserProfileActivity"></activity>
         <activity android:name=".Activities.ListingDetailsActivity"></activity>
+        <activity android:name=".Activities.EditListingActivity"></activity>
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
