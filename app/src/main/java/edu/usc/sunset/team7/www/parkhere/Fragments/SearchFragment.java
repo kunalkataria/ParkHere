@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,9 @@ public class SearchFragment extends Fragment {
     @BindView(R.id.stop_date_inputlayout) TextInputLayout stopDateInputLayout;
     @BindView(R.id.start_date_edittext) AppCompatEditText startDateEditText;
     @BindView(R.id.stop_date_edittext) AppCompatEditText stopDateEditText;
+
+    @BindView(R.id.latitude_edittext) AppCompatEditText latitudeEditText;
+    @BindView(R.id.longitude_edittext) AppCompatEditText longitudeEditText;
 
     @BindView(R.id.search_date_checkbox) AppCompatCheckBox searchDateCheckbox;
 
@@ -121,6 +125,16 @@ public class SearchFragment extends Fragment {
                 startDate = c.getTimeInMillis() / 1000;
             }
             ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, startDate, stopDate);
+        } else {
+            double lat = Double.parseDouble(latitudeEditText.getEditableText().toString());
+            double lon = Double.parseDouble(longitudeEditText.getEditableText().toString());
+            System.out.println(lat + " " + lon );
+            // set start date to current time if the time is not selected
+            if (startDate == -1) {
+                Calendar c = Calendar.getInstance();
+                startDate = c.getTimeInMillis() / 1000;
+            }
+            ResultsActivity.startActivity(getActivity(), lat, lon, startDate, stopDate);
         }
     }
 

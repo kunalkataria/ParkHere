@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,25 +97,27 @@ public class ListingDetailsActivity extends AppCompatActivity {
             editListingButton.setVisibility(View.GONE);
             deleteListingButton.setVisibility(View.GONE);
             providerID = listingResultPair.getListing().getProviderID();
+            listingNameTextView.setText(listingResult.getName());
         }
 
-        ValueEventListener databaseListener = new ValueEventListener() {
+        DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
+                .child(providerID).child(Consts.USER_FIRSTNAME);
+
+        providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 providerFirstName = (String) dataSnapshot.getValue();
-                listingNameTextView.setText(providerFirstName);
+                providerNameTextView.setText(providerFirstName);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
             }
-        };
+        });
 
-        DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
-                .child(providerID).child(Consts.USER_FIRSTNAME);
-        providerNameRef.addListenerForSingleValueEvent(databaseListener);
         listingDetailsTextView.setText(listingDetailsString());
+
     }
 
     private String listingDetailsString() {
