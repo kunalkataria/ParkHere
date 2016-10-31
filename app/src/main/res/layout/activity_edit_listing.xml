@@ -45,11 +45,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/price_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/price_edittext"
                     android:hint="@string/listing_price" />
             </android.support.design.widget.TextInputLayout>
 
@@ -83,13 +83,13 @@
             </RadioGroup>
 
             <Button
+                android:id="@+id/upload_parking_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/upload_parking_button"
                 android:text="@string/upload_parking_image" />
 
             <ImageView
-                android:id="@+id/parkingImage"
+                android:id="@+id/parking_image"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_gravity="center_horizontal"
@@ -142,39 +142,6 @@
                     android:clickable="true"
                     android:focusable="true" />
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/suv_button_control"
-                    android:text="@string/suv_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/truck_button_control"
-                    android:text="@string/truck_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true" />
-            </LinearLayout>
-
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

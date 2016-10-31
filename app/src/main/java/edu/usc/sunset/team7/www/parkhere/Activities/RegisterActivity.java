@@ -115,7 +115,12 @@ public class RegisterActivity extends AppCompatActivity {
             if (Tools.nameValid(firstName)) {
                 if (Tools.nameValid(lastName)) {
                     if (Tools.phoneValid(phoneNumber)) {
-                        return true;
+                        if(Tools.emailValid(email))
+                            return true;
+                        else {
+                            emailTextInputLayout.setErrorEnabled(true);
+                            emailTextInputLayout.setError("Password needs to atleast 10 characters long and contain a special character");
+                        }
                     } else {
                         // phone number not valid
                         phoneNumberTextInputLayout.setErrorEnabled(true);

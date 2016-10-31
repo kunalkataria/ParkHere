@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
@@ -69,12 +71,16 @@ public class CustomResultsAdapter extends BaseAdapter {
             item = (ItemShell) rowView.getTag();
         }
 
-        String currentResult = ((ResultsPair) getItem(position)).getListing().getName();
+        ResultsPair currentResult = (ResultsPair) getItem(position);
 
-        item.searchLabel.setText(currentResult);
-        double myDouble = ((ResultsPair) getItem(position)).getDistance();
+        String currentName = currentResult.getListing().getName();
+
+        item.searchLabel.setText(currentName);
+
+        double myDouble = currentResult.getDistance();
+
         item.distanceLabel.setText(Double.toString(myDouble));
-        //image stuff later
+        Picasso.with(context).load(currentResult.getListing().getImageURL()).into(item.imgView);
 
         rowView.setOnClickListener(new View.OnClickListener() {
 
@@ -82,6 +88,7 @@ public class CustomResultsAdapter extends BaseAdapter {
             public void onClick(View view) {
                 Intent detailsIntent = new Intent(context, ListingDetailsActivity.class);
                 detailsIntent.putExtra(Consts.LISTING_RESULT_EXTRA, (ResultsPair) getItem(position));
+                detailsIntent.putExtra(Consts.MY_OWN_LISTING_EXTRA, false);
                 context.startActivity(detailsIntent);
             }
         });

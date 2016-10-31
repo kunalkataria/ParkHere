@@ -33,6 +33,7 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 
 public class ResultsActivity extends AppCompatActivity {
 
+    @BindView(R.id.avg_parking_price_title) TextView parkWhizIntroTextView;
     @BindView(R.id.list_content_space) LinearLayout listContentSpace;
     @BindView(R.id.avg_parking_price_value) TextView avgParkingView;
     @BindView(R.id.loading_panel) RelativeLayout loadingPanel;
@@ -68,7 +69,12 @@ public class ResultsActivity extends AppCompatActivity {
         ListViewCompat listView = new ListViewCompat(this);
         listView.setAdapter(new CustomResultsAdapter(this, searchResult.getAllListings()));
         listContentSpace.addView(listView);
-        avgParkingView.setText(Double.toString(mSearchResult.getAverageParkPrice()));
+        if (mSearchResult.getAverageParkPrice() == -1.0) {
+            parkWhizIntroTextView.setVisibility(View.GONE);
+            avgParkingView.setText(getResources().getString(R.string.avg_parking_price_not_found));
+        } else {
+            avgParkingView.setText(Double.toString(mSearchResult.getAverageParkPrice()));
+        }
     }
 
     private void populateResultsList(List<ResultsPair> listings) {
@@ -89,6 +95,8 @@ public class ResultsActivity extends AppCompatActivity {
         long startTime = intent.getLongExtra(Consts.START_TIME_EXTRA, 0);
         long stopTime = intent.getLongExtra(Consts.STOP_TIME_EXTRA, 0);
 //        SearchService searchService = new SearchService();
+
+
         Intent serviceIntent = new Intent(this, SearchService.class);
         serviceIntent.putExtra(Consts.LATITUDE_EXTRA, latitude);
         serviceIntent.putExtra(Consts.LONGITUDE_EXTRA, longitude);

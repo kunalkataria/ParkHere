@@ -8,7 +8,6 @@ package edu.usc.sunset.team7.www.parkhere.backend;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,8 +25,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Scanner;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -56,8 +53,11 @@ public class SearchServlet extends HttpServlet {
 
         final double latitude = Double.parseDouble(req.getParameter("lat"));
         final double longitude = Double.parseDouble(req.getParameter("lon"));
+        final long startTime = Long.parseLong(req.getParameter("startTime"));
+        final long stopTime = Long.parseLong(req.getParameter("stopTime"));
 
         System.out.println("Lat: " + latitude + " Long: " + longitude);
+        System.out.println("Start: " + startTime + " End: " + stopTime);
 
         searchResult = new SearchResult(avgParkingCost(latitude, longitude));
 
@@ -84,16 +84,22 @@ public class SearchServlet extends HttpServlet {
 
         DatabaseReference ref = FirebaseDatabase
                 .getInstance()
-                .getReference("listings");
+                .getReference("Listings");
 
         resp.setStatus(HttpServletResponse.SC_OK);
         done = false;
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    System.out.println(child.getKey());
-                    processListing(child, latitude, longitude);
+                //looping through providers
+                for(DataSnapshot provider : dataSnapshot.getChildren()) {
+                    String providerID = provider.getKey();
+                    //looping through active listings
+                    for(DataSnapshot listing : provider.child("Active Listings").getChildren()) {
+                        String listingID = listing.getKey();
+                        processListing(listing, latitude, longitude,
+                                startTime, stopTime, providerID, listingID);
+                    }
                 }
                 done = true;
             }
@@ -123,69 +129,76 @@ public class SearchServlet extends HttpServlet {
                 Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) *
                         Math.sin(dLon/2) * Math.sin(dLon/2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double d = R * c;
+        double d = R * c * 0.621371;
         return d;
     }
 
+    //checks if a listing is within 3 miles of the searched location
     private boolean isWithinRadius(DataSnapshot child, double latitude, double longitude) {
         double listingLat = -1, listingLong = -1;
         for(DataSnapshot childSnap : child.getChildren()) {
-            if(childSnap.getKey().equals("latitude")) listingLat = Double.valueOf(childSnap.getValue().toString());
-            else if(childSnap.getKey().equals("longitude")) listingLong = Double.valueOf(childSnap.getValue().toString());
+            if(childSnap.getKey().equals("Latitude")) listingLat = Double.valueOf(childSnap.getValue().toString());
+            else if(childSnap.getKey().equals("Longitude")) listingLong = Double.valueOf(childSnap.getValue().toString());
         }
         if(listingLat == -1 || listingLong == -1) return false;
-        return (distance(listingLat, listingLong, latitude, longitude) < 4828.03);
+        return (distance(listingLat, listingLong, latitude, longitude) <= 3);
     }
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        String name = req.getParameter("name");
-        resp.setContentType("text/plain");
-        if (name == null) {
-            resp.getWriter().println("Please enter a name");
+        resp.getWriter().println("POST requests are not supported");
+    }
+    //checks if a listing is within searched time constraints
+    private boolean isWithinTimeConstraints(DataSnapshot child, long startTime, long stopTime) {
+        for(DataSnapshot childSnap : child.getChildren()) {
+            if(childSnap.getKey().equals("Start Time")) {
+                long listingStartTime = Long.parseLong(childSnap.getValue().toString());
+                if(listingStartTime > startTime) return false;
+            } else if(childSnap.getKey().equals("End Time")) {
+                long listingStopTime = Long.parseLong(childSnap.getValue().toString());
+                if(stopTime != -1 && listingStopTime < stopTime) return false;
+            }
         }
-        resp.getWriter().println("Hello " + name);
+        return true;
     }
 
     private Listing parseListing (DataSnapshot snapshot) {
         Listing listing = new Listing();
         for (DataSnapshot child : snapshot.getChildren()) {
             switch (child.getKey()) {
-                case "active":
-                    if (!Boolean.parseBoolean(child.getValue().toString())) continue;
-                    break;
-                case "compact":
+                case "Compact":
                     listing.setCompact(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "covered":
+                case "Covered":
                     listing.setCovered(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "description":
+                case "Listing Description":
                     listing.setDescription(child.getValue().toString());
                     break;
-                case "handicap":
+                case "Handicap":
                     listing.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "latitude":
+                case "Image URL":
+                    listing.setImageURL(child.getValue().toString());
+                    break;
+                case "Latitude":
                     listing.setLatitude(Double.parseDouble(child.getValue().toString()));
                     break;
-                case "longitude":
+                case "Longitude":
                     listing.setLongitude(Double.parseDouble(child.getValue().toString()));
                     break;
-                case "name":
+                case "Listing Name":
                     listing.setName(child.getValue().toString());
                     break;
-                case "ownerID":
-                    break;
-                case "refundable":
+                case "Is Refundable":
                     listing.setRefundable(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "startTime":
+                case "Start Time":
                     String startTime = child.getValue().toString();
                     listing.setStartTime(Long.valueOf(startTime));
                     break;
-                case "stopTime":
+                case "End Time":
                     String stopTime = child.getValue().toString();
                     listing.setStopTime(Long.valueOf(stopTime));
                     break;
@@ -194,13 +207,17 @@ public class SearchServlet extends HttpServlet {
         return listing;
     }
 
-    private void processListing(DataSnapshot dataSnapshot, double latitude, double longitude) {
-        if(isWithinRadius(dataSnapshot, latitude, longitude)) {
+    private void processListing(DataSnapshot dataSnapshot, double latitude, double longitude,
+                                long startTime, long stopTime, String providerID, String listingID) {
+        if(isWithinRadius(dataSnapshot, latitude, longitude) &&
+                isWithinTimeConstraints(dataSnapshot, startTime, stopTime)) {
+            System.out.println("Listing processed");
             Listing listing = parseListing(dataSnapshot);
+            listing.setProviderID(providerID);
+            listing.setListingID(listingID);
             double distance = distance(listing.getLatitude(), listing.getLongitude(), latitude, longitude);
             ResultsPair resultsPair = new ResultsPair(listing, distance);
             searchResult.addListing(resultsPair);
-            System.out.println(listing.getName() + " " + listing.getDescription());
         }
     }
 

@@ -66,6 +66,8 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedBundleInstance) {
         super.onCreate(savedBundleInstance);
+        startDate = -1;
+        stopDate = -1;
     }
 
     @Override
@@ -100,6 +102,11 @@ public class SearchFragment extends Fragment {
     protected void startSearch() {
         if (locationSelected != null) {
             LatLng latLng = locationSelected.getLatLng();
+            // set start date to current time if the time is not selected
+            if (startDate == -1) {
+                Calendar c = Calendar.getInstance();
+                startDate = c.getTimeInMillis() / 1000;
+            }
             ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, startDate, stopDate);
         }
     }
@@ -111,9 +118,9 @@ public class SearchFragment extends Fragment {
             DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    DateTime datetime = new DateTime(year, month, day, 0, 0);
+                    DateTime datetime = new DateTime(year, month + 1, day, 0, 0);
                     startDate = datetime.getMillis() / 1000; // save this
-                    startTimeEditText.setText(Tools.getDateString(year, month, day));
+                    startTimeEditText.setText(Tools.getDateString(year, month + 1, day));
                 }
             };
             startDatePicker = new DatePickerDialog
@@ -126,21 +133,19 @@ public class SearchFragment extends Fragment {
     @OnClick(R.id.stop_time_edittext)
     protected void stopDateDialog() {
         if (searchDateCheckbox.isChecked()) {
-            if (searchDateCheckbox.isChecked()) {
 //                LocalDate localDate = LocalDate.now();
-                Calendar c = Calendar.getInstance();
-                DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        DateTime datetime = new DateTime(year, month, day, 23, 59);
-                        stopDate = datetime.getMillis() / 1000;
-                        stopTimeEditText.setText(Tools.getDateString(year, month, day));
-                    }
-                };
-                stopDatePicker = new DatePickerDialog
-                        (getActivity(), startDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-                stopDatePicker.show();
-            }
+            Calendar c = Calendar.getInstance();
+            DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    DateTime datetime = new DateTime(year, month + 1, day, 23, 59);
+                    stopDate = datetime.getMillis() / 1000;
+                    stopTimeEditText.setText(Tools.getDateString(year, month + 1, day));
+                }
+            };
+            stopDatePicker = new DatePickerDialog
+                    (getActivity(), startDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+            stopDatePicker.show();
         }
     }
 
@@ -153,13 +158,15 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    // set the time to be the current time when clearing
     private void clearStart() {
-        startDate = 0;
+        startDate = -1;
         startTimeEditText.setText("");
     }
 
+    // set stop time to -1 for server
     private void clearStop() {
-        stopDate = 0;
+        stopDate = -1;
         stopTimeEditText.setText("");
     }
 

@@ -10,6 +10,8 @@ public class Consts {
     public static final String SEARCH_FRAGMENT_TAG = "search_fragment";
     public static final String BOOKING_FRAGMENT_TAG = "booking_fragment";
     public static final String LISTING_FRAGMENT_TAG = "listing_fragment";
+    public static final String BALANCE_FRAGMENT_TAG = "balance_fragment";
+    public static final String MY_PROFILE_FRAGMENT_TAG = "my_profile_fragment";
 
     public static final String IMAGE_URI = "image_uri";
 
@@ -23,6 +25,13 @@ public class Consts {
     public static final String HANDICAP_EXTRA = "handicap_extra";
     public static final String COMPACT_EXTRA = "compact_extra";
     public static final String LISTING_EDIT_EXTRA = "listing_edit_extra";
+    public static final String MY_OWN_LISTING_EXTRA = "my_own_listing_extra";
+    public static final String BOOKING_EXTRA = "booking_extra";
+    public static final String LISTING_EXTRA = "listing_extra";
+
+    public static final String LISTING_TO_BE_BOOKED = "listing_to_be_booked";
+    public static final String LISTING_DISTANCE = "listing_distance";
+    public static final String LISTING_DETAILS_STRING = "listing_details_string";
 
     public static final String SEARCH_INTENT_FILTER = "search_intent_filter";
 
@@ -64,7 +73,11 @@ public class Consts {
     public static final String USER_DEFAULT_PROFILE_PIC_URL = "https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2Fdefault_profile-web.png?alt=media&token=4d876ecf-8c3a-42cb-b140-fc8441e9335e";
 
     //Listing Database
+    public static final String ACTIVE_LISTINGS = "Active Listings";
+    public static final String INACTIVE_LISTINGS = "Inactive Listings";
+    public static final String PROVIDER_ID = "Provider ID";
     public static final String LISTING_ID = "Listing ID";
+
     public static final String LISTING_NAME = "Listing Name";
     public static final String LISTING_DESCRIPTION = "Listing Description";
     public static final String LISTING_REFUNDABLE = "Is Refundable";
@@ -74,12 +87,8 @@ public class Consts {
     public static final String LISTING_PRICE = "Price";
     public static final String LISTING_LONGITUDE = "Longitude";
     public static final String LISTING_LATITUDE = "Latitude";
-    public static final String LISTING_PROVIDER = "Provider";
     public static final String LISTING_START_TIME = "Start Time";
     public static final String LISTING_END_TIME = "End Time";
-    public static final String LISTING_SEEKER = "Seeker";
-    public static final String LISTING_RATING = "Rating";
-    public static final String LISTING_REVIEW = "Review";
     public static final String LISTING_IMAGE = "Image URL";
 
     //Booking Database
@@ -95,11 +104,10 @@ public class Consts {
     public static final String PAYPAL = "paypal";
 
     public static final String CREDIT_CARD_TYPE = "credit_card_type";
-    public static final String VISA = "visa";
-    public static final String DISCOVER = "discover";
-    public static final String AMERICAN_EXPRESS = "american_express";
-    public static final String MASTERCARD = "mastercard";
-
+    public static final String VISA = "Visa";
+    public static final String DISCOVER = "Discover";
+    public static final String AMERICAN_EXPRESS = "American Express";
+    public static final String MASTERCARD = "Mastercard";
 
     public static final String CREDIT_CARD_NUMBER = "credit_card_number";
     public static final String CREDIT_CARD_NAME = "name_on_card";
@@ -114,6 +122,10 @@ public class Consts {
     public static final String PAYPAL_EMAIL = "paypal_email";
 
     public static final String USER_ID = "User ID";
+
+    //Reviews Database
+    public static final String REVIEW_DESCRIPTION = "Review";
+    public static final String REVIEW_RATING = "Rating";
 
 
 }

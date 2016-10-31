@@ -1,5 +1,6 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,13 +12,16 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +32,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.joda.time.DateTime;
+
+import java.util.Calendar;
 import java.util.Hashtable;
 
 import butterknife.BindView;
@@ -35,6 +42,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 
 /**
  * Created by kunal on 10/23/16.
@@ -85,6 +93,16 @@ public class PostListingActivity extends AppCompatActivity {
     @BindView(R.id.covered_button_control)
     SwitchCompat coveredSwitch;
 
+    // Date selector pieces
+    @BindView(R.id.start_date_inputlayout) TextInputLayout startTimeLayout;
+    @BindView(R.id.stop_date_inputlayout) TextInputLayout stopTimeLayout;
+    @BindView(R.id.start_time_edittext) AppCompatEditText startTimeBox;
+    @BindView(R.id.stop_time_edittext) AppCompatEditText stopTimeBox;
+    private DatePickerDialog startDatePicker;
+    private DatePickerDialog stopDatePicker;
+    private long startDate;
+    private long stopDate;
+
     boolean isCompact,isHandicap, isCovered, isRefundable;
 
     @BindView(R.id.upload_listing_button)
@@ -97,11 +115,10 @@ public class PostListingActivity extends AppCompatActivity {
     private Uri sourceImageUri = null;
     private String firebaseImageURL = "";
 
-    //NEED TO ADD DATE AND TIME PICKERS
-    private long startTime, endTime;
-
     //NEED TO GET LONGITUDE AND LATITUDE
     private double longitude, latitude;
+
+    private Place locationSelected;
 
     public static void startActivity(Context context) {
         Intent i = new Intent(context, PostListingActivity.class);
@@ -115,7 +132,25 @@ public class PostListingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.search_autocomplete_fragment);
+                getFragmentManager().findFragmentById(R.id.post_listing_autocomplete_fragment);
+
+        if (autocompleteFragment != null) {
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(Place place) {
+                    locationSelected = place;
+                    latitude = locationSelected.getLatLng().latitude;
+                    longitude = locationSelected.getLatLng().longitude;
+                    Log.i(TAG, "Place: " + place.getName());
+                }
+
+                @Override
+                public void onError(Status status) {// TODO: Handle the error.
+                    Log.i(TAG, "An error occurred: " + status);
+                }
+            });
+        }
+
 
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -125,6 +160,10 @@ public class PostListingActivity extends AppCompatActivity {
         nameString = "";
         descriptionString = "";
         price=0.0;
+        startDate = 0;
+        stopDate = 0;
+        latitude = -1;
+        longitude = -1;
 
         cancellationIds = new Hashtable<Integer, String>();
         cancellationIds.put(R.id.refundable_rButton, Consts.REFUNDABLE);
@@ -154,9 +193,8 @@ public class PostListingActivity extends AppCompatActivity {
         if(checkFields()) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = currentUser.getUid();
-            String listingID = mDatabase.child(Consts.LISTINGS_DATABASE).push().getKey();;
-            DatabaseReference newListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listingID);
-
+            String listingID = mDatabase.child(Consts.LISTINGS_DATABASE).push().getKey();
+            final DatabaseReference newListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child(Consts.ACTIVE_LISTINGS).child(listingID);
             newListingRef.child(Consts.LISTING_NAME).setValue(nameString);
             newListingRef.child(Consts.LISTING_DESCRIPTION).setValue(descriptionString);
             newListingRef.child(Consts.LISTING_REFUNDABLE).setValue(isRefundable);
@@ -166,18 +204,13 @@ public class PostListingActivity extends AppCompatActivity {
             newListingRef.child(Consts.LISTING_HANDICAP).setValue(isHandicap);
             newListingRef.child(Consts.LISTING_LATITUDE).setValue(latitude);
             newListingRef.child(Consts.LISTING_LONGITUDE).setValue(longitude);
-            newListingRef.child(Consts.LISTING_START_TIME).setValue(startTime);
-            newListingRef.child(Consts.LISTING_END_TIME).setValue(endTime);
-            newListingRef.child(Consts.LISTING_PROVIDER).setValue(uid);
-            //dont need this
-            newListingRef.child(Consts.LISTING_SEEKER).setValue(null);
-            newListingRef.child(Consts.LISTING_RATING).setValue(null);
-            newListingRef.child(Consts.LISTING_REVIEW).setValue(null);
+            newListingRef.child(Consts.LISTING_START_TIME).setValue(startDate);
+            newListingRef.child(Consts.LISTING_END_TIME).setValue(stopDate);
 
             StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
             StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
             //Best way to store the data?
-            UploadTask uploadTask = parkingRef.child(uid).putFile(sourceImageUri);
+            UploadTask uploadTask = parkingRef.child(listingID).putFile(sourceImageUri);
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
@@ -191,10 +224,42 @@ public class PostListingActivity extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                     firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
+                    newListingRef.child(Consts.LISTING_IMAGE).setValue(firebaseImageURL);
                 }
             });
-            newListingRef.child(Consts.LISTING_IMAGE).setValue(firebaseImageURL);
         }
+    }
+
+    @OnClick(R.id.start_time_edittext)
+    protected void selectStartTime() {
+        Calendar c = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                DateTime datetime = new DateTime(year, month + 1, day, 0, 0);
+                startDate = datetime.getMillis() / 1000; // save this
+                startTimeBox.setText(Tools.getDateString(year, month + 1, day));
+            }
+        };
+        startDatePicker = new DatePickerDialog
+                (this, startDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        startDatePicker.show();
+    }
+
+    @OnClick(R.id.stop_time_edittext)
+    protected void selectStopTime() {
+        Calendar c = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                DateTime datetime = new DateTime(year, month + 1, day, 23, 59);
+                stopDate = datetime.getMillis() / 1000;
+                stopTimeBox.setText(Tools.getDateString(year, month + 1, day));
+            }
+        };
+        stopDatePicker = new DatePickerDialog
+                (this, startDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        stopDatePicker.show();
     }
 
     private boolean checkFields(){
@@ -204,12 +269,30 @@ public class PostListingActivity extends AppCompatActivity {
         price = Double.parseDouble(priceEditText.getText().toString());
 
         if(!nameString.equals("")){
+            parkingNameTextInputLayout.setErrorEnabled(false);
             if(!descriptionString.equals("")){
+                descriptionTextInputLayout.setErrorEnabled(false);
                 if(price>=0){
+                    priceTextInputLayout.setErrorEnabled(false);
                     if(sourceImageUri!=null) {
                         if (radioGroup.getCheckedRadioButtonId() != -1) {
-                            saveSwitchValues();
-                            return true;
+                            if (startDate != 0) {
+                                if (stopDate != 0) {
+                                    if (latitude != -1 && longitude != -1) {
+                                        saveSwitchValues();
+                                        return true;
+                                    } else {
+                                        Toast.makeText(PostListingActivity.this, "Please select a location through the search bar.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    stopTimeLayout.setError("Please select a stop date");
+                                    stopTimeLayout.setErrorEnabled(true);
+                                }
+                            } else {
+                                startTimeLayout.setError("Please select a start date");
+                                startTimeLayout.setErrorEnabled(true);
+                            }
                         } else {
                             Toast.makeText(PostListingActivity.this, "Please select a cancellation policy.",
                                     Toast.LENGTH_SHORT).show();

@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import edu.usc.sunset.team7.www.parkhere.Fragments.BalanceFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.BookingFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.ListingFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.SearchFragment;
@@ -35,9 +36,18 @@ public class HomeActivity extends AppCompatActivity {
 
     public static final String FRAGMENT_TAG = "fragment_tag";
     public GoogleApiClient mGoogleApiClient;
-    private static final String[] fragmentTitles = new String[] {"Search", "Listings", "Bookings"};
+    private static final String[] fragmentTitles = new String[]
+                    {"Search",
+                    "Listings",
+                    "Bookings",
+                    "Balance",
+                    "My Profile"};
     private static final String[] fragmentTags = new String[]
-            {Consts.SEARCH_FRAGMENT_TAG, Consts.LISTING_FRAGMENT_TAG, Consts.BOOKING_FRAGMENT_TAG};
+                    {Consts.SEARCH_FRAGMENT_TAG,
+                    Consts.LISTING_FRAGMENT_TAG,
+                    Consts.BOOKING_FRAGMENT_TAG,
+                    Consts.BALANCE_FRAGMENT_TAG,
+                    Consts.MY_PROFILE_FRAGMENT_TAG};
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     
@@ -158,6 +168,13 @@ public class HomeActivity extends AppCompatActivity {
                 case Consts.BOOKING_FRAGMENT_TAG:
                     currentFragment = new BookingFragment();
                     setToolbarTitle(getResources().getString(R.string.booking));
+                    break;
+                case Consts.BALANCE_FRAGMENT_TAG:
+                    currentFragment = new BalanceFragment();
+                    setToolbarTitle(getResources().getString(R.string.balance));
+                    break;
+                case Consts.MY_PROFILE_FRAGMENT_TAG:
+
                     break;
             }
         }
