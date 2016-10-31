@@ -93,7 +93,7 @@ public class Consts {
     public static final String LISTING_IMAGE = "Image URL";
 
     //Booking Database
-    public static final String BOOKING_ID = "Booking ID";
+    public static final String BOOKING_ID = "Listing ID";
     public static final String BOOKING_SEEKER_ID = "Seeker ID";
     public static final String BOOKING_SPACE_RATING = "Space Rating";
     public static final String BOOKING_SPACE_REVIEW = "Space Review";

@@ -135,8 +135,9 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         //Add to Booking database
         DatabaseReference bookingRef = mDatabase.child(Consts.BOOKINGS_DATABASE).child(uid).child(bookingID);
         bookingRef.child(Consts.LISTING_ID).setValue(listing.getListingID());
-        bookingRef.child(Consts.LISTING_START_TIME).setValue(Tools.convertUnixTimeToDateString(listing.getStartTime()));
-        bookingRef.child(Consts.LISTING_END_TIME).setValue(Tools.convertUnixTimeToDateString(listing.getStopTime()));
+        bookingRef.child(Consts.LISTING_START_TIME).setValue(listing.getStartTime());
+        bookingRef.child(Consts.LISTING_END_TIME).setValue(listing.getStopTime());
+        bookingRef.child(Consts.PROVIDER_ID).setValue(listing.getProviderID());
 
         //Move Listing to inactive
         DatabaseReference inactiveListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.INACTIVE_LISTINGS).child(listing.getListingID());
