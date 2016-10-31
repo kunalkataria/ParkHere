@@ -80,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         imageView.setImageResource(R.mipmap.default_profile);

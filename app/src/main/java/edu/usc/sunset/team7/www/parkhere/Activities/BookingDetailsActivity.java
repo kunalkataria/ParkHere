@@ -155,6 +155,6 @@ public class BookingDetailsActivity extends AppCompatActivity {
     @OnClick(R.id.cancel_booking_button)
     protected void cancelBooking() {
 
-        //DatabaseReference providerListingRef = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).
+       // DatabaseReference providerListingRef = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).
     }
 }

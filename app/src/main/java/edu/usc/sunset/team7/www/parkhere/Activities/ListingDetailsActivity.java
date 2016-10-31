@@ -2,6 +2,7 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -65,7 +66,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Listing details");
         }
 
-        myOwnListing = getIntent().getBooleanExtra(Consts.MY_OWN_LISTING_EXTRA, true);
+        myOwnListing = getIntent().getBooleanExtra(Consts.MY_OWN_LISTING_EXTRA, false);
+
         if (myOwnListing) {
             providerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
             listingResult = (Listing) getIntent().getSerializableExtra(Consts.LISTING_EXTRA);
@@ -76,6 +78,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
             //check if the listing is active
             DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.LISTINGS_DATABASE).child(providerID)
                     .child(Consts.ACTIVE_LISTINGS).child(listingResult.getListingID());
+
             dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
@@ -94,15 +97,14 @@ public class ListingDetailsActivity extends AppCompatActivity {
             editListingButton.setVisibility(View.GONE);
             deleteListingButton.setVisibility(View.GONE);
             providerID = listingResultPair.getListing().getProviderID();
+            listingNameTextView.setText(listingResult.getName());
         }
 
         ValueEventListener databaseListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!myOwnListing) {
-                    providerFirstName = (String) dataSnapshot.getValue();
-                    listingNameTextView.setText(providerFirstName);
-                }
+                providerFirstName = (String) dataSnapshot.getValue();
+                providerNameTextView.setText(providerFirstName);
             }
 
             @Override
@@ -115,6 +117,9 @@ public class ListingDetailsActivity extends AppCompatActivity {
                 .child(providerID).child(Consts.USER_FIRSTNAME);
         providerNameRef.addListenerForSingleValueEvent(databaseListener);
         listingDetailsTextView.setText(listingDetailsString());
+        parkingImageView.setImageURI(Uri.parse(listingResult.getImageURL()));
+
+
     }
 
     private String listingDetailsString() {
