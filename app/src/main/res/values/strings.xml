@@ -50,6 +50,7 @@
     <string name="current_balance">Current Balance</string>
     <string name="are_you_providing">Will you be providing parking spots?</string>
     <string name="transfer_to_bank">Transfer balance to bank account</string>
+    <string name="no_booking_payments">No pending booking payments to confirm</string>
 
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>

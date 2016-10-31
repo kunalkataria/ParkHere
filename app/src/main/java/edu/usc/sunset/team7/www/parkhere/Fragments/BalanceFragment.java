@@ -3,6 +3,7 @@ package edu.usc.sunset.team7.www.parkhere.Fragments;
 import android.app.Fragment;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
@@ -50,7 +51,6 @@ public class BalanceFragment extends Fragment {
     private double userBalance;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private DatabaseReference mDatabase;
     private String uid;
     private ArrayList<Listing> inactiveListing;
     @Override
@@ -63,6 +63,11 @@ public class BalanceFragment extends Fragment {
         System.out.println(uid);
         userBalance = 0.0;
         inactiveListing = new ArrayList<Listing>();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE+"/"+uid);
         dbRef.orderByChild(Consts.USER_BALANCE).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -101,7 +106,7 @@ public class BalanceFragment extends Fragment {
                 "You transferred " + formattedBalance + " to the bank!",
                 Toast.LENGTH_SHORT).show();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference balanceRef = mDatabase.child(Consts.USERS_DATABASE).child(uid);
         balanceRef.child(Consts.USER_BALANCE).setValue(0.0);
         userBalance = 0.0;
@@ -111,22 +116,32 @@ public class BalanceFragment extends Fragment {
 
     @OnClick(R.id.confirm_payment_button)
     protected void viewPayments(){
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         String uid = currentUser.getUid();
         DatabaseReference ref = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child(Consts.INACTIVE_LISTINGS);
         ref.addListenerForSingleValueEvent(new ValueEventListener(){
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Listing> inactiveListingz = new ArrayList<Listing>();
                 for(DataSnapshot listing : dataSnapshot.getChildren()) {
-                    String currListingID = (String)listing.getKey();
+                    String currListingID = listing.getKey();
                     Listing toAdd = parseListing(listing);
                     if(toAdd != null){
-                        //add to arraylist
-                        inactiveListing.add(toAdd);
+                        toAdd.setListingID(currListingID);
+                        inactiveListingz.add(toAdd);
                     }
                 }
-                ConfirmPaymentActivity.startActivity(new ConfirmPaymentActivity(), inactiveListing);
+                if (inactiveListingz.size() != 0) {
+                    ConfirmPaymentActivity.startActivity(getActivity(), inactiveListingz);
+                } else {
+                    // popup box
+                    AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
+                    adb.setTitle("No pending booking payments");
+                    adb.setPositiveButton("OK", null);
+                    adb.show();
+                }
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -177,6 +192,10 @@ public class BalanceFragment extends Fragment {
                     case "End Time":
                         String stopTime = child.getValue().toString();
                         listing.setStopTime(Long.valueOf(stopTime));
+                        break;
+                    case "Price":
+                        double price = Double.parseDouble(child.getValue().toString());
+                        listing.setPrice(price);
                         break;
                 }
             }
