@@ -65,7 +65,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Listing details");
         }
 
-        myOwnListing = getIntent().getBooleanExtra(Consts.MY_OWN_LISTING_EXTRA, true);
+        myOwnListing = getIntent().getBooleanExtra(Consts.MY_OWN_LISTING_EXTRA, false);
+
         if (myOwnListing) {
             providerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
             listingResult = (Listing) getIntent().getSerializableExtra(Consts.LISTING_EXTRA);
@@ -76,6 +77,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
             //check if the listing is active
             DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.LISTINGS_DATABASE).child(providerID)
                     .child(Consts.ACTIVE_LISTINGS).child(listingResult.getListingID());
+
             dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
@@ -99,10 +101,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
         ValueEventListener databaseListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!myOwnListing) {
-                    providerFirstName = (String) dataSnapshot.getValue();
-                    listingNameTextView.setText(providerFirstName);
-                }
+                providerFirstName = (String) dataSnapshot.getValue();
+                listingNameTextView.setText(providerFirstName);
             }
 
             @Override

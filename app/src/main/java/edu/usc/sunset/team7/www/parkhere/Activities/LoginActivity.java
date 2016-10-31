@@ -28,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 /**
  * Created by kunal on 10/12/16.
@@ -127,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
         if (email.isEmpty() || password.isEmpty()) {
             return;
         }
-
         //Firebase sign in code
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -193,18 +193,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkIsProvider(FirebaseUser user) {
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("user/"+user.getUid());
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE).child(user.getUid());
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    if(child.getKey().equals("is_provider")) {
+                    if(child.getKey().equals(Consts.USER_IS_PROVIDER)) {
                         isProvider = Boolean.parseBoolean(child.getValue().toString());
                         break;
                     }
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 Log.i(TAG, error.getMessage());
@@ -212,5 +211,4 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-
 }
