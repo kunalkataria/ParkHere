@@ -2,15 +2,12 @@ package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -74,7 +71,6 @@ public class ListingFragment extends Fragment {
 
                 Listing[] arrayListings = new Listing[userListings.size()];
                 arrayListings = userListings.toArray(arrayListings);
-
                 listingListView.setAdapter(new CustomListingAdapter(getActivity(), arrayListings));
             }
 

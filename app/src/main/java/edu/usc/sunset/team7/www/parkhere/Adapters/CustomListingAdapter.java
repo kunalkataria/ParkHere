@@ -79,7 +79,6 @@ public class CustomListingAdapter extends BaseAdapter {
             public void onClick(View view) {
                 Intent detailsIntent = new Intent(context, ListingDetailsActivity.class);
                 detailsIntent.putExtra(Consts.LISTING_EXTRA, (Listing) getItem(position));
-                detailsIntent.putExtra(Consts.MY_OWN_LISTING_EXTRA, true);
                 context.startActivity(detailsIntent);
             }
         });

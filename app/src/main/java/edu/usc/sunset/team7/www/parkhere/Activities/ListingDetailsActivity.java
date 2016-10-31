@@ -72,10 +72,12 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     private void getData(){
         if(!getIntent().hasExtra(Consts.LISTING_RESULT_EXTRA)){
-            Log.d(TAG, "*********************NO LISTING RESULT EXTRA");
+            listingResult = (Listing) getIntent().getSerializableExtra(Consts.LISTING_EXTRA);
+        } else {
+            listingResultPair = (ResultsPair) getIntent().getSerializableExtra(Consts.LISTING_RESULT_EXTRA);
+            listingResult = listingResultPair.getListing();
         }
-        listingResultPair = (ResultsPair) getIntent().getSerializableExtra(Consts.LISTING_RESULT_EXTRA);
-        listingResult = listingResultPair.getListing();
+
         providerID = listingResult.getProviderID();
 
         DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
