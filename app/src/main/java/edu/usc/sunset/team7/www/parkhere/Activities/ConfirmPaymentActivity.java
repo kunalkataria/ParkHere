@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import edu.usc.sunset.team7.www.parkhere.Adapters.CustomPaymentAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
@@ -32,8 +35,8 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 public class ConfirmPaymentActivity extends AppCompatActivity{
 
-    @BindView(R.id.listing_listview) ListView listingListView;
-    private DatabaseReference mDatabase;
+    @BindView(R.id.confirm_payment_listview) ListView listingListView;
+    @BindView(R.id.no_booking_payments_textview) TextView noBookingPaymentsTextView;
     private ArrayList<Listing> inactiveListings;
 
     public static void startActivity(Context context, ArrayList<Listing> inactiveListings) {
@@ -45,9 +48,11 @@ public class ConfirmPaymentActivity extends AppCompatActivity{
     //ConfirmaPaymentActivity.startActivity(this, inactiveListings);
 
     @Override
-    public void onCreate(Bundle savedBundleInstance){
+    public void onCreate(Bundle savedBundleInstance) {
         super.onCreate(savedBundleInstance);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        setContentView(R.layout.activity_confirm_payments);
+        ButterKnife.bind(this);
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         inactiveListings = (ArrayList<Listing>) getIntent().getSerializableExtra(Consts.INACTIVE_LISTINGS_EXTRA);
         final CustomPaymentAdapter adapter = new CustomPaymentAdapter(this, inactiveListings);
         listingListView.setAdapter(adapter);
@@ -61,14 +66,14 @@ public class ConfirmPaymentActivity extends AppCompatActivity{
                 adb.setPositiveButton("Confirm", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Listing toRemove = inactiveListings.get(positionToRemove);
-                        String providerID = toRemove.getProviderID();
+                        String providerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         final double addToBalance = toRemove.getPrice();
                         final DatabaseReference ref = mDatabase.child(Consts.USERS_DATABASE).child(providerID);
                         ref.addListenerForSingleValueEvent(new ValueEventListener(){
 
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                Double balance = (Double) dataSnapshot.getValue();
+                                Double balance = Double.parseDouble(dataSnapshot.child(Consts.USER_BALANCE).getValue().toString());
                                 ref.child(Consts.USER_BALANCE).setValue(addToBalance + balance);
                             }
 
@@ -79,9 +84,16 @@ public class ConfirmPaymentActivity extends AppCompatActivity{
                         });
 
                         //remove listing from the db
-                        mDatabase.child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(toRemove.getListingID()).removeValue();
+                        mDatabase
+                                .child(Consts.LISTINGS_DATABASE)
+                                .child(providerID)
+                                .child(Consts.INACTIVE_LISTINGS)
+                                .child(toRemove.getListingID()).removeValue();
                         inactiveListings.remove(positionToRemove);
                         adapter.notifyDataSetChanged();
+                        if (adapter.getCount() == 0) {
+                            noBookingPaymentsTextView.setVisibility(View.VISIBLE);
+                        }
                     }});
                 adb.show();
             }

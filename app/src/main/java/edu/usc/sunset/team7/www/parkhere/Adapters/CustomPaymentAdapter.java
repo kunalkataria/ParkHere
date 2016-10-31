@@ -88,7 +88,7 @@ public class CustomPaymentAdapter extends BaseAdapter {
         }
 
         item.bookingLabel.setText(((Listing)getItem(position)).getName());
-        item.dateLabel.setText(((Listing)getItem(position)).getStartTime() + "--" + ((Listing)getItem(position)).getStartTime());
+        item.dateLabel.setText(((Listing)getItem(position)).getStartTime() + "--" + ((Listing)getItem(position)).getStopTime());
         double userBalance = ((Listing)getItem(position)).getPrice();
         item.amountLabel.setText("$"+String.format("%.2f",userBalance));
         return rowView;
