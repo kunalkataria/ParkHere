@@ -60,7 +60,9 @@ public class ListingFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Listing currentListing = parseListing(child);
+                    String listingID = child.getKey();
                     currentListing.setListingID(child.getKey());
+                    System.out.println(currentListing.getListingID());
                     userListings.add(currentListing);
                 }
 
