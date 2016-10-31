@@ -155,22 +155,23 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         //Remove listing from active
         mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(listing.getListingID()).removeValue();
 
-        final DatabaseReference providerRef = mDatabase.child(Consts.USERS_DATABASE).child(listing.getProviderID());
+//        final DatabaseReference providerRef = mDatabase.child(Consts.USERS_DATABASE)
+//                .child(listing.getProviderID()).child(Consts.USER_BALANCE);
 
-        //Get and add balance from provider
-        ValueEventListener providerNameListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Double balance = (Double) dataSnapshot.getValue();
-                providerRef.child(Consts.USER_BALANCE).setValue(balance + listing.getPrice());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
-            }
-        };
-        providerRef.addListenerForSingleValueEvent(providerNameListener);
+//        //Get and add balance from provider
+//        ValueEventListener providerNameListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Double balance = Double.parseDouble(dataSnapshot.getValue().toString());
+//                providerRef.setValue(balance + listing.getPrice());
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
+//            }
+//        };
+//        providerRef.addListenerForSingleValueEvent(providerNameListener);
 
         finish();
     }

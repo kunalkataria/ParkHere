@@ -209,11 +209,11 @@ public class CreditCardActivity extends AppCompatActivity {
     }
 
     private boolean checkCreditCard(){
-        return creditCardNumber.length()<19 && creditCardNumber.length()>12 && isInt(creditCardNumber);
+        return creditCardNumber.length()<19 && creditCardNumber.length()>12 && isLong(creditCardNumber);
     }
 
     private boolean checkSecurityCode(){
-        return securityCode.length()<5 && securityCode.length()>2 && isInt(securityCode);
+        return securityCode.length()<5 && securityCode.length()>2 && isLong(securityCode);
     }
 
     private boolean checkExpirationDate(){
@@ -225,12 +225,12 @@ public class CreditCardActivity extends AppCompatActivity {
     }
 
     private boolean checkZipCode(){
-        return zipcode.length()!=9 && isInt(zipcode);
+        return zipcode.length()!=9 && isLong(zipcode);
     }
 
-    private boolean isInt(String s){
+    private boolean isLong(String s){
         try{
-            Integer.parseInt(s);
+            Long.parseLong(s);
             return true;
         } catch (NumberFormatException nfe){
             return false;
