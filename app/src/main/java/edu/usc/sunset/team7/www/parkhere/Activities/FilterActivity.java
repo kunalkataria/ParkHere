@@ -1,6 +1,6 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,12 +27,12 @@ public class FilterActivity extends AppCompatActivity {
     private boolean compactInitial;
     private boolean coveredInitial;
 
-    public static void startActivityForResult(int requestCode, Context context, boolean covered, boolean handicap, boolean compact) {
-        Intent intent = new Intent(context, FilterActivity.class);
+    public static void startActivityForResult(int requestCode, Activity activity, boolean covered, boolean handicap, boolean compact) {
+        Intent intent = new Intent(activity, FilterActivity.class);
         intent.putExtra(Consts.COVERED_EXTRA, covered);
         intent.putExtra(Consts.HANDICAP_EXTRA, handicap);
         intent.putExtra(Consts.COMPACT_EXTRA, compact);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     @Override

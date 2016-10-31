@@ -108,6 +108,11 @@ public class ResultsActivity extends AppCompatActivity {
     // public static void startActivityForResult(int requestCode, Context context, boolean covered, boolean handicap, boolean compact
     @OnClick (R.id.filter_button)
     protected void startFiltering() {
+//        Intent intent = new Intent(this, FilterActivity.class);
+//        intent.putExtra(Consts.COVERED_EXTRA, covered);
+//        intent.putExtra(Consts.HANDICAP_EXTRA, handicap);
+//        intent.putExtra(Consts.COMPACT_EXTRA, compact);
+//        startActivityForResult(intent, 1);
         FilterActivity.startActivityForResult(1, this, covered, handicap, compact);
     }
 
@@ -133,8 +138,8 @@ public class ResultsActivity extends AppCompatActivity {
                 List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
                 for (ResultsPair currentPair : searchResultListings) {
                     Listing currentListing = currentPair.getListing();
-                    if (currentListing.isCompact() == compact &&
-                            currentListing.isCovered() == covered &&
+                    if (currentListing.isCompact() == compact ||
+                            currentListing.isCovered() == covered ||
                             currentListing.isHandicap() == handicap) {
 
                         filteredResults.add(currentPair);
