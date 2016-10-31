@@ -153,9 +153,11 @@ public class BalanceFragment extends Fragment {
     private Listing parseListing (DataSnapshot snapshot) {
         Listing listing = new Listing();
         String endTime = snapshot.child(Consts.LISTING_END_TIME).getValue().toString();
+        boolean isPaid = Boolean.parseBoolean(snapshot.child(Consts.LISTING_IS_PAID).getValue().toString());
         long convertTime = Long.parseLong(endTime);
         long unixTime = System.currentTimeMillis() / 1000L;
-        if (unixTime >= convertTime) {
+        if (unixTime >= convertTime && !isPaid) {
+            //FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).child(currentUser.getUid()).child(Consts.INACTIVE_LISTINGS).child(currListingID).child(Consts.LISTING_IS_PAID).setValue(true);
             for (DataSnapshot child : snapshot.getChildren()) {
                 switch (child.getKey()) {
                     case "Compact":
@@ -197,6 +199,7 @@ public class BalanceFragment extends Fragment {
                         double price = Double.parseDouble(child.getValue().toString());
                         listing.setPrice(price);
                         break;
+
                 }
             }
         }

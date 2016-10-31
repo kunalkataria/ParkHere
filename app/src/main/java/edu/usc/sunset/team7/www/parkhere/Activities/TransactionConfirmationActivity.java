@@ -152,7 +152,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         inactiveListingRef.child(Consts.LISTING_LONGITUDE).setValue(listing.getLongitude());
         inactiveListingRef.child(Consts.LISTING_START_TIME).setValue(listing.getStartTime());
         inactiveListingRef.child(Consts.LISTING_END_TIME).setValue(listing.getStopTime());
-
+        inactiveListingRef.child(Consts.LISTING_IS_PAID).setValue(false);
         //Remove listing from active
         mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(listing.getListingID()).removeValue();
 

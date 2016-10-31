@@ -91,6 +91,7 @@ public class Consts {
     public static final String LISTING_START_TIME = "Start Time";
     public static final String LISTING_END_TIME = "End Time";
     public static final String LISTING_IMAGE = "Image URL";
+    public static final String LISTING_IS_PAID = "Paid";
 
     //Booking Database
     public static final String BOOKING_ID = "Listing ID";
