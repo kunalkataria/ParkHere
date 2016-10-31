@@ -29,6 +29,7 @@
     <string name="post_listing">Post a listing!</string>
     <string name="search">Search</string>
     <string name="edit_listing">Edit a listing!</string>
+
     <string name="listing">My Listings</string>
     <string name="booking">My Bookings</string>
     <string name="balance">"My Balance"</string>
@@ -96,6 +97,7 @@
     <string name="listing_details">Listing Details</string>
     <string name="billing_information">Billing Information</string>
 
+    <string name ="booking_details">Booking Details</string>
     <string name="place_booking">Place Booking</string>
     <string name="expiration_date_month_year"> Expiration Date (Month and Year)</string>
 
