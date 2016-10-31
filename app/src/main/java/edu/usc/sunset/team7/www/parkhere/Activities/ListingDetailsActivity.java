@@ -21,7 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -128,7 +127,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()));
         descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
         if (!myOwnListing) {
-            descriptionBuilder.append("\nDistance Away: " + (double)Math.round(listingResultPair.getDistance() * 100.0 / 100.0) + " miles");
+            descriptionBuilder.append("\nDistance Away: " + listingResultPair.getDistance() + " miles");
             descriptionBuilder.append("\nListing Provider: " + providerFirstName);
         }
         descriptionBuilder.append("\nPrice: $" + listing.getPrice());
