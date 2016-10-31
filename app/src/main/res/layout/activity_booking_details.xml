@@ -17,10 +17,10 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/listing_name"
+                android:id="@+id/booking_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/listing_details"
+                android:text="@string/booking_details"
                 android:gravity="center"
                 android:textSize="20sp"
                 android:layout_marginTop="40dp"/>
@@ -44,25 +44,18 @@
                 android:contentDescription="@string/profile_image_description"/>
 
             <TextView
-                android:id="@+id/listing_details"
+                android:id="@+id/booking_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/listing_details"
+                android:text="@string/booking_details"
                 android:textSize="15sp"
                 android:layout_marginTop="40dp" />
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/book_listing_button"
+                android:id="@+id/review_booking_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/book_listing"
-                android:layout_marginTop="20dp"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/edit_listing_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/edit_listing"
+                android:text="@string/review"
                 android:layout_marginTop="20dp"/>
 
         </LinearLayout>

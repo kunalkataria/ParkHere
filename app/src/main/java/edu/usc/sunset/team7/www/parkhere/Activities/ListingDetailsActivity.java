@@ -132,7 +132,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         //Go to public user profile activity
         Intent intent = new Intent(ListingDetailsActivity.this, UserProfileActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString(Consts.PROVIDER_ID, listingResult.getListing().getProviderID());
+        bundle.putString(Consts.USER_ID, listingResult.getListing().getProviderID());
         intent.putExtras(bundle);
         startActivity(intent);
     }

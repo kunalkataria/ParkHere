@@ -26,6 +26,7 @@ public class Consts {
     public static final String COMPACT_EXTRA = "compact_extra";
     public static final String LISTING_EDIT_EXTRA = "listing_edit_extra";
     public static final String MY_OWN_LISTING_EXTRA = "my_own_listing_extra";
+    public static final String BOOKING_EXTRA = "booking_extra";
 
     public static final String LISTING_TO_BE_BOOKED = "listing_to_be_booked";
     public static final String LISTING_DISTANCE = "listing_distance";
@@ -120,6 +121,10 @@ public class Consts {
     public static final String PAYPAL_EMAIL = "paypal_email";
 
     public static final String USER_ID = "User ID";
+
+    //Reviews Database
+    public static final String REVIEW_DESCRIPTION = "Review";
+    public static final String REVIEW_RATING = "Rating";
 
 
 }
