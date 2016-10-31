@@ -83,6 +83,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
         DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
                 .child(providerID).child(Consts.USER_FIRSTNAME);
+
+        System.out.println(providerNameRef.toString());
         providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
