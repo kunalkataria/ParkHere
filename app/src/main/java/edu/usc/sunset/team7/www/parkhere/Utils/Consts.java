@@ -71,7 +71,7 @@ public class Consts {
     public static final String USER_IS_PROVIDER = "Is Provider";
     public static final String USER_BALANCE = "Balance";
     public static final String USER_PROFILE_PIC = "Profile Picture URL";
-    public static final String USER_DEFAULT_PROFILE_PIC_URL = "https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2Fdefault_profile-web.png?alt=media&token=4d876ecf-8c3a-42cb-b140-fc8441e9335e";
+    public static final String USER_DEFAULT_PROFILE_PIC_URL = "https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/profile_pictures%2Fdefault_profile-web.png?alt=media&token=e434babc-dffa-47f4-a3c6-deea0e2557b4";
 
     //Listing Database
     public static final String ACTIVE_LISTINGS = "Active Listings";

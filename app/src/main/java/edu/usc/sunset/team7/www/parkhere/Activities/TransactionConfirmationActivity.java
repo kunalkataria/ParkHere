@@ -8,18 +8,14 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
-import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 /**
@@ -173,7 +169,6 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
 //            }
 //        };
 //        providerRef.addListenerForSingleValueEvent(providerNameListener);
-
         finish();
     }
 }
