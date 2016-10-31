@@ -60,7 +60,7 @@
             android:clickable="true"
             android:hint="@string/start_date">
             <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/start_time_edittext"
+                android:id="@+id/start_date_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:focusable="false"
@@ -75,7 +75,7 @@
             android:clickable="true"
             android:hint="@string/stop_date">
             <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/stop_time_edittext"
+                android:id="@+id/stop_date_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:focusable="false"

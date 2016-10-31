@@ -58,6 +58,13 @@
                 android:text="@string/review"
                 android:layout_marginTop="20dp"/>
 
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/cancel_booking_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel_booking"
+                android:layout_marginTop="20dp" />
+
         </LinearLayout>
     </ScrollView>
 

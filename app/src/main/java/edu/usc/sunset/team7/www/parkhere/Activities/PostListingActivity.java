@@ -227,6 +227,7 @@ public class PostListingActivity extends AppCompatActivity {
                     newListingRef.child(Consts.LISTING_IMAGE).setValue(firebaseImageURL);
                 }
             });
+            finish();
         }
     }
 

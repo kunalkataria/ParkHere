@@ -39,7 +39,7 @@ public class TransactionActivity extends AppCompatActivity {
 
     @OnClick(R.id.paypal_button)
     protected void paypalClicked() {
-        Intent intent = new Intent(TransactionActivity.this, TransactionConfirmationActivity.class);
+        Intent intent = new Intent(TransactionActivity.this, PaypalActivity.class);
         Bundle bundle = getIntent().getExtras();
         bundle.putString(Consts.PAYMENT_TYPE, Consts.PAYPAL);
         intent.putExtras(bundle);
@@ -48,7 +48,7 @@ public class TransactionActivity extends AppCompatActivity {
 
     @OnClick(R.id.credit_card_button)
     protected void creditCardClicked() {
-        Intent intent = new Intent(TransactionActivity.this, TransactionConfirmationActivity.class);
+        Intent intent = new Intent(TransactionActivity.this, CreditCardActivity.class);
         Bundle bundle = getIntent().getExtras();
         bundle.putString(Consts.PAYMENT_TYPE, Consts.CREDIT_CARD);
         intent.putExtras(bundle);
