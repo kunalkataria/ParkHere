@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
-import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 /**
  * Created by johnsonhui on 10/23/16.
@@ -62,9 +62,12 @@ public class CustomBookingAdapter extends BaseAdapter {
         } else {
             item = (ItemShell) rowView.getTag();
         }
-
+        //HEY JOHNSON USE PICASSO TO LOAD THE IMAGE
+//        Picasso.with(this.context).load((Booking)getItem(position).getMListing().getImageURL()).into(parkingImageView);
         item.bookingLabel.setText(((Booking)getItem(position)).getMListing().getName());
-        item.dateLabel.setText(((Booking)getItem(position)).getBookStartTime() + "--" + ((Booking)getItem(position)).getBookEndTime());
+        item.dateLabel.setText(Tools.convertUnixTimeToDateString(((Booking) getItem(position)).getBookStartTime())
+                + "--" + Tools.convertUnixTimeToDateString(((Booking)getItem(position)).getBookEndTime()));
+
         //need for item
         return rowView;
     }
