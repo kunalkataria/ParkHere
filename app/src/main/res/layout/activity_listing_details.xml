@@ -69,7 +69,7 @@
                 android:id="@+id/delete_listing_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/edit_listing"
+                android:text="@string/delete_listing"
                 android:layout_marginTop="5dp"/>
 
         </LinearLayout>

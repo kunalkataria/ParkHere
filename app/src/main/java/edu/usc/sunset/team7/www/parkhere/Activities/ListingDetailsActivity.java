@@ -48,6 +48,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
     private ResultsPair listingResultPair;
     private Listing listingResult;
     private String providerFirstName;
+    private String providerID;
     private static final String TAG = "ListingDetailsActivity";
     private boolean myOwnListing;
 
@@ -65,16 +66,15 @@ public class ListingDetailsActivity extends AppCompatActivity {
         }
 
         myOwnListing = getIntent().getBooleanExtra(Consts.MY_OWN_LISTING_EXTRA, true);
-
         if (myOwnListing) {
+            providerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
             listingResult = (Listing) getIntent().getSerializableExtra(Consts.LISTING_EXTRA);
             providerNameTextView.setVisibility(View.GONE);
             bookListingButton.setVisibility(View.GONE);
             deleteListingButton.setVisibility(View.GONE); //assume inactive initially
 
-
             //check if the listing is active
-            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Listings").child(listingResult.getProviderID())
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.LISTINGS_DATABASE).child(providerID)
                     .child(Consts.ACTIVE_LISTINGS).child(listingResult.getListingID());
             dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                  @Override
@@ -93,6 +93,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
             listingResult = listingResultPair.getListing();
             editListingButton.setVisibility(View.GONE);
             deleteListingButton.setVisibility(View.GONE);
+            providerID = listingResultPair.getListing().getProviderID();
         }
 
         ValueEventListener databaseListener = new ValueEventListener() {
@@ -110,12 +111,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
                 Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
             }
         };
-        String providerID;
-        if (myOwnListing) {
-            providerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        } else {
-            providerID = listingResultPair.getListing().getProviderID();
-        }
+
         DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
                 .child(providerID).child(Consts.USER_FIRSTNAME);
         providerNameRef.addListenerForSingleValueEvent(databaseListener);
@@ -196,8 +192,9 @@ public class ListingDetailsActivity extends AppCompatActivity {
     }
 
     private void deleteListing() {
-        FirebaseDatabase.getInstance().getReference().child(listingResult.getProviderID())
-                .child(Consts.ACTIVE_LISTINGS).child(listingResult.getListingID()).removeValue();
+        FirebaseDatabase.getInstance().getReference(Consts.LISTINGS_DATABASE).child(providerID)
+                .child(Consts.ACTIVE_LISTINGS).child(listingResult.getListingID()).setValue(null);
+        System.out.println(providerID+"/"+Consts.ACTIVE_LISTINGS+"/"+listingResult.getListingID());
         Toast.makeText(this,
                 "Listing deleted.",
                 Toast.LENGTH_SHORT).show();
