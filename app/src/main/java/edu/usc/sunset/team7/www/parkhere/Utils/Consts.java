@@ -94,6 +94,12 @@ public class Consts {
 
     //Booking Database
     public static final String BOOKING_ID = "Listing ID";
+    public static final String BOOKING_START_TIME = "Start Time";
+    public static final String BOOKING_END_TIME = "End Time";
+    public static final String BOOKING_PROVIDER_ID = "Provider ID";
+    public static final String BOOKING_LISTING_ID = "Listing ID";
+
+
     public static final String BOOKING_SEEKER_ID = "Seeker ID";
     public static final String BOOKING_SPACE_RATING = "Space Rating";
     public static final String BOOKING_SPACE_REVIEW = "Space Review";
