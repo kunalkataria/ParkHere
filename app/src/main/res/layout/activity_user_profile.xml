@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/listing_name"
+        android:id="@+id/user_name_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/first_name"
@@ -35,10 +35,5 @@
         android:contentDescription="@string/profile_image_description"
         android:layout_marginTop="20dp"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ratings_button"
-        android:text="@string/reviews"/>
 
 </LinearLayout>
