@@ -2,6 +2,7 @@ package edu.usc.sunset.team7.www.parkhere.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import edu.usc.sunset.team7.www.parkhere.Activities.BookingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
 
@@ -48,7 +51,7 @@ public class CustomBookingAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ItemShell item;
         View rowView = convertView;
         if(rowView == null){
@@ -64,6 +67,17 @@ public class CustomBookingAdapter extends BaseAdapter {
         } else {
             item = (ItemShell) rowView.getTag();
         }
+
+        rowView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent detailsIntent = new Intent(context, BookingDetailsActivity.class);
+                detailsIntent.putExtra(Consts.BOOKING_EXTRA, allBookings[position]);
+                context.startActivity(detailsIntent);
+            }
+        });
+
 
         System.out.println(((Booking)getItem(position)).getMListing().getImageURL());
         System.out.println(((Booking)getItem(position)).getMListing().getName());

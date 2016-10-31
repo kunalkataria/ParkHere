@@ -11,16 +11,12 @@ public class Booking implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Listing mListing;
-    //private PublicUserProfile seeker;
-    private int spaceRating;
-    private String seekerID;
-    private String review;
+    private String providerID;
     private long bookStartTime;
     private long bookEndTime;
 
     public Booking(Listing mListing) {
         this.mListing = mListing;
-        //this.seeker = seeker;
     }
 
     public Listing getMListing() {
@@ -29,14 +25,6 @@ public class Booking implements Serializable {
 
     public void setMListing(Listing mListing) {
         this.mListing = mListing;
-    }
-
-    public int getSpaceRating() {
-        return this.spaceRating;
-    }
-
-    public String getReview() {
-        return this.review;
     }
 
     public long getBookStartTime() {
@@ -55,20 +43,8 @@ public class Booking implements Serializable {
         this.bookEndTime = bookEndTime;
     }
 
-    public String getSeekerID() {
-        return seekerID;
-    }
+    public String getProviderID() { return providerID; }
 
-    public void setSeekerID(String seekerID) {
-        this.seekerID = seekerID;
-    }
-
-    public void setSpaceRating(int spaceRating) {
-        this.spaceRating = spaceRating;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
-    }
+    public void setProviderID(String providerID) {this.providerID = providerID; }
 
 }

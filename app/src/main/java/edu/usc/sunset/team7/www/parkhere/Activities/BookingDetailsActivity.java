@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
@@ -49,10 +50,11 @@ public class BookingDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_booking_details);
+        ButterKnife.bind(this);
         booking = (Booking) getIntent().getSerializableExtra(Consts.BOOKING_EXTRA);
         if(booking != null) {
             listing = booking.getMListing();
-            initializeReviewButton();
             getFirebaseData();
             displayBooking();
         } else {
@@ -64,14 +66,6 @@ public class BookingDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(context, BookingDetailsActivity.class);
         intent.putExtra(Consts.BOOKING_EXTRA, booking);
         context.startActivity(intent);
-    }
-
-    private void initializeReviewButton() {
-        if(booking.getReview() == null) {
-            reviewBookingButton.setEnabled(true);
-        } else {
-            reviewBookingButton.setEnabled(false);
-        }
     }
 
     private void getFirebaseData() {
