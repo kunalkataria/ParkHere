@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
@@ -62,8 +64,13 @@ public class CustomBookingAdapter extends BaseAdapter {
         } else {
             item = (ItemShell) rowView.getTag();
         }
-        //HEY JOHNSON USE PICASSO TO LOAD THE IMAGE
-//        Picasso.with(this.context).load((Booking)getItem(position).getMListing().getImageURL()).into(parkingImageView);
+
+        System.out.println(((Booking)getItem(position)).getMListing().getImageURL());
+        System.out.println(((Booking)getItem(position)).getMListing().getName());
+        if(rowView == null) System.out.println("NULL");
+
+
+        Picasso.with(this.context).load(((Booking)getItem(position)).getMListing().getImageURL()).into(item.imgView);
         item.bookingLabel.setText(((Booking)getItem(position)).getMListing().getName());
         item.dateLabel.setText(Tools.convertUnixTimeToDateString(((Booking) getItem(position)).getBookStartTime())
                 + "--" + Tools.convertUnixTimeToDateString(((Booking)getItem(position)).getBookEndTime()));
