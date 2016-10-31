@@ -22,6 +22,7 @@
         <activity android:name=".Activities.TransactionActivity"></activity>
         <activity android:name=".Activities.ResultsActivity"></activity>
         <activity android:name=".Activities.TransactionConfirmationActivity"></activity>
+        <activity android:name=".Activities.ConfirmPaymentActivity"></activity>
         <activity android:name=".Activities.FilterActivity"></activity>
         <activity android:name=".Activities.UserProfileActivity"></activity>
         <activity android:name=".Activities.ListingDetailsActivity"></activity>
