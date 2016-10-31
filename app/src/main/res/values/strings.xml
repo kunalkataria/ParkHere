@@ -26,6 +26,7 @@
     <string name="start_time_label">Start Time Label</string>
     <string name="end_time_label">End Time Label</string>
 
+    <string name="delete_listing">Delete Listing</string>
     <string name="post_listing">Post a listing!</string>
     <string name="search">Search</string>
     <string name="edit_listing">Edit a listing!</string>

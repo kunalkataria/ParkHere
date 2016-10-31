@@ -48,6 +48,12 @@ public class ListingFragment extends Fragment {
         View view = inflater.inflate(R.layout.listing_fragment, container, false);
         ButterKnife.bind(this, view);
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         final String userID = mAuth.getCurrentUser().getUid();
         final ArrayList<Listing> userListings = new ArrayList<Listing>();
@@ -75,8 +81,6 @@ public class ListingFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
-
-        return view;
     }
 
     @OnClick(R.id.post_listing_button)
