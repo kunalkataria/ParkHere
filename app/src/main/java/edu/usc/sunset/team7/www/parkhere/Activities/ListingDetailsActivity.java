@@ -68,7 +68,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
             // Temporary string, should replace with title of listing later
             getSupportActionBar().setTitle("Listing details");
         }
-        displayButtons();
+        displayView();
     }
 
     private void getData(){
@@ -81,32 +81,35 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
         providerID = listingResult.getProviderID();
 
-        DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
-                .child(providerID).child(Consts.USER_FIRSTNAME);
+        myOwnListing = providerID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        System.out.println(providerNameRef.toString());
-        providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        if (!myOwnListing) {
+            DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
+                    .child(providerID);
+            System.out.println(providerNameRef.toString());
+            providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                //TODO: provider first name datasnapshot.getValue() is null
-                providerFirstName = dataSnapshot.getValue().toString();
-                providerNameTextView.setText(providerFirstName);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
-            }
-        });
+                    String firstName = dataSnapshot.child(Consts.USER_FIRSTNAME)
+                            .getValue()
+                            .toString();
 
-        listingNameTextView.setText(listingResult.getName());
-        Picasso.with(this).load(listingResult.getImageURL()).into(parkingImageView);
-        listingDetailsTextView.setText(listingDetailsString());
+                    //TODO: provider first name datasnapshot.getValue() is null
+                    //TODO: followup - that's because we were using an inconsistent user database
+                    providerFirstName = dataSnapshot.getValue().toString();
+                    providerNameTextView.setText(providerFirstName);
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
+                }
+            });
+        }
     }
 
-    private void displayButtons(){
+    private void displayView(){
         //DISPLAY BUTTONS ACCORDING TO USER
-        myOwnListing = providerID == FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (myOwnListing) {
 //            providerNameTextView.setVisibility(View.GONE);
             bookListingButton.setVisibility(View.GONE);
@@ -127,9 +130,14 @@ public class ListingDetailsActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {}
             });
         } else {
+            providerNameTextView.setText(providerFirstName);
             editListingButton.setVisibility(View.GONE);
             deleteListingButton.setVisibility(View.GONE);
         }
+
+        listingNameTextView.setText(listingResult.getName());
+        Picasso.with(this).load(listingResult.getImageURL()).into(parkingImageView);
+        listingDetailsTextView.setText(listingDetailsString());
     }
 
     private String listingDetailsString() {

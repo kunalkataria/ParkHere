@@ -65,6 +65,7 @@ public class ListingFragment extends Fragment {
                     Listing currentListing = parseListing(child);
                     String listingID = child.getKey();
                     currentListing.setListingID(child.getKey());
+                    currentListing.setProviderID(userID);
                     System.out.println(currentListing.getListingID());
                     userListings.add(currentListing);
                 }
