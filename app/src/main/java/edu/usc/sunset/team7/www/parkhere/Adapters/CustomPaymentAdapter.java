@@ -89,7 +89,7 @@ public class CustomPaymentAdapter extends BaseAdapter {
         } else{
             item = (ItemShell) rowView.getTag();
         }
-        item.bookingLabel.setText(((Listing)getItem(position)).getName());
+      
         long startTime = ((Listing) getItem(position)).getStartTime();
         DateTime startDateTime = new DateTime(startTime);
         long endTime = ((Listing) getItem(position)).getStopTime();
