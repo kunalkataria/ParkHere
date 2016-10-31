@@ -19,10 +19,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
@@ -86,9 +89,14 @@ public class CustomPaymentAdapter extends BaseAdapter {
         } else{
             item = (ItemShell) rowView.getTag();
         }
+        item.bookingLabel.setText(((Listing)getItem(position)).getName());
+        long startTime = ((Listing) getItem(position)).getStartTime();
+        DateTime startDateTime = new DateTime(startTime);
+        long endTime = ((Listing) getItem(position)).getStopTime();
+        DateTime endDateTime = new DateTime(endTime);
 
         item.bookingLabel.setText(((Listing)getItem(position)).getName());
-        item.dateLabel.setText(((Listing)getItem(position)).getStartTime() + "--" + ((Listing)getItem(position)).getStopTime());
+        item.dateLabel.setText(Tools.getDateString(startDateTime) + "--" + Tools.getDateString(endDateTime));
         double userBalance = ((Listing)getItem(position)).getPrice();
         item.amountLabel.setText("$"+String.format("%.2f",userBalance));
         return rowView;
