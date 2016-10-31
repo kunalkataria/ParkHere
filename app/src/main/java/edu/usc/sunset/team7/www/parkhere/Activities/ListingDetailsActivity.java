@@ -95,7 +95,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
                             .toString();
 
                     //TODO: provider first name datasnapshot.getValue() is null
-                    providerFirstName = dataSnapshot.getValue().toString();
+                    providerFirstName = dataSnapshot.child(Consts.USER_FIRSTNAME).getValue().toString();
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
