@@ -169,6 +169,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
 //            }
 //        };
 //        providerRef.addListenerForSingleValueEvent(providerNameListener);
+        HomeActivity.startActivityPostBooking(this);
         finish();
     }
 }
