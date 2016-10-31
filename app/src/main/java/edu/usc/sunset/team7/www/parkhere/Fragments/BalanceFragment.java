@@ -119,7 +119,7 @@ public class BalanceFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot listing : dataSnapshot.getChildren()) {
-                    String currListingID = (String)listing.getValue();
+                    String currListingID = (String)listing.getKey();
                     Listing toAdd = parseListing(listing);
                     if(toAdd != null){
                         //add to arraylist
@@ -137,7 +137,7 @@ public class BalanceFragment extends Fragment {
 
     private Listing parseListing (DataSnapshot snapshot) {
         Listing listing = new Listing();
-        String endTime = (String) snapshot.child(Consts.LISTING_START_TIME).getValue();
+        String endTime = snapshot.child(Consts.LISTING_END_TIME).getValue().toString();
         long convertTime = Long.parseLong(endTime);
         long unixTime = System.currentTimeMillis() / 1000L;
         if (unixTime >= convertTime) {
