@@ -50,7 +50,7 @@ public class CustomReviewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ItemShell item;
         View rowView = convertView;
-        if(rowView != null){
+        if(rowView == null){
             inflater = ((Activity)context).getLayoutInflater();
             rowView = inflater.inflate(R.layout.review_view, parent, false);
 
