@@ -263,13 +263,14 @@ public class PostListingActivity extends AppCompatActivity {
                 startDateEditText.setText(Tools.getDateString(dateTime));
             }
         };
+        startTimePicker = new TimePickerDialog(this, startTimeListener, c.get(Calendar.HOUR), c.get(Calendar.MINUTE), false);
         DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 startYear = year;
                 startMonth = month + 1;
                 startDay = day;
-                startDatePicker.show();
+                startTimePicker.show();
             }
         };
         startDatePicker = new DatePickerDialog
@@ -290,7 +291,7 @@ public class PostListingActivity extends AppCompatActivity {
                 stopDateEditText.setText(Tools.getDateString(dateTime));
             }
         };
-
+        stopTimePicker = new TimePickerDialog(this, stopTimeListener, c.get(Calendar.HOUR), c.get(Calendar.MINUTE), false);
         DatePickerDialog.OnDateSetListener stopDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
