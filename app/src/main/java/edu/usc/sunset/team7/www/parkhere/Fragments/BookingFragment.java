@@ -67,6 +67,7 @@ public class BookingFragment extends Fragment {
     }
 
     protected void getAllBookings(){
+
         String uid = currentUser.getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference ref = mDatabase.child(Consts.BOOKINGS_DATABASE).child(uid);
