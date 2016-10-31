@@ -245,6 +245,7 @@ public class SearchServlet extends HttpServlet {
         inactiveListingRef.child("Longitude").setValue(toMove.getLongitude());
         inactiveListingRef.child("Start Time").setValue(toMove.getStartTime());
         inactiveListingRef.child("End Time").setValue(toMove.getStopTime());
+        inactiveListingRef.child("Paid").setValue(true);
 
         //Remove listing from active
         FirebaseDatabase.getInstance().getReference().child("Listings").child(providerID)
