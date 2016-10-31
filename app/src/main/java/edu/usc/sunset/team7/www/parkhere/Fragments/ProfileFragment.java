@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment{
     private double rating = -1;
     private ArrayList<Review> reviews = new ArrayList<Review>();
 
-    private static final String TAG = "UserProfileFragment";
+    private static final String TAG = "UserProfileFragment***";
 
 
     @Override
@@ -67,6 +67,7 @@ public class ProfileFragment extends Fragment{
 
         super.onCreate(savedBundleInstance);
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d(TAG, uid);
         getValuesFromDatabase();
     }
 
@@ -89,12 +90,14 @@ public class ProfileFragment extends Fragment{
                     switch (child.getKey()){
                         case Consts.USER_FIRSTNAME:
                             name = child.getValue().toString();
+                            Log.d(TAG, "name: " + name);
                             break;
                         case Consts.USER_PROFILE_PIC:
                             imageURL = child.getValue().toString();
                             break;
                         case Consts.USER_RATING:
                             rating = Double.parseDouble(child.getValue().toString());
+                            Log.d(TAG, "Rating: " + Double.toString(rating));
                             break;
                     }
                 }
@@ -102,7 +105,7 @@ public class ProfileFragment extends Fragment{
                     StorageReference storage = FirebaseStorage.getInstance()
                             .getReferenceFromUrl(Consts.STORAGE_URL)
                             .child(Consts.STORAGE_PROFILE_PICTURES).child(uid);
-                    final long ONE_MEGABYTE = 1024 * 1024;
+                    final long ONE_MEGABYTE = 5 * 1024 * 1024;
                     storage.getBytes(ONE_MEGABYTE).addOnSuccessListener(
                             new OnSuccessListener<byte[]>() {
                                 @Override
@@ -159,7 +162,7 @@ public class ProfileFragment extends Fragment{
     }
 
     private void setValues(){
-        if(name!=null && imageURL!=null && rating!=-1){
+        if(name!=null && rating!=-1){
             userName.setText(name);
             //profilePic.setImageURI(Uri.parse(imageURL));
 
