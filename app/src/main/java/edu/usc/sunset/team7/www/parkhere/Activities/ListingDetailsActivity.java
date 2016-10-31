@@ -103,7 +103,6 @@ public class ListingDetailsActivity extends AppCompatActivity {
                     providerFirstName = (String) dataSnapshot.getValue();
                     listingNameTextView.setText(providerFirstName);
                 }
-                listingDetailsTextView.setText(listingDetailsString());
             }
 
             @Override
@@ -115,6 +114,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
                 .child(providerID).child(Consts.USER_FIRSTNAME);
         providerNameRef.addListenerForSingleValueEvent(databaseListener);
+        listingDetailsTextView.setText(listingDetailsString());
     }
 
     private String listingDetailsString() {
@@ -125,11 +125,10 @@ public class ListingDetailsActivity extends AppCompatActivity {
         descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()));
         descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
         if (!myOwnListing) {
-            descriptionBuilder.append("\nDistance Away: " + listingResultPair.getDistance());
+            descriptionBuilder.append("\nDistance Away: " + (double)Math.round(listingResultPair.getDistance() * 100.0 / 100.0) + " miles");
+            descriptionBuilder.append("\nListing Provider: " + providerFirstName);
         }
-        descriptionBuilder.append("\nListing provider: " + providerFirstName);
-        descriptionBuilder.append("\n\nParking Information");
-        descriptionBuilder.append("\nPrice: " + listing.getPrice());
+        descriptionBuilder.append("\nPrice: $" + listing.getPrice());
         descriptionBuilder.append("\nRefundable? " +listing.isRefundable());
         descriptionBuilder.append("\nHandicap? " + listing.isHandicap());
         descriptionBuilder.append("\nCovered? " + listing.isCovered());
