@@ -63,6 +63,14 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public static void startActivityPostBooking(Context context) {
+        Intent newIntent = new Intent(context, HomeActivity.class);
+        newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        newIntent.putExtra(FRAGMENT_TAG, Consts.BOOKING_FRAGMENT_TAG);
+        context.startActivity(newIntent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +115,15 @@ public class HomeActivity extends AppCompatActivity {
                     currentFragment = new SearchFragment();
                 }
                 setToolbarTitle(getResources().getString(R.string.search));
+                break;
+            case Consts.BOOKING_FRAGMENT_TAG:
+                if (getFragmentManager().findFragmentByTag(Consts.BOOKING_FRAGMENT_TAG) != null) {
+                    currentFragment = getFragmentManager().findFragmentByTag(Consts.BOOKING_FRAGMENT_TAG);
+                } else {
+                    currentFragment = new BookingFragment();
+                }
+                setToolbarTitle(getResources().getString(R.string.booking));
+                break;
         }
 
         // use the fragment manager to move to the fragment selected by the switch statement

@@ -83,12 +83,14 @@ public class ConfirmPaymentActivity extends AppCompatActivity{
                             }
                         });
 
-                        //remove listing from the db
+                        //mark it as paid
                         mDatabase
                                 .child(Consts.LISTINGS_DATABASE)
                                 .child(providerID)
                                 .child(Consts.INACTIVE_LISTINGS)
-                                .child(toRemove.getListingID()).removeValue();
+                                .child(toRemove.getListingID())
+                                .child(Consts.LISTING_IS_PAID)
+                                .setValue(true);
                         inactiveListings.remove(positionToRemove);
                         adapter.notifyDataSetChanged();
                         if (adapter.getCount() == 0) {

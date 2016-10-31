@@ -86,6 +86,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         if (!myOwnListing) {
             DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
                     .child(providerID);
+            System.out.println(providerNameRef.toString());
             providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -94,8 +95,9 @@ public class ListingDetailsActivity extends AppCompatActivity {
                             .getValue()
                             .toString();
 
-                    //TODO: provider first name datasnapshot.getValue() is null
-                    providerFirstName = dataSnapshot.getValue().toString();
+                    //TODO: followup - that's because we were using an inconsistent user database
+                    providerFirstName = dataSnapshot.child(Consts.USER_FIRSTNAME).getValue().toString();
+                    providerNameTextView.setText(providerFirstName);
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
