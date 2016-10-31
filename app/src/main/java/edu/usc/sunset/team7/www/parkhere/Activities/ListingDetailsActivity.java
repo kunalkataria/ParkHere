@@ -59,19 +59,50 @@ public class ListingDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listing_details);
         ButterKnife.bind(this);
 
+        getData();
+
+        //TOOL BAR SET UP
         setSupportActionBar(postListingToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             // Temporary string, should replace with title of listing later
             getSupportActionBar().setTitle("Listing details");
         }
+        displayButtons();
+    }
 
-        myOwnListing = getIntent().getBooleanExtra(Consts.MY_OWN_LISTING_EXTRA, false);
+    private void getData(){
+        if(!getIntent().hasExtra(Consts.LISTING_RESULT_EXTRA)){
+            Log.d(TAG, "*********************NO LISTING RESULT EXTRA");
+        }
+        listingResultPair = (ResultsPair) getIntent().getSerializableExtra(Consts.LISTING_RESULT_EXTRA);
+        listingResult = listingResultPair.getListing();
+        providerID = listingResult.getProviderID();
 
+        DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
+                .child(providerID).child(Consts.USER_FIRSTNAME);
+        providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                providerFirstName = dataSnapshot.getValue().toString();
+                providerNameTextView.setText(providerFirstName);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
+            }
+        });
+
+        listingNameTextView.setText(listingResult.getName());
+        Picasso.with(this).load(listingResult.getImageURL()).into(parkingImageView);
+        listingDetailsTextView.setText(listingDetailsString());
+    }
+
+    private void displayButtons(){
+        //DISPLAY BUTTONS ACCORDING TO USER
+        myOwnListing = providerID == FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (myOwnListing) {
-            providerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            listingResult = (Listing) getIntent().getSerializableExtra(Consts.LISTING_EXTRA);
-            providerNameTextView.setVisibility(View.GONE);
+//            providerNameTextView.setVisibility(View.GONE);
             bookListingButton.setVisibility(View.GONE);
             deleteListingButton.setVisibility(View.GONE); //assume inactive initially
 
@@ -80,44 +111,19 @@ public class ListingDetailsActivity extends AppCompatActivity {
                     .child(Consts.ACTIVE_LISTINGS).child(listingResult.getListingID());
 
             dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                 @Override
-                 public void onDataChange(DataSnapshot dataSnapshot) {
-                     if(dataSnapshot.exists()) { //if it is active, allow delete
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()) { //if it is active, allow delete
                         deleteListingButton.setVisibility(View.VISIBLE);
-                     }
-                 }
-
-                 @Override
-                 public void onCancelled(DatabaseError databaseError) {}
-             });
-
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
         } else {
-            listingResultPair = (ResultsPair) getIntent().getSerializableExtra(Consts.LISTING_RESULT_EXTRA);
-            listingResult = listingResultPair.getListing();
             editListingButton.setVisibility(View.GONE);
             deleteListingButton.setVisibility(View.GONE);
-            providerID = listingResultPair.getListing().getProviderID();
-            listingNameTextView.setText(listingResult.getName());
         }
-
-        DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
-                .child(providerID).child(Consts.USER_FIRSTNAME);
-
-        providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                providerFirstName = (String) dataSnapshot.getValue();
-                providerNameTextView.setText(providerFirstName);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
-            }
-        });
-
-        listingDetailsTextView.setText(listingDetailsString());
-
     }
 
     private String listingDetailsString() {
@@ -202,5 +208,4 @@ public class ListingDetailsActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();
         finish();
     }
-
 }
