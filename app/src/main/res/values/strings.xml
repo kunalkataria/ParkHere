@@ -27,9 +27,9 @@
     <string name="end_time_label">End Time Label</string>
 
     <string name="delete_listing">Delete Listing</string>
-    <string name="post_listing">Post a listing!</string>
+    <string name="post_listing">Post a listing</string>
     <string name="search">Search</string>
-    <string name="edit_listing">Edit a listing!</string>
+    <string name="edit_listing">Edit a listing</string>
 
     <string name="listing">My Listings</string>
     <string name="booking">My Bookings</string>
@@ -38,7 +38,7 @@
     <string name="profile_image_description">Profile Image</string>
     <string name="select_picture">Select Picture</string>
     <string name="confirm">Confirm</string>
-    <string name="book_listing">Book this listing!</string>
+    <string name="book_listing">Book this listing</string>
     <string name="filter">Filter</string>
     <string name="avg_parking_price">Average Parking Price (from ParkWhiz): $</string>
     <string name="avg_parking_price_not_found">Average Parking Price (from ParkWhiz): No data found</string>
