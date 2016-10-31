@@ -112,8 +112,10 @@ public class EditListingActivity extends AppCompatActivity {
     private String firebaseImageURL = "";
     private String listingId;
     private Listing editListing;
-    public static void startActivity(Context context) {
+
+    public static void startActivity(Context context, Listing listing) {
         Intent i = new Intent(context, EditListingActivity.class);
+        i.putExtra(Consts.LISTING_EDIT_EXTRA, listing);
         context.startActivity(i);
     }
 

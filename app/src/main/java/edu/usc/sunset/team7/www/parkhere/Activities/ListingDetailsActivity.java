@@ -3,9 +3,11 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,17 +32,13 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
  */
 public class ListingDetailsActivity extends AppCompatActivity {
 
-    @BindView(R.id.listing_name)
-    TextView listingNameTextView;
-    @BindView(R.id.listing_details)
-    TextView listingDetailsTextView;
-    @BindView(R.id.provider_name)
-    TextView providerNameTextView;
-    @BindView(R.id.parking_image)
-    ImageView parkingImageView;
-    @BindView(R.id.book_listing_button)
-    Button bookListingButton;
+    @BindView(R.id.listing_name) TextView listingNameTextView;
+    @BindView(R.id.listing_details) TextView listingDetailsTextView;
+    @BindView(R.id.provider_name) TextView providerNameTextView;
+    @BindView(R.id.parking_image) ImageView parkingImageView;
+    @BindView(R.id.book_listing_button) Button bookListingButton;
     @BindView(R.id.listing_details_toolbar) Toolbar postListingToolbar;
+    @BindView(R.id.edit_listing_button) AppCompatButton editListingButton;
 
     private ResultsPair listingResult;
     private String providerFirstName;
@@ -60,11 +58,20 @@ public class ListingDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Listing details");
         }
 
-        ValueEventListener providerNameListener = new ValueEventListener() {
+        final boolean myOwnListing = getIntent().getBooleanExtra(Consts.MY_OWN_LISTING_EXTRA, true);
+
+        if (myOwnListing) {
+            providerNameTextView.setVisibility(View.GONE);
+            bookListingButton.setVisibility(View.GONE);
+        }
+
+        ValueEventListener databaseListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                providerFirstName = (String) dataSnapshot.getValue();
-                listingNameTextView.setText(providerFirstName);
+                if (!myOwnListing) {
+                    providerFirstName = (String) dataSnapshot.getValue();
+                    listingNameTextView.setText(providerFirstName);
+                }
                 listingDetailsTextView.setText(listingDetailsString());
             }
 
@@ -75,10 +82,10 @@ public class ListingDetailsActivity extends AppCompatActivity {
         };
         DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
                 .child(listingResult.getListing().getProviderID()).child(Consts.USER_FIRSTNAME);
-        providerNameRef.addListenerForSingleValueEvent(providerNameListener);
+        providerNameRef.addListenerForSingleValueEvent(databaseListener);
     }
 
-    private String listingDetailsString(){
+    private String listingDetailsString() {
         Listing listing = listingResult.getListing();
         StringBuilder descriptionBuilder = new StringBuilder();
         descriptionBuilder.append("Name of Listing: " + listing.getName());
@@ -115,8 +122,13 @@ public class ListingDetailsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.edit_listing_button)
+    protected void editListing() {
+        EditListingActivity.startActivity(this, listingResult.getListing());
+    }
+
     @OnClick(R.id.provider_name)
-    protected void displayProvider(){
+    protected void displayProvider() {
         //Go to public user profile activity
         Intent intent = new Intent(ListingDetailsActivity.this, UserProfileActivity.class);
         Bundle bundle = new Bundle();

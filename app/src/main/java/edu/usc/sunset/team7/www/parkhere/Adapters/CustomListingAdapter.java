@@ -2,6 +2,7 @@ package edu.usc.sunset.team7.www.parkhere.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 
 /**
  * Created by johnsonhui on 10/23/16.
@@ -48,7 +52,7 @@ public class CustomListingAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ItemShell item;
         View rowView = convertView;
         if(rowView == null) {
@@ -68,6 +72,17 @@ public class CustomListingAdapter extends BaseAdapter {
         item.locationLabel.setText(((Listing)getItem(position)).getName());
         item.dateLabel.setText(((Listing)getItem(position)).getStartTime() + "--" + ((Listing)getItem(position)).getStopTime());
         Picasso.with(context).load(((Listing)getItem(position)).getImageURL()).into(item.imgView);
+
+        rowView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent detailsIntent = new Intent(context, ListingDetailsActivity.class);
+                detailsIntent.putExtra(Consts.LISTING_RESULT_EXTRA, (ResultsPair) getItem(position));
+                detailsIntent.putExtra(Consts.MY_OWN_LISTING_EXTRA, true);
+                context.startActivity(detailsIntent);
+            }
+        });
 
         return rowView;
     }
