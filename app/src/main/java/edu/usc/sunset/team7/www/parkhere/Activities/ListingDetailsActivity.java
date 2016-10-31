@@ -68,7 +68,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
             // Temporary string, should replace with title of listing later
             getSupportActionBar().setTitle("Listing details");
         }
-        displayButtons();
+        displayView();
     }
 
     private void getData(){
@@ -81,30 +81,32 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
         providerID = listingResult.getProviderID();
 
-        DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
-                .child(providerID).child(Consts.USER_FIRSTNAME);
-        providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        myOwnListing = providerID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                //TODO: provider first name datasnapshot.getValue() is null
-                providerFirstName = dataSnapshot.getValue().toString();
-                providerNameTextView.setText(providerFirstName);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
-            }
-        });
+        if (!myOwnListing) {
+            DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
+                    .child(providerID);
+            providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-        listingNameTextView.setText(listingResult.getName());
-        Picasso.with(this).load(listingResult.getImageURL()).into(parkingImageView);
-        listingDetailsTextView.setText(listingDetailsString());
+                    String firstName = dataSnapshot.child(Consts.USER_FIRSTNAME)
+                            .getValue()
+                            .toString();
+
+                    //TODO: provider first name datasnapshot.getValue() is null
+                    providerFirstName = dataSnapshot.getValue().toString();
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
+                }
+            });
+        }
     }
 
-    private void displayButtons(){
+    private void displayView(){
         //DISPLAY BUTTONS ACCORDING TO USER
-        myOwnListing = providerID == FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (myOwnListing) {
 //            providerNameTextView.setVisibility(View.GONE);
             bookListingButton.setVisibility(View.GONE);
@@ -125,9 +127,14 @@ public class ListingDetailsActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {}
             });
         } else {
+            providerNameTextView.setText(providerFirstName);
             editListingButton.setVisibility(View.GONE);
             deleteListingButton.setVisibility(View.GONE);
         }
+
+        listingNameTextView.setText(listingResult.getName());
+        Picasso.with(this).load(listingResult.getImageURL()).into(parkingImageView);
+        listingDetailsTextView.setText(listingDetailsString());
     }
 
     private String listingDetailsString() {
