@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,7 +18,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.usc.sunset.team7.www.parkhere.Adapters.CustomBookingAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
@@ -28,6 +31,8 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
  */
 
 public class BookingFragment extends Fragment {
+
+    @BindView(R.id.booking_listview) ListView bookingListview;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -50,7 +55,6 @@ public class BookingFragment extends Fragment {
         done = false;
         getAllBookings();
         //while(!done) try { Thread.sleep(5); } catch (InterruptedException e) {e.printStackTrace();}
-        Booking[] sendToAdapter = allBookings.toArray(new Booking[allBookings.size()]);
         //need to call the adapter now
 
     }
@@ -74,15 +78,14 @@ public class BookingFragment extends Fragment {
                 for(DataSnapshot booking : dataSnapshot.getChildren()) {
                     System.out.println(booking.getKey());
                     Booking toAdd = parseBooking(booking);
-                    System.out.println("Parsed booking");
                     String listingID = booking.child(Consts.BOOKING_ID).getValue().toString();
                     String providerID = booking.child(Consts.PROVIDER_ID).getValue().toString();
                     Listing mListing = parseListing(listingID, providerID);
-                    System.out.println("Parsed listing");
                     toAdd.setMListing(mListing);
                     allBookings.add(toAdd);
                 }
-                done = true;
+                Booking[] sendToAdapter = allBookings.toArray(new Booking[allBookings.size()]);
+                bookingListview.setAdapter(new CustomBookingAdapter(getActivity(), sendToAdapter));
             }
 
             @Override
@@ -93,7 +96,6 @@ public class BookingFragment extends Fragment {
     }
 
     private Booking parseBooking (DataSnapshot snapshot) {
-        System.out.println("BOOKING");
         Booking toAddBooking = new Booking(null);
         for(DataSnapshot child : snapshot.getChildren()) {
             switch (child.getKey()) {
@@ -120,8 +122,8 @@ public class BookingFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listing = dataSnapshot;
-                System.out.println(dataSnapshot.getKey());
                 for (DataSnapshot child : listing.getChildren()) {
+                    System.out.println("Child: " + child.getKey());
                     switch (child.getKey()) {
                         case Consts.LISTING_NAME:
                             curListing.setName(child.getValue().toString());
@@ -166,9 +168,6 @@ public class BookingFragment extends Fragment {
                 System.out.println("NO!");
             }
         });
-
-        while(!foundListing) try { Thread.sleep(5); } catch (InterruptedException e) { e.printStackTrace(); }
-
 
         return curListing;
     }
