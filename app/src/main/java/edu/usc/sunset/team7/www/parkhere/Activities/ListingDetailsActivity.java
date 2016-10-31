@@ -97,13 +97,14 @@ public class ListingDetailsActivity extends AppCompatActivity {
             editListingButton.setVisibility(View.GONE);
             deleteListingButton.setVisibility(View.GONE);
             providerID = listingResultPair.getListing().getProviderID();
+            listingNameTextView.setText(listingResult.getName());
         }
 
         ValueEventListener databaseListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 providerFirstName = (String) dataSnapshot.getValue();
-                listingNameTextView.setText(providerFirstName);
+                providerNameTextView.setText(providerFirstName);
             }
 
             @Override
@@ -117,6 +118,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
         providerNameRef.addListenerForSingleValueEvent(databaseListener);
         listingDetailsTextView.setText(listingDetailsString());
         parkingImageView.setImageURI(Uri.parse(listingResult.getImageURL()));
+
+
     }
 
     private String listingDetailsString() {
