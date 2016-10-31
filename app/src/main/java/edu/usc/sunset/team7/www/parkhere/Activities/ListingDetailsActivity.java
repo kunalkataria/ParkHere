@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,16 +41,17 @@ public class ListingDetailsActivity extends AppCompatActivity {
     @BindView(R.id.listing_details_toolbar) Toolbar postListingToolbar;
     @BindView(R.id.edit_listing_button) AppCompatButton editListingButton;
 
-    private ResultsPair listingResult;
+    private ResultsPair listingResultPair;
+    private Listing listingResult;
     private String providerFirstName;
     private static final String TAG = "ListingDetailsActivity";
+    private boolean myOwnListing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing_details);
         ButterKnife.bind(this);
-        listingResult = (ResultsPair) getIntent().getSerializableExtra(Consts.LISTING_RESULT_EXTRA);
 
         setSupportActionBar(postListingToolbar);
         if (getSupportActionBar() != null) {
@@ -58,11 +60,16 @@ public class ListingDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Listing details");
         }
 
-        final boolean myOwnListing = getIntent().getBooleanExtra(Consts.MY_OWN_LISTING_EXTRA, true);
+        myOwnListing = getIntent().getBooleanExtra(Consts.MY_OWN_LISTING_EXTRA, true);
 
         if (myOwnListing) {
             providerNameTextView.setVisibility(View.GONE);
             bookListingButton.setVisibility(View.GONE);
+            listingResult = (Listing) getIntent().getSerializableExtra(Consts.LISTING_EXTRA);
+        } else {
+            listingResultPair = (ResultsPair) getIntent().getSerializableExtra(Consts.LISTING_RESULT_EXTRA);
+            listingResult = listingResultPair.getListing();
+            editListingButton.setVisibility(View.GONE);
         }
 
         ValueEventListener databaseListener = new ValueEventListener() {
@@ -80,19 +87,27 @@ public class ListingDetailsActivity extends AppCompatActivity {
                 Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
             }
         };
+        String providerID;
+        if (myOwnListing) {
+            providerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        } else {
+            providerID = listingResultPair.getListing().getProviderID();
+        }
         DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
-                .child(listingResult.getListing().getProviderID()).child(Consts.USER_FIRSTNAME);
+                .child(providerID).child(Consts.USER_FIRSTNAME);
         providerNameRef.addListenerForSingleValueEvent(databaseListener);
     }
 
     private String listingDetailsString() {
-        Listing listing = listingResult.getListing();
+        Listing listing = listingResult;
         StringBuilder descriptionBuilder = new StringBuilder();
         descriptionBuilder.append("Name of Listing: " + listing.getName());
         descriptionBuilder.append("\nListing Description: "  + listing.getDescription());
         descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()));
         descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
-        descriptionBuilder.append("\nDistance Away: " + listingResult.getDistance());
+        if (!myOwnListing) {
+            descriptionBuilder.append("\nDistance Away: " + listingResultPair.getDistance());
+        }
         descriptionBuilder.append("\nListing provider: " + providerFirstName);
         descriptionBuilder.append("\n\nParking Information");
         descriptionBuilder.append("\nPrice: " + listing.getPrice());
@@ -115,8 +130,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
     protected void bookListing() {
         Intent intent = new Intent(ListingDetailsActivity.this, TransactionActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Consts.LISTING_TO_BE_BOOKED, listingResult.getListing());
-        bundle.putDouble(Consts.LISTING_DISTANCE, listingResult.getDistance());
+        bundle.putSerializable(Consts.LISTING_TO_BE_BOOKED, listingResultPair.getListing());
+        bundle.putDouble(Consts.LISTING_DISTANCE, listingResultPair.getDistance());
         bundle.putString(Consts.LISTING_DETAILS_STRING, listingDetailsString());
         intent.putExtras(bundle);
         startActivity(intent);
@@ -124,7 +139,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.edit_listing_button)
     protected void editListing() {
-        EditListingActivity.startActivity(this, listingResult.getListing());
+        EditListingActivity.startActivity(this, listingResult);
     }
 
     @OnClick(R.id.provider_name)
@@ -132,7 +147,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         //Go to public user profile activity
         Intent intent = new Intent(ListingDetailsActivity.this, UserProfileActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString(Consts.USER_ID, listingResult.getListing().getProviderID());
+        bundle.putString(Consts.USER_ID, listingResult.getProviderID());
         intent.putExtras(bundle);
         startActivity(intent);
     }

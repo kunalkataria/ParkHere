@@ -54,52 +54,36 @@ public class EditListingActivity extends AppCompatActivity {
     //private static final String EditListingTag = "EditListingActivity";
 
     //the container for each textfield
-    @BindView(R.id.name_textinputlayout)
-    TextInputLayout parkingNameTextInputLayout;
-    @BindView(R.id.description_textinputlayout)
-    TextInputLayout descriptionTextInputLayout;
-    @BindView(R.id.price_textinputlayout)
-    TextInputLayout priceTextInputLayout;
+    @BindView(R.id.name_textinputlayout) TextInputLayout parkingNameTextInputLayout;
+    @BindView(R.id.description_textinputlayout) TextInputLayout descriptionTextInputLayout;
+    @BindView(R.id.price_textinputlayout) TextInputLayout priceTextInputLayout;
 
     //The actual textfields
-    @BindView(R.id.name_edittext)
-    AppCompatEditText parkingNameEditText;
-    @BindView(R.id.description_edittext)
-    AppCompatEditText descriptionEditText;
-    @BindView(R.id.price_edittext)
-    AppCompatEditText priceEditText;
+    @BindView(R.id.name_edittext) AppCompatEditText parkingNameEditText;
+    @BindView(R.id.description_edittext) AppCompatEditText descriptionEditText;
+    @BindView(R.id.price_edittext) AppCompatEditText priceEditText;
 
     private String nameString, descriptionString;
     private double price;
 
     ///Image
-    @BindView(R.id.parking_image)
-    ImageView parkingImageView;
+    @BindView(R.id.parking_image) ImageView parkingImageView;
 
     //Parking Type Buttons
-    @BindView(R.id.handicap_button_control)
-    SwitchCompat handicapSwitch;
-    @BindView(R.id.compact_button_control)
-    SwitchCompat compactSwitch;
-    @BindView(R.id.covered_button_control)
-    SwitchCompat coveredSwitch;
+    @BindView(R.id.handicap_button_control) SwitchCompat handicapSwitch;
+    @BindView(R.id.compact_button_control) SwitchCompat compactSwitch;
+    @BindView(R.id.covered_button_control) SwitchCompat coveredSwitch;
 
     boolean isCompact, isHandicap, isCovered;
 
     //Cancellation policies
-    @BindView(R.id.myRadioGroup)
-    RadioGroup radioGroup;
-    @BindView(R.id.refundable_rButton)
-    RadioButton refundableRButton;
-    @BindView(R.id.nonrefundable_rButton)
-    RadioButton nonrefundableRButton;
+    @BindView(R.id.myRadioGroup) RadioGroup radioGroup;
+    @BindView(R.id.refundable_rButton) RadioButton refundableRButton;
+    @BindView(R.id.nonrefundable_rButton) RadioButton nonrefundableRButton;
 
     private static Hashtable<Integer, String> cancellationIds;
 
-
-    //probably need this to reupload edits
-    @BindView(R.id.upload_listing_button)
-    Button uploadListingButton;
+    @BindView(R.id.upload_listing_button) Button uploadListingButton;
 
     private String editNameString, editDescriptionString;
     private double editPrice;
@@ -122,7 +106,7 @@ public class EditListingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_listing);
+        setContentView(R.layout.activity_edit_listing);
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -145,21 +129,9 @@ public class EditListingActivity extends AppCompatActivity {
         coveredSwitch.setChecked(getListing.isCovered());
         listingId = getListing.getListingID();
 
-        //not exactly sure if this is right
         URL url = null;
-        try {
-            url = new URL(getListing.getImageURL());
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            parkingImageView.setImageBitmap(bmp);
-        } catch (MalformedURLException e) {
-            parkingImageView.setImageResource(R.mipmap.empty_parking);
-            e.printStackTrace();
-        } catch (IOException e) {
-            parkingImageView.setImageResource(R.mipmap.empty_parking);
-            e.printStackTrace();
-        }
+        Picasso.with(this).load(getListing.getImageURL()).into(parkingImageView);
 
-        //imageView.setImageBitmap(bmp);
         boolean isRefundable = getListing.isRefundable();
         if(isRefundable){
             ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);

@@ -16,7 +16,6 @@ import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
-import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 
 /**
  * Created by johnsonhui on 10/23/16.
@@ -78,7 +77,7 @@ public class CustomListingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent detailsIntent = new Intent(context, ListingDetailsActivity.class);
-                detailsIntent.putExtra(Consts.LISTING_RESULT_EXTRA, (ResultsPair) getItem(position));
+                detailsIntent.putExtra(Consts.LISTING_EXTRA, (Listing) getItem(position));
                 detailsIntent.putExtra(Consts.MY_OWN_LISTING_EXTRA, true);
                 context.startActivity(detailsIntent);
             }
