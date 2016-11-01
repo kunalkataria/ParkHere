@@ -154,9 +154,9 @@ public class BookingDetailsActivity extends AppCompatActivity {
                         String startTime = snapshot.child(Consts.BOOKING_START_TIME).getValue().toString();
                         String providerID = snapshot.child(Consts.BOOKING_PROVIDER_ID).getValue().toString();
                         String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
-                        long convertTime = Long.parseLong(startTime);
+                        long longStartTime = Long.parseLong(startTime);
                         long unixTime = System.currentTimeMillis() / 1000L;
-                        if(unixTime > convertTime) {
+                        if(unixTime < longStartTime) {
                             removeListing(listingID, providerID, booking.getBookingID());
                         } else {
                             AlertDialog.Builder adb=new AlertDialog.Builder(BookingDetailsActivity.this);
