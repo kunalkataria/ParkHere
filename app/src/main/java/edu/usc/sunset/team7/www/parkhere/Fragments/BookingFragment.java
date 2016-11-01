@@ -49,6 +49,7 @@ public class BookingFragment extends Fragment {
 
     @Override
     public void onResume() {
+        super.onResume();
         getAllBookings();
     }
 
