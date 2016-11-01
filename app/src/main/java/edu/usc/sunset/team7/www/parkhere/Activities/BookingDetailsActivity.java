@@ -100,6 +100,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
             cancelBookingButton.setEnabled(false);
         }
         bookingName.setText(listing.getName());
+        providerName.setText(providerFirstName);
         Picasso.with(this).load(listing.getImageURL()).into(parkingImage);
         bookingDetails.setText(bookingDetailsString());
     }
