@@ -93,6 +93,7 @@ public class BookingFragment extends Fragment {
     private Booking parseBooking (DataSnapshot datasnapshot, DataSnapshot booking,
                                   String listingID, String providerID) {
         Booking toAddBooking = new Booking(null);
+        toAddBooking.setBookingID(booking.getKey());
         for(DataSnapshot child : booking.getChildren()) {
             switch (child.getKey()) {
                 case Consts.LISTING_END_TIME:

@@ -12,12 +12,17 @@ public class Booking implements Serializable {
 
     private Listing mListing;
     private String providerID;
+    private String bookingID;
     private long bookStartTime;
     private long bookEndTime;
 
     public Booking(Listing mListing) {
         this.mListing = mListing;
     }
+
+    public void setBookingID(String bookingID) { this.bookingID = bookingID; }
+
+    public String getBookingID() { return this.bookingID; }
 
     public Listing getMListing() {
         return this.mListing;
