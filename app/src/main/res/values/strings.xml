@@ -31,7 +31,7 @@
     <string name="delete_listing">Delete Listing</string>
     <string name="post_listing">Post a listing</string>
     <string name="search">Search</string>
-    <string name="edit_listing">Edit a listing</string>
+    <string name="edit_listing">Edit the listing</string>
 
     <string name="listing">My Listings</string>
     <string name="booking">My Bookings</string>
@@ -57,6 +57,9 @@
 
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+
+    <string name="open_drawer">Open drawer</string>
+    <string name="close_drawer">Close drawer</string>
 
     <!-- Placeholder strings for adapter views. -->
     <string name="location_label">Location label</string>

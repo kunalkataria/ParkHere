@@ -126,15 +126,22 @@ public class SearchFragment extends Fragment {
             }
             ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, startDate, stopDate);
         } else {
-            double lat = Double.parseDouble(latitudeEditText.getEditableText().toString());
-            double lon = Double.parseDouble(longitudeEditText.getEditableText().toString());
-            System.out.println(lat + " " + lon );
-            // set start date to current time if the time is not selected
-            if (startDate == -1) {
-                Calendar c = Calendar.getInstance();
-                startDate = c.getTimeInMillis() / 1000;
+            if (!latitudeEditText.getEditableText().toString().isEmpty() &&
+                    !longitudeEditText.getEditableText().toString().isEmpty()) {
+                double lat = Double.parseDouble(latitudeEditText.getEditableText().toString());
+                double lon = Double.parseDouble(longitudeEditText.getEditableText().toString());
+                System.out.println(lat + " " + lon );
+                // set start date to current time if the time is not selected
+                if (startDate == -1) {
+                    Calendar c = Calendar.getInstance();
+                    startDate = c.getTimeInMillis() / 1000;
+                }
+                ResultsActivity.startActivity(getActivity(), lat, lon, startDate, stopDate);
+            } else {
+                Toast.makeText(getActivity(), "Please enter both a latitude and longitude",
+                        Toast.LENGTH_SHORT).show();
             }
-            ResultsActivity.startActivity(getActivity(), lat, lon, startDate, stopDate);
+
         }
     }
 
