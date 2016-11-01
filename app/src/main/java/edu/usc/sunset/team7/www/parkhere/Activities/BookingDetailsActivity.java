@@ -3,6 +3,7 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
@@ -155,10 +156,18 @@ public class BookingDetailsActivity extends AppCompatActivity {
                         String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
                         long convertTime = Long.parseLong(startTime);
                         long unixTime = System.currentTimeMillis() / 1000L;
-                        if(unixTime > convertTime) removeListing(listingID, providerID, booking.getBookingID());
-                        else System.out.println(listingID + "has passed");
+                        if(unixTime > convertTime) {
+                            removeListing(listingID, providerID, booking.getBookingID());
+                        } else {
+                            AlertDialog.Builder adb=new AlertDialog.Builder(BookingDetailsActivity.this);
+                            adb.setTitle("This booking cannot be cancelled because the transaction has been completed");
+                            adb.setPositiveButton("OK", null);
+                            adb.show();
+                        }
                     }
                 }
+                HomeActivity.startActivityPostBooking(BookingDetailsActivity.this);
+                finish();
             }
 
             @Override
