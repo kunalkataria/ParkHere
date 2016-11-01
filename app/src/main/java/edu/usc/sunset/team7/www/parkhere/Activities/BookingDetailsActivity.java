@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
     @BindView(R.id.booking_details) TextView bookingDetails;
     @BindView(R.id.review_booking_button) AppCompatButton reviewBookingButton;
     @BindView(R.id.cancel_booking_button) AppCompatButton cancelBookingButton;
+    @BindView(R.id.booking_details_toolbar) Toolbar bookingDetailsToolbar;
 
     private static final String TAG = "BookingDetailsActivity";
     private Booking booking;
@@ -53,6 +55,13 @@ public class BookingDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_details);
         ButterKnife.bind(this);
+
+        setSupportActionBar(bookingDetailsToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Booking details");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         booking = (Booking) getIntent().getSerializableExtra(Consts.BOOKING_EXTRA);
         if(booking != null) {
             listing = booking.getMListing();

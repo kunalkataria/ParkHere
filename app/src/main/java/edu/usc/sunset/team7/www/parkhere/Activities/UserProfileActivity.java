@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListViewCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,6 +48,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @BindView(R.id.user_name_view) TextView userName;
     @BindView(R.id.user_rating_bar) RatingBar userRating;
     @BindView(R.id.review_content_space) LinearLayout reviewContentSpace;
+    @BindView(R.id.public_profile_toolbar) Toolbar publicProfileToolbar;
 
     private String uid, name, imageURL;
     private double rating = -1;
@@ -54,11 +56,16 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "UserProfileActivity";
 
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activty_public_profile);
         ButterKnife.bind(this);
+
+        setSupportActionBar(publicProfileToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Public Profile");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         Bundle bundle = getIntent().getExtras();
 

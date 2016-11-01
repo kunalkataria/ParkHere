@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -191,7 +192,7 @@ public class ProfileFragment extends Fragment{
 
             if (reviews != null || reviews.size() > 0) {
                 reviewContentSpace.removeAllViewsInLayout();
-                ListViewCompat listView = new ListViewCompat(getActivity());
+                ListView listView = new ListView(getActivity());
                 listView.setAdapter(new CustomReviewAdapter(getActivity(), reviews));
                 reviewContentSpace.addView(listView);
             }
