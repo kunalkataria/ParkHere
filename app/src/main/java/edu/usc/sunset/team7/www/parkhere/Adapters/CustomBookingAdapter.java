@@ -78,12 +78,6 @@ public class CustomBookingAdapter extends BaseAdapter {
             }
         });
 
-
-        System.out.println(((Booking)getItem(position)).getMListing().getImageURL());
-        System.out.println(((Booking)getItem(position)).getMListing().getName());
-        if(rowView == null) System.out.println("NULL");
-
-
         Picasso.with(this.context).load(((Booking)getItem(position)).getMListing().getImageURL()).into(item.imgView);
         item.bookingLabel.setText(((Booking)getItem(position)).getMListing().getName());
         item.dateLabel.setText(Tools.convertUnixTimeToDateString(((Booking) getItem(position)).getBookStartTime())

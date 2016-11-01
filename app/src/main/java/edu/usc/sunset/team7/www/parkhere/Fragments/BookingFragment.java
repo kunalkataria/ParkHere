@@ -101,10 +101,6 @@ public class BookingFragment extends Fragment {
                 case Consts.LISTING_START_TIME:
                     toAddBooking.setBookStartTime(Long.parseLong(child.getValue().toString()));
                     break;
-                case Consts.BOOKING_PROVIDER_ID:
-                    toAddBooking.setProviderID(child.getValue().toString());
-                    break;
-
             }
         }
         Listing listing = parseListing(datasnapshot, listingID, providerID);
