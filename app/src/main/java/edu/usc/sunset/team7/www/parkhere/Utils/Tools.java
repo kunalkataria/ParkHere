@@ -47,6 +47,11 @@ public class Tools {
         return dateTimeFormatter.print(dateTime);
     }
 
+    public static String getDateString(long unixTimeStamp) {
+        DateTime dateTime = new DateTime(unixTimeStamp * 1000);
+        return getDateString(dateTime);
+    }
+
     public static String getDateString(int year, int month, int day, int hour, int minute) {
 
         return month + "/" + day + "/" + year + " " + hour + ":" + minute;
