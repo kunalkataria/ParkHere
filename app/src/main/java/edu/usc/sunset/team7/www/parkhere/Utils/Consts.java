@@ -94,7 +94,7 @@ public class Consts {
     public static final String LISTING_IS_PAID = "Paid";
 
     //Booking Database
-    public static final String BOOKING_ID = "Listing ID";
+    public static final String BOOKING_ID = "Booking ID";
     public static final String BOOKING_START_TIME = "Start Time";
     public static final String BOOKING_END_TIME = "End Time";
     public static final String BOOKING_PROVIDER_ID = "Provider ID";

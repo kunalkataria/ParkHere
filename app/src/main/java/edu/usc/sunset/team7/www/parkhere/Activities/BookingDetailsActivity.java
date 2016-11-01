@@ -149,13 +149,15 @@ public class BookingDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String startTime = snapshot.child(Consts.BOOKING_START_TIME).getValue().toString();
-                    String providerID = snapshot.child(Consts.BOOKING_PROVIDER_ID).getValue().toString();
-                    String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
-                    long convertTime = Long.parseLong(startTime);
-                    long unixTime = System.currentTimeMillis() / 1000L;
-                    if(unixTime > convertTime) removeListing(listingID, providerID);
-                    else System.out.println(listingID + "has passed");
+                    if(snapshot.getKey().toString().equals(booking.getBookingID())) {
+                        String startTime = snapshot.child(Consts.BOOKING_START_TIME).getValue().toString();
+                        String providerID = snapshot.child(Consts.BOOKING_PROVIDER_ID).getValue().toString();
+                        String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
+                        long convertTime = Long.parseLong(startTime);
+                        long unixTime = System.currentTimeMillis() / 1000L;
+                        if(unixTime > convertTime) removeListing(listingID, providerID, booking.getBookingID());
+                        else System.out.println(listingID + "has passed");
+                    }
                 }
             }
 
@@ -166,7 +168,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
        // DatabaseReference providerListingRef = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).
     }
 
-    protected void removeListing(final String listingID, final String providerID){
+    protected void removeListing(final String listingID, final String providerID, final String bookingID){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(listingID);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -222,7 +224,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 }
                 //remove from inactive listing
                 FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(listingID).removeValue();
-                FirebaseDatabase.getInstance().getReference().child(Consts.BOOKINGS_DATABASE).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                FirebaseDatabase.getInstance().getReference().child(Consts.BOOKINGS_DATABASE).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bookingID).removeValue();
             }
 
             @Override
