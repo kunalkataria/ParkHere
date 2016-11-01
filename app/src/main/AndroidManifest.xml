@@ -74,6 +74,11 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden">
         </activity>
+        <activity android:name=".Activities.ReviewActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+
         <activity android:name=".Activities.LoginActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden">

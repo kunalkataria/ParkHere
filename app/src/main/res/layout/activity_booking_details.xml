@@ -29,7 +29,6 @@
                 android:id="@+id/provider_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/first_name"
                 android:gravity="center"
                 android:textSize="15sp"
                 android:clickable="true"
