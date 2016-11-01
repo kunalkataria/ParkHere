@@ -19,4 +19,8 @@
         <item name="android:textColorPrimary">@android:color/black</item>
     </style>
 
+    <style name="RatingBarTheme" parent="AppTheme">
+        <item name="colorAccent">@color/starColor</item>
+    </style>
+
 </resources>
