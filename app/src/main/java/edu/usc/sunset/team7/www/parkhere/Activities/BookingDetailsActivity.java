@@ -124,6 +124,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         descriptionBuilder.append("\nProvider phone number: " + providerPhoneNumber);
 
         descriptionBuilder.append("\n\nParking Information");
+        descriptionBuilder.append("\nLocation: (" + listing.getLatitude() + "," + listing.getLongitude() + ")");
         descriptionBuilder.append("\nPrice: " + listing.getPrice());
         descriptionBuilder.append("\nRefundable? " +listing.isRefundable());
         descriptionBuilder.append("\nHandicap? " + listing.isHandicap());

@@ -23,7 +23,11 @@
                 android:text="@string/booking_details"
                 android:gravity="center"
                 android:textSize="20sp"
-                android:layout_marginTop="40dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/blueClick"/>
+
+            <include layout="@layout/divider"/>
 
             <TextView
                 android:id="@+id/provider_name"
@@ -34,7 +38,7 @@
                 android:textSize="15sp"
                 android:clickable="true"
                 android:layout_marginTop="40dp"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/colorAccent"/>
 
             <ImageView
                 android:id="@+id/parking_image"
@@ -44,26 +48,48 @@
                 android:contentDescription="@string/profile_image_description"/>
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/booking_details"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:textColor="@color/blueClick"/>
+
+            <TextView
                 android:id="@+id/booking_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:text="@string/booking_details"
                 android:textSize="15sp"
-                android:layout_marginTop="40dp" />
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/review_booking_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/review"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:textSize="25sp"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/cancel_booking_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel_booking"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:textSize="25sp"
+                android:layout_marginBottom="20dp" />
 
         </LinearLayout>
     </ScrollView>

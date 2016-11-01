@@ -17,10 +17,26 @@
             android:layout_height="match_parent"
             tools:ignore="ScrollViewSize">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_listing"
+                android:gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:textSize="20dp"
+                android:textColor="@color/blueClick"
+                />
+
+            <include layout="@layout/divider"/>
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/name_textinputlayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp">
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/name_edittext"
                     android:layout_width="match_parent"
@@ -31,19 +47,28 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/description_textinputlayout"
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="100dp">
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/description_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/listing_description"
-                    android:inputType="textMultiLine"/>
+                    android:inputType="textMultiLine"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"/>
             </android.support.design.widget.TextInputLayout>
+
+            <include layout="@layout/divider"/>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/price_textinputlayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp">
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/price_edittext"
                     android:layout_width="match_parent"
@@ -53,19 +78,26 @@
                     android:hint="@string/listing_price" />
             </android.support.design.widget.TextInputLayout>
 
+
             <TextView
                 android:text="@string/refundable_policy"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/blueClick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/cancellation_textView"
-                android:clickable="true"/>
+                android:clickable="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"/>
 
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/myRadioGroup"
-                android:checkedButton="@+id/selectedCancellationPolicy">
+                android:checkedButton="@+id/selectedCancellationPolicy"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp">
 
                 <RadioButton
                     android:layout_width="wrap_content"
@@ -82,11 +114,18 @@
 
             </RadioGroup>
 
+            <include layout="@layout/divider"/>
+
             <Button
                 android:id="@+id/upload_parking_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/upload_parking_image" />
+                android:layout_height="50dp"
+                android:text="@string/upload_parking_image"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="20dp"
+                android:textSize="20dp"/>
+
 
             <ImageView
                 android:id="@+id/parking_image"
@@ -100,7 +139,9 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
+                android:padding="@dimen/padding_small"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/covered_button_control"
@@ -108,7 +149,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:textColor="@color/blueClick"/>
             </LinearLayout>
 
             <LinearLayout
@@ -116,7 +158,9 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
+                android:padding="@dimen/padding_small"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/compact_button_control"
@@ -124,7 +168,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:textColor="@color/blueClick"/>
             </LinearLayout>
 
             <LinearLayout
@@ -132,7 +177,10 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
+                android:padding="@dimen/padding_small"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp">
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/handicap_button_control"
@@ -140,13 +188,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:textColor="@color/blueClick"/>
             </LinearLayout>
+
+            <include layout="@layout/divider"/>
             <Button
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/upload_listing_button"
-                android:text="@string/submit"/>
+                android:text="@string/submit"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:textSize="25dp"/>
 
         </LinearLayout>
     </ScrollView>

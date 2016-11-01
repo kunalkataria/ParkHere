@@ -11,6 +11,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -54,52 +55,41 @@ public class PostListingActivity extends AppCompatActivity {
 
     private static final String TAG = "PostListingActivity";
 
-    @BindView(R.id.name_textinputlayout)
-    TextInputLayout parkingNameTextInputLayout;
-    @BindView(R.id.description_textinputlayout)
-    TextInputLayout descriptionTextInputLayout;
-    @BindView(R.id.price_textinputlayout)
-    TextInputLayout priceTextInputLayout;
+    @BindView(R.id.name_textinputlayout) TextInputLayout parkingNameTextInputLayout;
+    @BindView(R.id.description_textinputlayout) TextInputLayout descriptionTextInputLayout;
+    @BindView(R.id.price_textinputlayout) TextInputLayout priceTextInputLayout;
 
-    @BindView(R.id.name_edittext)
-    AppCompatEditText parkingNameEditText;
-    @BindView(R.id.description_edittext)
-    AppCompatEditText descriptionEditText;
-    @BindView(R.id.price_edittext)
-    AppCompatEditText priceEditText;
+    @BindView(R.id.name_edittext) AppCompatEditText parkingNameEditText;
+    @BindView(R.id.description_edittext) AppCompatEditText descriptionEditText;
+    @BindView(R.id.price_edittext) AppCompatEditText priceEditText;
 
     private String nameString, descriptionString;
     private double price;
 
-    @BindView(R.id.myRadioGroup)
-    RadioGroup radioGroup;
-    @BindView(R.id.refundable_rButton)
-    RadioButton refundableRButton;
-    @BindView(R.id.nonrefundable_rButton)
-    RadioButton nonrefundableRButton;
+    @BindView(R.id.myRadioGroup) RadioGroup radioGroup;
+    @BindView(R.id.refundable_rButton) RadioButton refundableRButton;
+    @BindView(R.id.nonrefundable_rButton) RadioButton nonrefundableRButton;
 
     private static Hashtable<Integer, String> cancellationIds;
 
     //Parking image controls
-    @BindView(R.id.upload_parking_button)
-    Button uploadParkingImageButton;
+    @BindView(R.id.upload_parking_button) Button uploadParkingImageButton;
 
     @BindView(R.id.parkingImage)
     ImageView parkingImageView;
 
     //Parking Type Buttons
-    @BindView(R.id.handicap_button_control)
-    SwitchCompat handicapSwitch;
-    @BindView(R.id.compact_button_control)
-    SwitchCompat compactSwitch;
-    @BindView(R.id.covered_button_control)
-    SwitchCompat coveredSwitch;
+    @BindView(R.id.handicap_button_control) SwitchCompat handicapSwitch;
+    @BindView(R.id.compact_button_control) SwitchCompat compactSwitch;
+    @BindView(R.id.covered_button_control) SwitchCompat coveredSwitch;
 
     // Date selector pieces
     @BindView(R.id.start_date_inputlayout) TextInputLayout startDateLayout;
     @BindView(R.id.stop_date_inputlayout) TextInputLayout stopDateLayout;
     @BindView(R.id.start_time_edittext) AppCompatEditText startDateEditText;
     @BindView(R.id.stop_time_edittext) AppCompatEditText stopDateEditText;
+
+    @BindView(R.id.post_listing_toolbar) Toolbar postListingToolbar;
 
     private DatePickerDialog startDatePicker;
     private DatePickerDialog stopDatePicker;
@@ -150,6 +140,12 @@ public class PostListingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_listing);
         ButterKnife.bind(this);
 
+        setSupportActionBar(postListingToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Post a Listing");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.post_listing_autocomplete_fragment);
 
@@ -169,7 +165,6 @@ public class PostListingActivity extends AppCompatActivity {
                 }
             });
         }
-
 
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();

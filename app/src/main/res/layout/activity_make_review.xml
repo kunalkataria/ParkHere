@@ -8,25 +8,46 @@
     <include layout="@layout/base_toolbar"
         android:id="@+id/review_toolbar"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/leave_review"
+        android:gravity="center"
+        android:textColor="@color/blueClick"
+        android:layout_marginTop="30dp"
+        android:textSize="25dp"/>
+
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/leave_review_rating_bar"
-        android:theme="@style/RatingBarTheme"/>
+        android:theme="@style/RatingBarTheme"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"/>
 
     <android.support.v7.widget.AppCompatEditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100sp"
+        android:inputType="textMultiLine"
         android:id="@+id/review_description_text"
         android:textSize="20sp"
-        android:hint="@string/review"/>
+        android:hint="@string/review"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"/>
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/submit_review_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:text="@string/review"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textColor="@color/colorAccent"
+        android:textSize="25dp"/>
 
     
 </LinearLayout>
