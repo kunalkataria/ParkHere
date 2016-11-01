@@ -34,7 +34,7 @@
                 android:textSize="15sp"
                 android:clickable="true"
                 android:layout_marginTop="40dp"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/blueClick"/>
 
             <ImageView
                 android:id="@+id/parking_image"
@@ -44,33 +44,60 @@
                 android:contentDescription="@string/profile_image_description"/>
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/blueClick"/>
+
+            <TextView
                 android:id="@+id/listing_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/listing_details"
                 android:textSize="15sp"
-                android:layout_marginTop="40dp" />
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <include layout="@layout/divider"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/book_listing_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/book_listing"
-                android:layout_marginTop="20dp"/>
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textSize="18dp"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/edit_listing_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/edit_listing"
-                android:layout_marginTop="20dp"/>
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="20dp"
+                android:textSize="18dp"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/delete_listing_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
                 android:text="@string/delete_listing"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="18dp"/>
 
         </LinearLayout>
     </ScrollView>
