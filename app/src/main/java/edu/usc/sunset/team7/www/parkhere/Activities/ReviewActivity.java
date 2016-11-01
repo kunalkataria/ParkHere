@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.Toolbar;
 import android.widget.RatingBar;
 
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +28,7 @@ public class ReviewActivity extends AppCompatActivity {
     @BindView(R.id.leave_review_rating_bar) RatingBar ratingBar;
     @BindView(R.id.review_description_text) AppCompatEditText reviewTextView;
     @BindView(R.id.submit_review_button) AppCompatButton submitReviewButton;
-
+    @BindView(R.id.review_toolbar) Toolbar reviewToolbar;
     private static final String TAG = "ReviewActivity";
     private Booking booking;
 
@@ -43,6 +44,12 @@ public class ReviewActivity extends AppCompatActivity {
         booking = (Booking) getIntent().getSerializableExtra(Consts.BOOKING_EXTRA);
         setContentView(R.layout.activity_make_review);
         ButterKnife.bind(this);
+
+        setSupportActionBar(reviewToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Review");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         setValues();
     }
 
