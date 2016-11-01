@@ -16,4 +16,5 @@
         android:id="@+id/review_text"
         android:textSize="20sp"
         android:hint="@string/review"/>
+
 </LinearLayout>
