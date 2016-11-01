@@ -9,9 +9,28 @@
         android:id="@+id/post_listing_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/post_listing"/>
+        android:text="@string/post_listing"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textColor="@color/colorAccent"/>
+
+    <include layout="@layout/divider"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/listing"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/blueClick"
+        />
 
     <ListView
+        android:layout_marginTop="10dp"
         android:id="@+id/listing_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

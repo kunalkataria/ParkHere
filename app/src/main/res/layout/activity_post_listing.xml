@@ -18,6 +18,15 @@
             android:layout_height="match_parent"
             tools:ignore="ScrollViewSize">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/search_by_address"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/blueClick"
+                />
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="96dp"
@@ -34,7 +43,9 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/name_textinputlayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/name_edittext"
                     android:layout_width="match_parent"
@@ -45,7 +56,9 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/description_textinputlayout"
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/description_edittext"
                     android:layout_width="match_parent"
@@ -54,28 +67,20 @@
                     android:inputType="textMultiLine"/>
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/price_textinputlayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <android.support.v7.widget.AppCompatEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:ems="10"
-                    android:id="@+id/price_edittext"
-                    android:hint="@string/listing_price" />
-            </android.support.design.widget.TextInputLayout>
-
             <TextView
                 android:text="@string/dates_available"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/blueClick"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/start_date_inputlayout"
@@ -113,16 +118,36 @@
 
             </LinearLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/price_textinputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/price_edittext"
+                    android:hint="@string/listing_price" />
+            </android.support.design.widget.TextInputLayout>
+
             <TextView
                 android:text="@string/cancellation_policy"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/blueClick"
+                android:layout_marginTop="10dp"/>
 
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/myRadioGroup"
-                android:checkedButton="@+id/selectedCancellationPolicy">
+                android:checkedButton="@+id/selectedCancellationPolicy"
+                android:layout_marginBottom="10dp">
 
                 <RadioButton
                     android:layout_width="wrap_content"
@@ -139,25 +164,14 @@
 
             </RadioGroup>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/upload_parking_button"
-                android:text="@string/upload_parking_image" />
-
-            <ImageView
-                android:id="@+id/parkingImage"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/profile_image_description"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
+                android:padding="@dimen/padding_small"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/covered_button_control"
@@ -165,7 +179,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:textColor="@color/blueClick"/>
             </LinearLayout>
 
             <LinearLayout
@@ -173,7 +188,9 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
+                android:padding="@dimen/padding_small"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/compact_button_control"
@@ -181,7 +198,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:textColor="@color/blueClick"/>
             </LinearLayout>
 
             <LinearLayout
@@ -189,7 +207,10 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
+                android:padding="@dimen/padding_small"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp">
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/handicap_button_control"
@@ -197,14 +218,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:textColor="@color/blueClick"/>
             </LinearLayout>
+
+            <include layout="@layout/divider"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/upload_parking_button"
+                android:text="@string/upload_parking_image"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"/>
+
+            <ImageView
+                android:id="@+id/parkingImage"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/profile_image_description"
+                android:layout_marginBottom="20dp"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/upload_listing_button"
-                android:text="@string/submit"/>
+                android:text="@string/submit"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:textSize="20dp"
+                android:layout_marginBottom="20dp"/>
 
         </LinearLayout>
     </ScrollView>
