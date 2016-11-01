@@ -91,12 +91,10 @@ public class CustomPaymentAdapter extends BaseAdapter {
         }
         
         long startTime = ((Listing) getItem(position)).getStartTime();
-        DateTime startDateTime = new DateTime(startTime);
         long endTime = ((Listing) getItem(position)).getStopTime();
-        DateTime endDateTime = new DateTime(endTime);
 
         item.bookingLabel.setText(((Listing)getItem(position)).getName());
-        item.dateLabel.setText(Tools.getDateString(startDateTime) + "--" + Tools.getDateString(endDateTime));
+        item.dateLabel.setText(Tools.getDateString(startTime) + "--" + Tools.getDateString(endTime));
         double userBalance = ((Listing)getItem(position)).getPrice();
         item.amountLabel.setText("$"+String.format("%.2f",userBalance));
         return rowView;
