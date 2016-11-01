@@ -102,6 +102,11 @@ public class HomeActivity extends AppCompatActivity {
 
         String currentFragmentTag = getIntent().getStringExtra(FRAGMENT_TAG);
 
+        // go to search screen if starting home actviity without passing a fragment tag
+        if (currentFragmentTag == null) {
+            currentFragmentTag = Consts.SEARCH_FRAGMENT_TAG;
+        }
+
         Fragment currentFragment = null;
 
         // switch on the currentFragmentTag, which came from the intent

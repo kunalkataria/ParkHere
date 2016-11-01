@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListViewCompat;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,6 +39,7 @@ public class ResultsActivity extends AppCompatActivity {
     @BindView(R.id.list_content_space) LinearLayout listContentSpace;
     @BindView(R.id.avg_parking_price_value) TextView avgParkingView;
     @BindView(R.id.loading_panel) RelativeLayout loadingPanel;
+    @BindView(R.id.results_toolbar) Toolbar resultsToolbar;
 
     private boolean covered = false;
     private boolean compact = false;
@@ -88,6 +91,12 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
         ButterKnife.bind(this);
+        setSupportActionBar(resultsToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Search Results");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(Consts.SEARCH_INTENT_FILTER));
         Intent intent = getIntent();
         double latitude = intent.getDoubleExtra(Consts.LATITUDE_EXTRA, 0);
@@ -150,6 +159,16 @@ public class ResultsActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     private List<ResultsPair> filterResultsOnHandicap(List<ResultsPair> currentResults) {
