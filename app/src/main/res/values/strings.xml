@@ -81,6 +81,7 @@
     <string name="paypal_button">Paypal</string>
     <string name="credit_card_button">Credit Card</string>
     <string name="credit_card_type">Credit Card Information</string>
+    <string name="cc_type">Credit Card Type</string>
     <string name="name_on_card">Name on Card</string>
     <string name="credit_card_number">Credit Card Number</string>
     <string name="security_number">Security Number</string>
