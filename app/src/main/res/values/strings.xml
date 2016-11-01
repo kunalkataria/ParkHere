@@ -5,6 +5,7 @@
     <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
+    <string name="forgot_password">Forgot Password?</string>
     <string name="login">Login</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
@@ -20,19 +21,47 @@
     <string name="upload_parking_image">Upload parking image</string>
     <string name="submit">Submit</string>
     <string name="listing_price">$ Price</string>
+    <string name="search_within_daterange">Search within date range</string>
+    <string name="dates_available">Dates space is available</string>
+    <string name="submit_review">Submit Review</string>
 
     <string name="start_time_label">Start Time Label</string>
     <string name="end_time_label">End Time Label</string>
 
-    <string name="post_listing">Post a listing!</string>
+    <string name="delete_listing">Delete Listing</string>
+    <string name="post_listing">Post a listing</string>
     <string name="search">Search</string>
+    <string name="edit_listing">Edit the listing</string>
+    <string name="leave_review">Rate the booking out of 5 stars and leave a comment!</string>
+
     <string name="listing">My Listings</string>
     <string name="booking">My Bookings</string>
+    <string name="balance">My Balance</string>
+    <string name="profile">My Profile</string>
     <string name="upload_picture">Upload profile image</string>
     <string name="profile_image_description">Profile Image</string>
     <string name="select_picture">Select Picture</string>
     <string name="confirm">Confirm</string>
-    <string name="book_listing">Book this listing!</string>
+    <string name="book_listing">Book this listing</string>
+    <string name="filter">Filter</string>
+    <string name="filters">Filters</string>
+    <string name="avg_parking_price">Average Parking Price (from ParkWhiz): $</string>
+    <string name="avg_parking_price_not_found">Average Parking Price (from ParkWhiz): No data found</string>
+    <string name="start_date">Start date</string>
+    <string name="stop_date">Stop date</string>
+    <string name="start_time">Start time</string>
+    <string name="stop_time">Stop time</string>
+    <string name="review">Review</string>
+    <string name="current_balance">Current Balance</string>
+    <string name="are_you_providing">Will you be providing parking spots?</string>
+    <string name="transfer_to_bank">Transfer balance to bank account</string>
+    <string name="no_booking_payments">No pending booking payments to confirm</string>
+
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+
+    <string name="open_drawer">Open drawer</string>
+    <string name="close_drawer">Close drawer</string>
 
     <!-- Placeholder strings for adapter views. -->
     <string name="location_label">Location label</string>
@@ -42,23 +71,26 @@
     <string name="distance_label">Distance label</string>
 
     <!-- Strings for cancellation policies-->
+    <string name = "refundable_policy">Refundable</string>
+    <string name = "nonrefundable_policy">Nonrefundable</string>
     <string name="flexible_policy">Flexible</string>
     <string name="moderate_policy">Moderate</string>
     <string name="strict_policy">Strict</string>
     <string name="superstrict30_policy">Super Strict 30</string>
     <string name="superstrict60_policy">Super Strict 60</string>
     <string name="longterm_policy">Long Term</string>
-    <string name="cancellation_policies">Cancellation Policies (click for info)</string>
+    <string name="cancellation_policy">Cancellation Policy</string>
 
     <!-- Transaction strings-->
     <string name="choose_payment">Choose your payment method</string>
     <string name="paypal_button">Paypal</string>
     <string name="credit_card_button">Credit Card</string>
     <string name="credit_card_type">Credit Card Information</string>
+    <string name="cc_type">Credit Card Type</string>
     <string name="name_on_card">Name on Card</string>
     <string name="credit_card_number">Credit Card Number</string>
     <string name="security_number">Security Number</string>
-    <string name="expiration_data">Expiration Date</string>
+    <string name="expiration_date">Expiration Date</string>
     <string name="mastercard">Mastercard</string>
     <string name="visa">Visa</string>
     <string name="american_express">American Express</string>
@@ -75,8 +107,28 @@
     <string name="paypal_instructions">Please enter your paypal information to validate payment.</string>
 
     <!-- Transaction stuff -->
-    <string name="confirmation_header">Please confirm the following information is correct before you book the listing.</string>
+    <string name="confirmation_header">Please confirm the following information is correct.</string>
     <string name="listing_details">Listing Details</string>
+    <string name="billing_information">Billing Information</string>
+
+    <string name ="booking_details">Booking Details</string>
+    <string name="place_booking">Place Booking</string>
+    <string name="expiration_date_month_year"> Expiration Date (Month and Year)</string>
+
+    <string name="reviews">My Reviews</string>
+    <string name="rating">Rating</string>
+    <string name="confirm_payment">Confirm Booking Payments</string>
+    <string name="confirm_payment_amount">$</string>
+    <string name="cancel_booking">Cancel Booking</string>
+
+    <string name="hi">Hi</string>
+    <string name="login_welcome">Welcome to ParkHere</string>
+    <string name="solve_parking">Let\'s solve parking together</string>
+
+    <string name="search_by_address">Search by address:</string>
+
+    <string name="or_search_by">Or search by coordinates:</string>
+    <string name="other_options">Other search options:</string>
 
 </resources>
 

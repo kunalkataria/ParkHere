@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 /**
  * Created by Jonathan on 10/26/16.
@@ -22,6 +23,7 @@ public class TransactionActivity extends AppCompatActivity {
     Button paypalButton;
     @BindView(R.id.credit_card_button)
     Button creditCardButton;
+
 
     public static void startActivity(Context context) {
         Intent i = new Intent(context, TransactionActivity.class);
@@ -37,12 +39,20 @@ public class TransactionActivity extends AppCompatActivity {
 
     @OnClick(R.id.paypal_button)
     protected void paypalClicked() {
-        PaypalActivity.startActivity(TransactionActivity.this);
+        Intent intent = new Intent(TransactionActivity.this, PaypalActivity.class);
+        Bundle bundle = getIntent().getExtras();
+        bundle.putString(Consts.PAYMENT_TYPE, Consts.PAYPAL);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @OnClick(R.id.credit_card_button)
     protected void creditCardClicked() {
-        CreditCardActivity.startActivity(TransactionActivity.this);
+        Intent intent = new Intent(TransactionActivity.this, CreditCardActivity.class);
+        Bundle bundle = getIntent().getExtras();
+        bundle.putString(Consts.PAYMENT_TYPE, Consts.CREDIT_CARD);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
 }

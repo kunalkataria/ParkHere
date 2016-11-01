@@ -10,11 +10,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 
 /**
@@ -22,11 +25,10 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
  */
 
 public class CustomResultsAdapter extends BaseAdapter {
-    private ArrayList<ResultsPair> allResults;
-    private static LayoutInflater inflater = null;
+    private List<ResultsPair> allResults;
     private Context context;
 
-    public CustomResultsAdapter(Activity activity, ArrayList<ResultsPair> allResults) {
+    public CustomResultsAdapter(Activity activity, List<ResultsPair> allResults) {
         this.context = activity;
         this.allResults = allResults;
     }
@@ -54,23 +56,31 @@ public class CustomResultsAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ItemShell item;
         View rowView = convertView;
-        if(rowView != null) {
-            inflater = ((Activity)context).getLayoutInflater();
+        if(rowView == null) {
+            LayoutInflater inflater=((Activity)context).getLayoutInflater();
             rowView = inflater.inflate(R.layout.results_view, parent, false);
 
             item = new ItemShell();
             item.searchLabel = (TextView) rowView.findViewById(R.id.results_label);
             item.distanceLabel = (TextView) rowView.findViewById(R.id.distance_label);
             item.imgView = (ImageView) rowView.findViewById(R.id.results_image);
+
+            rowView.setTag(item);
         }
         else {
             item = (ItemShell) rowView.getTag();
         }
 
-        item.searchLabel.setText(((ResultsPair)getItem(position)).getListing().getName());
-        double myDouble = ((ResultsPair) getItem(position)).getDistance();
+        ResultsPair currentResult = (ResultsPair) getItem(position);
+
+        String currentName = currentResult.getListing().getName();
+
+        item.searchLabel.setText(currentName);
+
+        double myDouble = currentResult.getDistance();
+
         item.distanceLabel.setText(Double.toString(myDouble));
-        //image stuff later
+        Picasso.with(context).load(currentResult.getListing().getImageURL()).into(item.imgView);
 
         rowView.setOnClickListener(new View.OnClickListener() {
 
@@ -78,6 +88,7 @@ public class CustomResultsAdapter extends BaseAdapter {
             public void onClick(View view) {
                 Intent detailsIntent = new Intent(context, ListingDetailsActivity.class);
                 detailsIntent.putExtra(Consts.LISTING_RESULT_EXTRA, (ResultsPair) getItem(position));
+                detailsIntent.putExtra(Consts.MY_OWN_LISTING_EXTRA, false);
                 context.startActivity(detailsIntent);
             }
         });

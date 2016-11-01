@@ -1,10 +1,11 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -22,9 +23,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnItemClick;
+import edu.usc.sunset.team7.www.parkhere.Fragments.BalanceFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.BookingFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.ListingFragment;
+import edu.usc.sunset.team7.www.parkhere.Fragments.ProfileFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.SearchFragment;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
@@ -32,12 +34,23 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 public class HomeActivity extends AppCompatActivity {
 
     @BindView(R.id.home_toolbar) Toolbar homeToolbar;
+    @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    ActionBarDrawerToggle mDrawerToggle;
 
     public static final String FRAGMENT_TAG = "fragment_tag";
     public GoogleApiClient mGoogleApiClient;
-    private static final String[] fragmentTitles = new String[] {"Search", "Listings", "Bookings"};
+    private static final String[] fragmentTitles = new String[]
+                    {"Search",
+                    "Listings",
+                    "Bookings",
+                    "Balance",
+                    "My Profile"};
     private static final String[] fragmentTags = new String[]
-            {Consts.SEARCH_FRAGMENT_TAG, Consts.LISTING_FRAGMENT_TAG, Consts.BOOKING_FRAGMENT_TAG};
+                    {Consts.SEARCH_FRAGMENT_TAG,
+                    Consts.LISTING_FRAGMENT_TAG,
+                    Consts.BOOKING_FRAGMENT_TAG,
+                    Consts.BALANCE_FRAGMENT_TAG,
+                    Consts.MY_PROFILE_FRAGMENT_TAG};
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     
@@ -52,6 +65,14 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public static void startActivityPostBooking(Context context) {
+        Intent newIntent = new Intent(context, HomeActivity.class);
+        newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        newIntent.putExtra(FRAGMENT_TAG, Consts.BOOKING_FRAGMENT_TAG);
+        context.startActivity(newIntent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +80,26 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(homeToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+        }
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, homeToolbar, R.string.open_drawer, R.string.close_drawer)
+        {
+            public void onDrawerClosed(View view) {
+                supportInvalidateOptionsMenu();
+                //drawerOpened = false;
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                supportInvalidateOptionsMenu();
+                //drawerOpened = true;
+            }
+        };
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerToggle.syncState();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -83,6 +123,11 @@ public class HomeActivity extends AppCompatActivity {
 
         String currentFragmentTag = getIntent().getStringExtra(FRAGMENT_TAG);
 
+        // go to search screen if starting home actviity without passing a fragment tag
+        if (currentFragmentTag == null) {
+            currentFragmentTag = Consts.SEARCH_FRAGMENT_TAG;
+        }
+
         Fragment currentFragment = null;
 
         // switch on the currentFragmentTag, which came from the intent
@@ -96,6 +141,15 @@ public class HomeActivity extends AppCompatActivity {
                     currentFragment = new SearchFragment();
                 }
                 setToolbarTitle(getResources().getString(R.string.search));
+                break;
+            case Consts.BOOKING_FRAGMENT_TAG:
+                if (getFragmentManager().findFragmentByTag(Consts.BOOKING_FRAGMENT_TAG) != null) {
+                    currentFragment = getFragmentManager().findFragmentByTag(Consts.BOOKING_FRAGMENT_TAG);
+                } else {
+                    currentFragment = new BookingFragment();
+                }
+                setToolbarTitle(getResources().getString(R.string.booking));
+                break;
         }
 
         // use the fragment manager to move to the fragment selected by the switch statement
@@ -105,6 +159,18 @@ public class HomeActivity extends AppCompatActivity {
             //TODO: figure out what do in this case
         }
 
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -158,6 +224,14 @@ public class HomeActivity extends AppCompatActivity {
                 case Consts.BOOKING_FRAGMENT_TAG:
                     currentFragment = new BookingFragment();
                     setToolbarTitle(getResources().getString(R.string.booking));
+                    break;
+                case Consts.BALANCE_FRAGMENT_TAG:
+                    currentFragment = new BalanceFragment();
+                    setToolbarTitle(getResources().getString(R.string.balance));
+                    break;
+                case Consts.MY_PROFILE_FRAGMENT_TAG:
+                    currentFragment = new ProfileFragment();
+                    setToolbarTitle(getResources().getString(R.string.profile));
                     break;
             }
         }

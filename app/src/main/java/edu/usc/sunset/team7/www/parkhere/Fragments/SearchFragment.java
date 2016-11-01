@@ -1,12 +1,20 @@
 package edu.usc.sunset.team7.www.parkhere.Fragments;
 
+import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.content.Intent;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -17,10 +25,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.joda.time.DateTime;
+
+import java.util.Calendar;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.Activities.ResultsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 
 import static com.google.android.gms.internal.zzs.TAG;
 
@@ -30,6 +45,37 @@ import static com.google.android.gms.internal.zzs.TAG;
 
 public class SearchFragment extends Fragment {
 
+    @BindView(R.id.start_date_inputlayout) TextInputLayout startDateInputlayout;
+    @BindView(R.id.stop_date_inputlayout) TextInputLayout stopDateInputLayout;
+    @BindView(R.id.start_date_edittext) AppCompatEditText startDateEditText;
+    @BindView(R.id.stop_date_edittext) AppCompatEditText stopDateEditText;
+
+    @BindView(R.id.latitude_edittext) AppCompatEditText latitudeEditText;
+    @BindView(R.id.longitude_edittext) AppCompatEditText longitudeEditText;
+
+    @BindView(R.id.search_date_checkbox) AppCompatCheckBox searchDateCheckbox;
+
+    private DatePickerDialog startDatePicker;
+    private DatePickerDialog stopDatePicker;
+
+    private TimePickerDialog startTimePicker;
+    private TimePickerDialog stopTimePicker;
+
+    private long startDate;
+    private long stopDate;
+
+    private int startYear;
+    private int startMonth;
+    private int startDay;
+    private int startHour;
+    private int startMinute;
+
+    private int stopYear;
+    private int stopMonth;
+    private int stopDay;
+    private int stopHour;
+    private int stopMinute;
+
     private Place locationSelected;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private GoogleApiClient mGoogleApiClient;
@@ -37,17 +83,20 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedBundleInstance) {
         super.onCreate(savedBundleInstance);
-        locationSelected = null;
+        startDate = -1;
+        stopDate = -1;
     }
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.search_autocomplete_bar);
         ButterKnife.bind(this, view);
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getChildFragmentManager().findFragmentById(R.id.search_autocomplete_fragment);
+        Log.i(TAG, "on create view");
         //set location to be the current location
         if (autocompleteFragment != null) {
+            Log.i(TAG, "Autocomplete Fragment not null");
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(Place place) {
@@ -63,7 +112,6 @@ public class SearchFragment extends Fragment {
             });
 
         }
-        Log.i(TAG, "Returning view.");
         return view;
     }
 
@@ -71,38 +119,112 @@ public class SearchFragment extends Fragment {
     protected void startSearch() {
         if (locationSelected != null) {
             LatLng latLng = locationSelected.getLatLng();
-            ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, 0, 0);
+            // set start date to current time if the time is not selected
+            if (startDate == -1) {
+                Calendar c = Calendar.getInstance();
+                startDate = c.getTimeInMillis() / 1000;
+            }
+            ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, startDate, stopDate);
+        } else {
+            if (!latitudeEditText.getEditableText().toString().isEmpty() &&
+                    !longitudeEditText.getEditableText().toString().isEmpty()) {
+                double lat = Double.parseDouble(latitudeEditText.getEditableText().toString());
+                double lon = Double.parseDouble(longitudeEditText.getEditableText().toString());
+                System.out.println(lat + " " + lon );
+                // set start date to current time if the time is not selected
+                if (startDate == -1) {
+                    Calendar c = Calendar.getInstance();
+                    startDate = c.getTimeInMillis() / 1000;
+                }
+                ResultsActivity.startActivity(getActivity(), lat, lon, startDate, stopDate);
+            } else {
+                Toast.makeText(getActivity(), "Please enter both a latitude and longitude",
+                        Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
-    public void sendLocationToFirebase() {
-        if(locationSelected == null) return;
+    @OnClick(R.id.start_date_edittext)
+    protected void startDateDialog() {
+        if (searchDateCheckbox.isChecked()) {
+            Calendar c = Calendar.getInstance();
+            TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                    startHour = hourOfDay;
+                    startMinute = minute;
+                    DateTime dateTime = new DateTime(startYear, startMonth, startDay, startHour, startMinute);
+                    startDate = dateTime.getMillis() / 1000;
+                    startDateEditText.setText(Tools.getDateString(dateTime));
+                }
+            };
+            startTimePicker = new TimePickerDialog(getActivity(), startTimeListener, c.get(Calendar.HOUR), c.get(Calendar.MINUTE), false);
+            DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    startYear = year;
+                    startMonth = month + 1;
+                    startDay = day;
+                    startTimePicker.show();
+                }
+            };
+            startDatePicker = new DatePickerDialog
+                    (getActivity(), startDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+            startDatePicker.show();
 
-        LatLng latLng = locationSelected.getLatLng();
-
-        //send it over
-//        try {
-//            String url = "http://www.parkhere-ceccb.appspot.com/?"+
-//                    "lat="+latLng.latitude+
-//                    "&long="+latLng.longitude;
-//            URL servletURL = new URL(url);
-//            HttpURLConnection connection = (HttpURLConnection) servletURL.openConnection();
-//            connection.setRequestMethod("GET");
-//            connection.setRequestProperty("Content-Type", "text/plain");
-//            connection.setRequestProperty("charset", "utf-8");
-//            connection.connect();
-//
-//            //reading back listings as json
-//            InputStream is = connection.getInputStream();
-//            JsonReader reader = new JsonReader(new InputStreamReader(is));
-//            while(reader.hasNext()) {
-//                reader.beginObject();
-//
-//            }
-//        } catch (IOException ioe) {
-//            System.out.println(ioe.getMessage());
-//        }
+        }
     }
 
+    @OnClick(R.id.stop_date_edittext)
+    protected void stopDateDialog() {
+        if (searchDateCheckbox.isChecked()) {
+            Calendar c = Calendar.getInstance();
+            TimePickerDialog.OnTimeSetListener stopTimeListener = new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                    stopHour = hourOfDay;
+                    stopMinute = minute;
+                    DateTime dateTime = new DateTime(stopYear, stopMonth, stopDay, stopHour, stopMinute);
+                    stopDate = dateTime.getMillis() / 1000;
+                    stopDateEditText.setText(Tools.getDateString(dateTime));
+                }
+            };
+            stopTimePicker = new TimePickerDialog(getActivity(), stopTimeListener, c.get(Calendar.HOUR), c.get(Calendar.MINUTE), false);
+            DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    stopYear = year;
+                    stopMonth = month + 1;
+                    stopDay = day;
+                    stopTimePicker.show();
+                }
+            };
+            stopDatePicker = new DatePickerDialog
+                    (getActivity(), startDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+            stopDatePicker.show();
+        }
+    }
+
+    @OnCheckedChanged(R.id.search_date_checkbox)
+    protected void searchWithDateCheckbox() {
+        if (!searchDateCheckbox.isChecked()) {
+            // clear start and stop dates
+            clearStart();
+            clearStop();
+        }
+    }
+
+    // set the time to be the current time when clearing
+    private void clearStart() {
+        startDate = -1;
+        startDateEditText.setText("");
+    }
+
+    // set stop time to -1 for server
+    private void clearStop() {
+        stopDate = -1;
+        stopDateEditText.setText("");
+    }
 
 }

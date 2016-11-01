@@ -1,23 +1,28 @@
 package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
+import java.io.Serializable;
+
 /**
  * Created by Acer on 10/18/2016.
  */
 
-public class Booking {
+public class Booking implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Listing mListing;
-    private PublicUserProfile seeker;
-    private int providerRating;
-    private int spaceRating;
-    private String review;
+    private String providerID;
+    private String bookingID;
     private long bookStartTime;
     private long bookEndTime;
 
-    public Booking(Listing mListing, PublicUserProfile seeker) {
+    public Booking(Listing mListing) {
         this.mListing = mListing;
-        this.seeker = seeker;
     }
+
+    public void setBookingID(String bookingID) { this.bookingID = bookingID; }
+
+    public String getBookingID() { return this.bookingID; }
 
     public Listing getMListing() {
         return this.mListing;
@@ -25,35 +30,6 @@ public class Booking {
 
     public void setMListing(Listing mListing) {
         this.mListing = mListing;
-    }
-
-    public PublicUserProfile getSeeker() {
-        return this.seeker;
-    }
-
-    public void setSeeker(PublicUserProfile seeker) {
-        this.seeker = seeker;
-    }
-
-    public int getProviderRating() {
-        return this.providerRating;
-    }
-
-    public void setProviderRating(int providerRating) {
-        this.providerRating = providerRating;
-    }
-
-    public int getSpaceRating() {
-        return this.spaceRating;
-    }
-
-    public String getReview() {
-        return this.review;
-    }
-
-    public void rate(int providerRating, String review) {
-        this.providerRating = providerRating;
-        this.review = review;
     }
 
     public long getBookStartTime() {
@@ -72,5 +48,8 @@ public class Booking {
         this.bookEndTime = bookEndTime;
     }
 
+    public String getProviderID() { return providerID; }
+
+    public void setProviderID(String providerID) {this.providerID = providerID; }
 
 }

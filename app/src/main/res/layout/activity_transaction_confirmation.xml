@@ -18,13 +18,72 @@
             android:layout_height="match_parent"
             tools:ignore="ScrollViewSize">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/credit_card_type"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:layout_marginTop="50dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/confirmation_header"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/blueClick"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="40dp" />
+
+            <TextView
+                android:id="@+id/listing_details_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="40dp"
+                android:gravity="center"/>
+
+            <include layout="@layout/divider"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/billing_information"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="40dp" />
+
+            <TextView
+                android:id="@+id/billing_information_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/billing_information"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="40dp"
+                android:gravity="center"/>
+
+            <include layout="@layout/divider"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/place_booking_button"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/place_booking"
+                android:textColor="@color/colorAccent"
+                android:textSize="25sp"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+
+
+
 
         </LinearLayout>
 
