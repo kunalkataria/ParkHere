@@ -91,7 +91,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
                     //TODO: followup - that's because we were using an inconsistent user database
                     providerFirstName = dataSnapshot.child(Consts.USER_FIRSTNAME).getValue().toString();
-                    providerNameTextView.setText(providerFirstName);
+                    providerNameTextView.setText("Owner: " + providerFirstName);
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
