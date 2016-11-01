@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="starColor">#FFCC00</color>
+    <color name="blueClick">#0099CC</color>
 </resources>

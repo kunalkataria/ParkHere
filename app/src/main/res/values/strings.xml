@@ -5,6 +5,7 @@
     <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
+    <string name="forgot_password">Forgot Password?</string>
     <string name="login">Login</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
@@ -112,6 +113,15 @@
     <string name="confirm_payment">Confirm Booking Payments</string>
     <string name="confirm_payment_amount">$</string>
     <string name="cancel_booking">Cancel Booking</string>
+
+    <string name="hi">Hi</string>
+    <string name="login_welcome">Welcome to ParkHere</string>
+    <string name="solve_parking">Let\'s solve parking together</string>
+
+    <string name="search_by_address">Search by address:</string>
+
+    <string name="or_search_by">Or search by coordinates:</string>
+    <string name="other_options">Other search options:</string>
 
 </resources>
 
