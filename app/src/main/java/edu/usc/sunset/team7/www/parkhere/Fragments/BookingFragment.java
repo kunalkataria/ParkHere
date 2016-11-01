@@ -44,11 +44,12 @@ public class BookingFragment extends Fragment {
         //Get booking from database
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        allBookings = new ArrayList<Booking>();
     }
 
     @Override
     public void onResume() {
+        super.onResume();
+        allBookings = new ArrayList<Booking>();
         getAllBookings();
     }
 
