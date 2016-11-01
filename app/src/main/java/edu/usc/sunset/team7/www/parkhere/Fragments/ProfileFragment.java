@@ -121,7 +121,6 @@ public class ProfileFragment extends Fragment{
                         }
                     });
                 }
-                setValues();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {}
@@ -133,25 +132,39 @@ public class ProfileFragment extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(uid)){
+
                     if(dataSnapshot.child(uid).hasChildren()){
-                        int rating = -1;
+                        int ratings = -1;
+                        int counter = 0;
                         String description = null;
                         for(DataSnapshot child : dataSnapshot.child(uid).getChildren()){
-                            switch (child.getKey()) {
-                                case Consts.REVIEW_DESCRIPTION:
-                                    description = child.getValue().toString();
-                                    break;
-                                case Consts.REVIEW_RATING:
-                                    rating = (int)child.getValue();
-                                    break;
+                            for (DataSnapshot child2 : child.getChildren()){
+                                switch (child2.getKey()) {
+                                    case Consts.REVIEW_DESCRIPTION:
+                                        description = child2.getValue().toString();
+                                        break;
+                                    case Consts.REVIEW_RATING:
+                                        ratings = Integer.parseInt(child2.getValue().toString());
+                                        rating += (double)ratings;
+                                        counter++;
+                                        break;
+                                }
+                            }
+                            Log.d(TAG, "Description: " + description);
+                            Log.d(TAG, "a Rating value: " + Integer.toString(ratings));
+                            if(ratings !=-1 && description != null){
+                                Log.d(TAG, "Created review");
+                                Review r = new Review(ratings, description);
+                                reviews.add(r);
+
                             }
                         }
-                        if(rating!=-1 && description==null){
-                            Review r = new Review(rating, description);
-                            reviews.add(r);
-                        }
+                        rating = rating/(double) counter;
+                        Log.d(TAG, Double.toString(rating));
+                        Log.d(TAG, "Reviews Size: " + Integer.toString(reviews.size()));
                     }
                 }
+                setValues();
             }
 
             @Override
