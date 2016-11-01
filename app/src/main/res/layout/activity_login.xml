@@ -60,7 +60,7 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/login_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:text="@string/login"
             android:layout_marginTop="20dp"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
@@ -70,11 +70,10 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/register_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:text="@string/register"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:textColor="@color/blueClick"
-            android:layout_marginTop="20dp"/>
+            android:textColor="@color/blueClick" />
 
         <Button
             android:layout_width="match_parent"
@@ -83,7 +82,8 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:textColor="@color/colorAccent"
             android:text="@string/forgot_password"
-            android:layout_marginTop="50dp" />
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
 
     </LinearLayout>
 </ScrollView>

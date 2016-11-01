@@ -83,21 +83,15 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
         myOwnListing = providerID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        if (!myOwnListing) {
             DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
                     .child(providerID);
-            System.out.println(providerNameRef.toString());
             providerNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    String firstName = dataSnapshot.child(Consts.USER_FIRSTNAME)
-                            .getValue()
-                            .toString();
-
                     //TODO: followup - that's because we were using an inconsistent user database
                     providerFirstName = dataSnapshot.child(Consts.USER_FIRSTNAME).getValue().toString();
-                    providerNameTextView.setText(providerFirstName);
+                    providerNameTextView.setText("Owner: " + providerFirstName);
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -105,7 +99,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
                 }
             });
         }
-    }
+
 
     private void displayView(){
         //DISPLAY BUTTONS ACCORDING TO USER
@@ -148,7 +142,6 @@ public class ListingDetailsActivity extends AppCompatActivity {
         descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
         if (!myOwnListing) {
             descriptionBuilder.append("\nDistance Away: " + listingResultPair.getDistance() + " miles");
-            descriptionBuilder.append("\nListing Provider: " + providerFirstName);
         }
         descriptionBuilder.append("\nPrice: $" + listing.getPrice());
         descriptionBuilder.append("\nRefundable? " +listing.isRefundable());
