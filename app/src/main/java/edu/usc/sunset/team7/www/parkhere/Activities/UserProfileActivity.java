@@ -111,7 +111,6 @@ public class UserProfileActivity extends AppCompatActivity {
                         }
                     });
                 }
-                setValues();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {}
@@ -124,24 +123,26 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(uid)){
                     if(dataSnapshot.child(uid).hasChildren()){
-                        int rating = -1;
+                        int ratings = -1;
                         String description = null;
                         for(DataSnapshot child : dataSnapshot.child(uid).getChildren()){
                             switch (child.getKey()) {
                                 case Consts.REVIEW_DESCRIPTION:
                                     description = child.getValue().toString();
+                                    Log.d(TAG, description);
                                     break;
                                 case Consts.REVIEW_RATING:
-                                    rating = (int)child.getValue();
+                                    ratings = (int)child.getValue();
                                     break;
                             }
                         }
-                        if(rating!=-1 && description==null){
-                            Review r = new Review(rating, description);
+                        if(ratings !=-1 && description!=null){
+                            Review r = new Review(ratings, description);
                             reviews.add(r);
                         }
                     }
                 }
+                setValues();
             }
 
             @Override
