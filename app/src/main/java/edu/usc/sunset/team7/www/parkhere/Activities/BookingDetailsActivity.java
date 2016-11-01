@@ -135,7 +135,9 @@ public class BookingDetailsActivity extends AppCompatActivity {
     @OnClick(R.id.review_booking_button)
     protected void reviewBooking() {
         Intent intent = new Intent(BookingDetailsActivity.this, ReviewActivity.class);
-        intent.putExtra(Consts.BOOKING_EXTRA, booking);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Consts.BOOKING_EXTRA, booking);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 

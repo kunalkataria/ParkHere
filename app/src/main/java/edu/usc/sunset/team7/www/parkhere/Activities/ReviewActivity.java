@@ -2,13 +2,28 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Review;
@@ -18,6 +33,10 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Review;
  */
 
 public class ReviewActivity extends AppCompatActivity {
+
+    @BindView(R.id.leave_review_rating_bar) RatingBar ratingBar;
+    @BindView(R.id.review_description_text) AppCompatEditText reviewTextView;
+    @BindView(R.id.submit_review_button) AppCompatButton submitReviewButton;
 
     private static final String TAG = "ReviewActivity";
     private Booking booking;
@@ -32,19 +51,31 @@ public class ReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         booking = (Booking) getIntent().getSerializableExtra(Consts.BOOKING_EXTRA);
+        setContentView(R.layout.activity_make_review);
+        ButterKnife.bind(this);
+        setValues();
     }
 
-    private void sendReview() {
-        int reviewRating = 0; //get stars
-        String reviewDescription = ""; //get description
+    private void setValues() {
+        Drawable drawable = ratingBar.getProgressDrawable();
+        drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
+        ratingBar.setMax(5);
+        ratingBar.setStepSize(1.0f);
+    }
+
+    @OnClick(R.id.submit_review_button)
+    public void sendReview() {
+        int reviewRating = ratingBar.getNumStars(); //get stars
+        String reviewDescription = reviewTextView.getEditableText().toString(); //get description
+
+        if(reviewDescription.equals("")) return;
 
         //accessing firebase
         String providerID = booking.getMListing().getProviderID();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE+"/"+providerID).push();
         dbRef.child(Consts.REVIEW_DESCRIPTION).setValue(reviewDescription);
         dbRef.child(Consts.REVIEW_RATING).setValue(reviewRating);
-
-
+        finish();
     }
 
 }

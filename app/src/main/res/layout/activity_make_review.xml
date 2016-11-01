@@ -6,11 +6,9 @@
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/review_rating_bar"
-        android:numStars="5"
-        android:stepSize="1.0"/>
+        android:id="@+id/leave_review_rating_bar"/>
 
-    <android.support.v7.widget.AppCompatTextView
+    <android.support.v7.widget.AppCompatEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/review_description_text"
@@ -20,6 +18,7 @@
         android:id="@+id/submit_review_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:text="@string/review"
         android:layout_marginTop="10dp"/>
 
