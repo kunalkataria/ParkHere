@@ -66,7 +66,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             // Temporary string, should replace with title of listing later
-            getSupportActionBar().setTitle("Listing details");
+            getSupportActionBar().setTitle("Listing Details");
         }
         displayView();
     }
