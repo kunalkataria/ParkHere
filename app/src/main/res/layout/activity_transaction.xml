@@ -10,6 +10,7 @@
     <TextView
         android:text="@string/choose_payment"
         android:textSize="25dp"
+        android:textColor="@color/blueClick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/choose_payment"
@@ -17,21 +18,34 @@
         android:layout_marginBottom="50dp"
         android:layout_marginTop="50dp"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/paypal_button"
-        android:text="@string/paypal_button"
-        android:textSize="25dp"
-        android:layout_marginBottom="100dp"
-        android:padding="25dp"/>
+    <include layout="@layout/divider"/>
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
+        android:id="@+id/paypal_button"
+        android:textColor="@color/colorAccent"
+        android:text="@string/paypal_button"
+        android:textSize="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp"
+        android:padding="25dp"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
+
+    <include layout="@layout/divider"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:id="@+id/credit_card_button"
+        android:textColor="@color/colorAccent"
         android:text="@string/credit_card_button"
         android:textSize="25dp"
-        android:padding="25dp"/>
+        android:padding="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
+    
+    <include layout="@layout/divider"/>
 
 </LinearLayout>

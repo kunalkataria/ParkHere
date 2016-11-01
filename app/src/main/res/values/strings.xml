@@ -58,6 +58,9 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
 
+    <string name="open_drawer">Open drawer</string>
+    <string name="close_drawer">Close drawer</string>
+
     <!-- Placeholder strings for adapter views. -->
     <string name="location_label">Location label</string>
     <string name="date_range">startDate - endDate</string>
