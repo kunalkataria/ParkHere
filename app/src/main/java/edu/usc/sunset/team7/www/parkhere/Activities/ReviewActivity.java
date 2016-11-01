@@ -2,21 +2,12 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatTextView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RatingBar;
-import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,7 +17,6 @@ import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
-import edu.usc.sunset.team7.www.parkhere.objectmodule.Review;
 
 /**
  * Created by Acer on 10/30/2016.
@@ -57,8 +47,7 @@ public class ReviewActivity extends AppCompatActivity {
     }
 
     private void setValues() {
-        Drawable drawable = ratingBar.getProgressDrawable();
-        drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
+        ratingBar.setIsIndicator(false);
         ratingBar.setMax(5);
         ratingBar.setStepSize(1.0f);
     }
