@@ -36,11 +36,6 @@ public class BookingFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private FirebaseUser currentUser;
-    private boolean done;
-
-    //for parsing the listing
-    private boolean foundListing;
-    private DataSnapshot listing;
 
     private ArrayList<Booking> allBookings;
     @Override
@@ -50,7 +45,10 @@ public class BookingFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         allBookings = new ArrayList<Booking>();
-        done = false;
+    }
+
+    @Override
+    public void onResume() {
         getAllBookings();
     }
 
@@ -61,7 +59,7 @@ public class BookingFragment extends Fragment {
         return view;
     }
 
-    protected void getAllBookings(){
+    protected void getAllBookings() {
         final String uid = currentUser.getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
