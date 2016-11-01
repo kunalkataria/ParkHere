@@ -56,6 +56,10 @@
         <activity android:name=".Activities.ConfirmPaymentActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.HomeActivity" />
+
         </activity>
         <activity android:name=".Activities.FilterActivity"
             android:screenOrientation="portrait"
@@ -89,6 +93,9 @@
         <activity android:name=".Activities.ReviewActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.BookingDetailsActivity" />
         </activity>
 
         <activity android:name=".Activities.LoginActivity"

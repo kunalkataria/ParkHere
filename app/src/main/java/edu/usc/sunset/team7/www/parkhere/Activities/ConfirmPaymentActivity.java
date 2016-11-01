@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -37,6 +38,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity{
 
     @BindView(R.id.confirm_payment_listview) ListView listingListView;
     @BindView(R.id.no_booking_payments_textview) TextView noBookingPaymentsTextView;
+    @BindView(R.id.confirm_payment_toolbar) Toolbar confirmPaymentToolbar;
     private ArrayList<Listing> inactiveListings;
 
     public static void startActivity(Context context, ArrayList<Listing> inactiveListings) {
@@ -52,6 +54,11 @@ public class ConfirmPaymentActivity extends AppCompatActivity{
         super.onCreate(savedBundleInstance);
         setContentView(R.layout.activity_confirm_payments);
         ButterKnife.bind(this);
+        setSupportActionBar(confirmPaymentToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Confirm Payment");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         inactiveListings = (ArrayList<Listing>) getIntent().getSerializableExtra(Consts.INACTIVE_LISTINGS_EXTRA);
         final CustomPaymentAdapter adapter = new CustomPaymentAdapter(this, inactiveListings);
