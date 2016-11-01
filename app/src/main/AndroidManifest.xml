@@ -27,6 +27,7 @@
         <activity android:name=".Activities.UserProfileActivity"></activity>
         <activity android:name=".Activities.ListingDetailsActivity"></activity>
         <activity android:name=".Activities.EditListingActivity"></activity>
+        <activity android:name=".Activities.ReviewActivity"></activity>
         <activity android:name=".Activities.BookingDetailsActivity"></activity>
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>

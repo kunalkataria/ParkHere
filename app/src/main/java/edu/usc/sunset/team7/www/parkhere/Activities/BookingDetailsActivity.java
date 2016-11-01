@@ -134,7 +134,11 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.review_booking_button)
     protected void reviewBooking() {
-
+        Intent intent = new Intent(BookingDetailsActivity.this, ReviewActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Consts.BOOKING_EXTRA, booking);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @OnClick(R.id.cancel_booking_button)
@@ -218,7 +222,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 }
                 //remove from inactive listing
                 FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(listingID).removeValue();
-                FirebaseDatabase.getInstance().getReference().child(Consts.BOOKINGS_DATABASE).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bookingI)
+                FirebaseDatabase.getInstance().getReference().child(Consts.BOOKINGS_DATABASE).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             }
 
             @Override
