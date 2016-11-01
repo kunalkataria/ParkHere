@@ -56,13 +56,13 @@ public class BookingDetailsActivity extends AppCompatActivity {
         if(booking != null) {
             listing = booking.getMListing();
             getFirebaseData();
-            displayBooking();
         } else {
             Log.d(TAG, "BOOKING OBJECT IS EMPTY!");
         }
     }
 
     public static void startActivity(Context context, Booking booking) {
+        System.out.println("Started activity");
         Intent intent = new Intent(context, BookingDetailsActivity.class);
         intent.putExtra(Consts.BOOKING_EXTRA, booking);
         context.startActivity(intent);
@@ -74,40 +74,24 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
         //getting first name of provider
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE)
-                .child(listing.getProviderID()).child(Consts.USER_FIRSTNAME);
+                .child(listing.getProviderID());
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                providerFirstName = dataSnapshot.getValue().toString();
+                getFirstNameAndPhoneNumber(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
-                providerFirstName = "Error getting name";
             }
         });
+    }
 
-        //getting phone number of provider
-        dbRef = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE)
-                .child(listing.getProviderID()).child(Consts.USER_PHONENUMBER);
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                providerPhoneNumber = dataSnapshot.getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
-                providerPhoneNumber = "Error getting phone number";
-            }
-        });
-
-        while(providerFirstName == null || providerPhoneNumber == null) {
-            try { Thread.sleep(5); }
-            catch (InterruptedException e) { e.printStackTrace(); }
-        }
+    private void getFirstNameAndPhoneNumber(DataSnapshot userData) {
+        providerFirstName = userData.child(Consts.USER_FIRSTNAME).getValue().toString();
+        providerPhoneNumber = userData.child(Consts.USER_PHONENUMBER).getValue().toString();
+        displayBooking();
     }
 
     private void displayBooking() {
@@ -148,6 +132,11 @@ public class BookingDetailsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.review_booking_button)
+    protected void reviewBooking() {
+
+    }
+
     @OnClick(R.id.cancel_booking_button)
     protected void cancelBooking() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -161,14 +150,13 @@ public class BookingDetailsActivity extends AppCompatActivity {
                     String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
                     long convertTime = Long.parseLong(startTime);
                     long unixTime = System.currentTimeMillis() / 1000L;
-                    removeListing(listingID, providerID);
+                    if(unixTime > convertTime) removeListing(listingID, providerID);
+                    else System.out.println(listingID + "has passed");
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
        // DatabaseReference providerListingRef = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).
@@ -179,6 +167,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.println(dataSnapshot.getKey());
                 DataSnapshot snap = dataSnapshot.child(Consts.LISTING_REFUNDABLE);
                 boolean isRefundable = Boolean.parseBoolean(snap.getValue().toString());
                 Listing listing = new Listing();
@@ -229,6 +218,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 }
                 //remove from inactive listing
                 FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(listingID).removeValue();
+                FirebaseDatabase.getInstance().getReference().child(Consts.BOOKINGS_DATABASE).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bookingI)
             }
 
             @Override
