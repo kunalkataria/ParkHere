@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +47,7 @@ public class FilterActivity extends AppCompatActivity {
         setSupportActionBar(filterToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.filter);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         Intent dataIntent = getIntent();
@@ -58,6 +62,17 @@ public class FilterActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem selectedItem) {
+        switch (selectedItem.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+
 
     @Override
     public void onBackPressed() {

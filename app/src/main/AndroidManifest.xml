@@ -60,6 +60,9 @@
         <activity android:name=".Activities.FilterActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.ResultsActivity" />
         </activity>
         <activity android:name=".Activities.UserProfileActivity"
             android:screenOrientation="portrait"
