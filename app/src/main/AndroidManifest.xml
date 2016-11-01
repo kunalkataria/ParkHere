@@ -20,7 +20,12 @@
         <activity android:name=".Activities.PaypalActivity"></activity>
         <activity android:name=".Activities.CreditCardActivity"></activity>
         <activity android:name=".Activities.TransactionActivity"></activity>
-        <activity android:name=".Activities.ResultsActivity"></activity>
+        <activity android:name=".Activities.ResultsActivity">
+            android:parentActivityName=".activities.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.HomeActivity" />
+        </activity>
         <activity android:name=".Activities.TransactionConfirmationActivity"></activity>
         <activity android:name=".Activities.ConfirmPaymentActivity"></activity>
         <activity android:name=".Activities.FilterActivity"></activity>
