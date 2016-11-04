@@ -62,7 +62,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public static void startActivityForListing(Context context) {
-
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.putExtra(FRAGMENT_TAG, Consts.LISTING_FRAGMENT_TAG);
+        context.startActivity(intent);
     }
 
     public static void startActivityPostBooking(Context context) {
@@ -149,6 +151,14 @@ public class HomeActivity extends AppCompatActivity {
                     currentFragment = new BookingFragment();
                 }
                 setToolbarTitle(getResources().getString(R.string.booking));
+                break;
+            case Consts.LISTING_FRAGMENT_TAG:
+                if (getFragmentManager().findFragmentByTag(Consts.LISTING_FRAGMENT_TAG) != null) {
+                    currentFragment = getFragmentManager().findFragmentByTag(Consts.LISTING_FRAGMENT_TAG);
+                } else {
+                    currentFragment = new ListingFragment();
+                }
+                setToolbarTitle(getResources().getString(R.string.listing));
                 break;
         }
 

@@ -86,7 +86,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     checkIsProvider(user);
                     if(isProvider) {
-                        //start my listings activity
+                        HomeActivity.startActivityForListing(LoginActivity.this);
+                        finish();
                     } else {
                         HomeActivity.startActivityForSearch(LoginActivity.this);
                         finish();
