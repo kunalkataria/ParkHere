@@ -204,7 +204,7 @@ public class EditListingActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Make sure the gallery Intent called this method
-        if(requestCode==1 && resultCode==RESULT_OK && data!=null ){
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null) {
             sourceImageUri = data.getData();
             parkingImageView.setImageURI(sourceImageUri);
         }
