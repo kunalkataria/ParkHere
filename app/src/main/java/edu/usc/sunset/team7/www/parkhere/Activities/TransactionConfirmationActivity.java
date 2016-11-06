@@ -123,7 +123,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.place_booking_button)
-    protected void placeBooking() {
+    public void placeBooking() {
         //Write to database here
         String uid = currentUser.getUid();
         String bookingID = mDatabase.child(Consts.BOOKINGS_DATABASE).push().getKey();
