@@ -44,7 +44,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
     @BindView(R.id.book_listing_button) Button bookListingButton;
     @BindView(R.id.listing_details_toolbar) Toolbar postListingToolbar;
     @BindView(R.id.edit_listing_button) AppCompatButton editListingButton;
-    @BindView(R.id.delete_listing_button) AppCompatButton deleteListingButton;
+    @BindView(R.id.delete_listing_button) public AppCompatButton deleteListingButton;
 
     private ResultsPair listingResultPair;
     private Listing listingResult;

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.AppCompatButton;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -52,6 +54,11 @@ public class ListingDetailsActivityTest {
         sample.setProviderID(FirebaseAuth.getInstance().getCurrentUser().getUid());
         sample.setRefundable(false);
 
+    }
+
+    @Test
+    public void deleteListingTest() {
+        //write to active listings database
         DatabaseReference nameRef = FirebaseDatabase.getInstance().getReference()
                 .child(Consts.LISTINGS_DATABASE).child(sample.getProviderID()).child(Consts.ACTIVE_LISTINGS)
                 .child(sample.getListingID());
@@ -64,13 +71,8 @@ public class ListingDetailsActivityTest {
         nameRef.child(Consts.LISTING_NAME).setValue(sample.getName());
         nameRef.child(Consts.LISTING_REFUNDABLE).setValue(sample.isRefundable());
 
-    }
-
-    @Test
-    public void deleteListingTest() {
         Intent intent = new Intent();
         intent.putExtra(Consts.LISTING_EXTRA, sample);
-        intent.putExtra("test", true);
         activityRule.launchActivity(intent);
         activityRule.getActivity().deleteListing();
 
@@ -87,6 +89,30 @@ public class ListingDetailsActivityTest {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+    }
+
+    @Test
+    public void deleteListingAfterStartTime() {
+        //write to inactive listings database
+        DatabaseReference nameRef = FirebaseDatabase.getInstance().getReference()
+                .child(Consts.LISTINGS_DATABASE).child(sample.getProviderID()).child(Consts.INACTIVE_LISTINGS)
+                .child(sample.getListingID());
+        nameRef.child(Consts.LISTING_DESCRIPTION).setValue(sample.getDescription());
+        nameRef.child(Consts.LISTING_PRICE).setValue(sample.getPrice());
+
+        nameRef.child(Consts.LISTING_HANDICAP).setValue(sample.isHandicap());
+        nameRef.child(Consts.LISTING_COMPACT).setValue(sample.isCompact());
+        nameRef.child(Consts.LISTING_COVERED).setValue(sample.isCovered());
+        nameRef.child(Consts.LISTING_NAME).setValue(sample.getName());
+        nameRef.child(Consts.LISTING_REFUNDABLE).setValue(sample.isRefundable());
+
+        Intent intent = new Intent();
+        intent.putExtra(Consts.LISTING_EXTRA, sample);
+        activityRule.launchActivity(intent);
+        int deleteListingButtonVisibility = activityRule.getActivity().deleteListingButton.getVisibility();
+
+        //make sure that the delete button is not visible to the user
+        Assert.assertEquals(deleteListingButtonVisibility, View.GONE);
     }
 
 }

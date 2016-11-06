@@ -121,7 +121,7 @@ public class UserProfileFragmentTest {
         });
 
         //Test for correct rating
-        Assert.assertEquals(true, ratingBar.getRating() == mRating);
+        Assert.assertEquals(ratingBar.getRating(), mRating);
 
     }
 }
