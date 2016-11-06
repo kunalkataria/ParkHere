@@ -90,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void register() {
         removeErrors();
         collectValues();
-        if(checkValues()){
+        if(checkValues(firstName, lastName, phoneNumber, email, password)){
             writeToDatabase();
         }
     }
@@ -111,29 +111,29 @@ public class RegisterActivity extends AppCompatActivity {
         isProvider = provideSwitch.isChecked();
     }
 
-    private boolean checkValues(){
+    public boolean checkValues(String fName, String lName, String pNumber, String emailAddress, String pword){
         boolean allValid = true;
-        if(!Tools.nameValid(firstName)) {
+        if(!Tools.nameValid(fName)) {
             allValid = false;
             firstNameTextInputLayout.setErrorEnabled(true);
             firstNameTextInputLayout.setError("First name not valid");
         }
-        if(!Tools.nameValid(lastName)) {
+        if(!Tools.nameValid(lName)) {
             allValid = false;
             lastNameTextInputLayout.setErrorEnabled(true);
             lastNameTextInputLayout.setError("Last name not valid");
         }
-        if(!Tools.phoneValid(phoneNumber)) {
+        if(!Tools.phoneValid(pNumber)) {
             allValid = false;
             phoneNumberTextInputLayout.setErrorEnabled(true);
             phoneNumberTextInputLayout.setError("Phone number not valid");
         }
-        if(!Tools.emailValid(email)) {
+        if(!Tools.emailValid(emailAddress)) {
             allValid = false;
             emailTextInputLayout.setErrorEnabled(true);
             emailTextInputLayout.setError("Email not valid");
         }
-        if(!Tools.passwordValid(email)) {
+        if(!Tools.passwordValid(pword)) {
             allValid = false;
             passwordTextInputLayout.setErrorEnabled(true);
             passwordTextInputLayout.setError("Password needs to at least 10 characters long and contain a special character");
