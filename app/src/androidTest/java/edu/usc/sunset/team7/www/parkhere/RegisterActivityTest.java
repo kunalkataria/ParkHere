@@ -24,8 +24,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.Executor;
-
 import edu.usc.sunset.team7.www.parkhere.Activities.RegisterActivity;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
@@ -69,7 +67,7 @@ public class RegisterActivityTest {
         intent.putExtra("test", true);
         activityRule.launchActivity(intent);
         if (activityRule.getActivity().checkValues(validFirstName, validLastName, validPhoneNumber, validEmail, validPassword)) {
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(validEmail, validPassword).addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(validEmail, validPassword).addOnCompleteListener(activityRule.getActivity(), new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task)
                 {
