@@ -112,37 +112,33 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean checkValues(){
-        if (Tools.emailValid(email)) {
-            if (Tools.nameValid(firstName)) {
-                if (Tools.nameValid(lastName)) {
-                    if (Tools.phoneValid(phoneNumber)) {
-                        if(Tools.emailValid(email))
-                            return true;
-                        else {
-                            emailTextInputLayout.setErrorEnabled(true);
-                            emailTextInputLayout.setError("Password needs to atleast 10 characters long and contain a special character");
-                        }
-                    } else {
-                        // phone number not valid
-                        phoneNumberTextInputLayout.setErrorEnabled(true);
-                        phoneNumberTextInputLayout.setError("Phone number not valid");
-                    }
-                } else {
-                    // last name not valid
-                    lastNameTextInputLayout.setErrorEnabled(true);
-                    lastNameTextInputLayout.setError("Last name not valid");
-                }
-            } else {
-                // firstName not valid
-                firstNameTextInputLayout.setErrorEnabled(true);
-                firstNameTextInputLayout.setError("First name not valid");
-            }
-        } else {
-            // email not valid
+        boolean allValid = true;
+        if(!Tools.nameValid(firstName)) {
+            allValid = false;
+            firstNameTextInputLayout.setErrorEnabled(true);
+            firstNameTextInputLayout.setError("First name not valid");
+        }
+        if(!Tools.nameValid(lastName)) {
+            allValid = false;
+            lastNameTextInputLayout.setErrorEnabled(true);
+            lastNameTextInputLayout.setError("Last name not valid");
+        }
+        if(!Tools.phoneValid(phoneNumber)) {
+            allValid = false;
+            phoneNumberTextInputLayout.setErrorEnabled(true);
+            phoneNumberTextInputLayout.setError("Phone number not valid");
+        }
+        if(!Tools.emailValid(email)) {
+            allValid = false;
             emailTextInputLayout.setErrorEnabled(true);
             emailTextInputLayout.setError("Email not valid");
         }
-        return false;
+        if(!Tools.passwordValid(email)) {
+            allValid = false;
+            passwordTextInputLayout.setErrorEnabled(true);
+            passwordTextInputLayout.setError("Password needs to at least 10 characters long and contain a special character");
+        }
+        return allValid;
     }
 
     private void writeToDatabase(){
