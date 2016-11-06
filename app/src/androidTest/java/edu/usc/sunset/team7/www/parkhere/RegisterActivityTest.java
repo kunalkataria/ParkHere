@@ -19,13 +19,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.RegisterActivity;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 
 import static android.content.ContentValues.TAG;
 
@@ -55,11 +55,6 @@ public class RegisterActivityTest {
     @Rule
     public ActivityTestRule<RegisterActivity> activityRule =
             new ActivityTestRule<>(RegisterActivity.class, true, false);
-
-    @Before
-    public void setUp() {
-
-    }
 
     @Test
     public void validateUserWithCorrectFields() {
@@ -125,14 +120,31 @@ public class RegisterActivityTest {
 
     @Test
     public void validateUserWithIncorrectFields() {
+        Intent intent = new Intent();
+        intent.putExtra("test", true);
+        activityRule.launchActivity(intent);
+        Assert.assertEquals(checkRegisterValues(invalidFirstName, invalidLastName, invalidPhoneNumber, invalidEmail, invalidPassword), false);
 
     }
 
-    @Test
-    public void readFromDatabase() {
-
+    public boolean checkRegisterValues(String fName, String lName, String pNumber, String emailAddress, String pword){
+        boolean allValid = true;
+        if(!Tools.nameValid(fName)) {
+            allValid = false;
+        }
+        if(!Tools.nameValid(lName)) {
+            allValid = false;
+        }
+        if(!Tools.phoneValid(pNumber)) {
+            allValid = false;
+        }
+        if(!Tools.emailValid(emailAddress)) {
+            allValid = false;
+        }
+        if(!Tools.passwordValid(pword)) {
+            allValid = false;
+        }
+        return allValid;
     }
-
-
 
 }
