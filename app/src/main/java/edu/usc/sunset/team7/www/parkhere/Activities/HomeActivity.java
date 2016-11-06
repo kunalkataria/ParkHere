@@ -75,6 +75,12 @@ public class HomeActivity extends AppCompatActivity {
         context.startActivity(newIntent);
     }
 
+    public static void startActivityForBalance(Context context) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.putExtra(FRAGMENT_TAG, Consts.BALANCE_FRAGMENT_TAG);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +166,13 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 setToolbarTitle(getResources().getString(R.string.listing));
                 break;
+            case Consts.BALANCE_FRAGMENT_TAG:
+                if (getFragmentManager().findFragmentByTag(Consts.BALANCE_FRAGMENT_TAG) != null) {
+                    currentFragment = getFragmentManager().findFragmentByTag(Consts.BALANCE_FRAGMENT_TAG);
+                } else {
+                    currentFragment = new BalanceFragment();
+                }
+                setToolbarTitle(getResources().getString(R.string.balance));
         }
 
         // use the fragment manager to move to the fragment selected by the switch statement

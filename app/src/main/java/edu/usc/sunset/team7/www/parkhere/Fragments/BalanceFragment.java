@@ -2,6 +2,7 @@ package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.app.Fragment;
 import android.icu.text.DecimalFormat;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,24 +71,7 @@ public class BalanceFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE+"/"+uid);
-        dbRef.orderByChild(Consts.USER_BALANCE).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    if(child.getKey().equals(Consts.USER_BALANCE)) {
-                        System.out.println(child.getValue().toString());
-                        userBalance = Double.parseDouble(child.getValue().toString());
-                        break;
-                    }
-                }
-                String formattedBalance = "$" + String.format("%.2f", userBalance);
-                currentBalanceNumber.setText(formattedBalance);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+        new FindBalanceTask().execute(uid);
     }
 
     @Override
@@ -207,6 +192,48 @@ public class BalanceFragment extends Fragment {
             return null;
         }
         return listing;
+    }
+
+    private class FindBalanceTask extends AsyncTask<String, Void, Double> {
+
+        double balance;
+
+        @Override
+        protected Double doInBackground(String... strings) {
+
+            final Semaphore semaphore = new Semaphore(0);
+
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE+"/"+strings[0]);
+            dbRef.orderByChild(Consts.USER_BALANCE).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot child : dataSnapshot.getChildren()) {
+                        if(child.getKey().equals(Consts.USER_BALANCE)) {
+                            System.out.println(child.getValue().toString());
+                            balance = Double.parseDouble(child.getValue().toString());
+                            semaphore.release();
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+            try {
+                semaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return balance;
+        }
+
+        @Override
+        protected void onPostExecute(Double result) {
+            String formattedBalance = "$" + String.format("%.2f", result);
+            currentBalanceNumber.setText(formattedBalance);
+        }
+
     }
 
 
