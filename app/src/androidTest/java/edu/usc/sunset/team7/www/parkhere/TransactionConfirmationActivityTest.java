@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -79,6 +80,21 @@ public class TransactionConfirmationActivityTest {
                 .child(Consts.BOOKINGS_DATABASE).child(uid);
         db.removeValue();
         activityRule.getActivity().placeBooking();
-        Assert.assertEquals(false, db.getKey() == null);
+        Assert.assertEquals(false, db.getKey() == null); //properly written to bookings database
+
+        db = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE)
+                .child(uid).child(Consts.INACTIVE_LISTINGS).child(sample.getListingID());
+        Assert.assertEquals(false, db.getKey() == null); //properly written to inactive listings
+    }
+
+    @After
+    public void cleanup(){
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference()
+                .child(Consts.BOOKINGS_DATABASE).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        db.removeValue();
+        db = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(Consts.INACTIVE_LISTINGS).child(sample.getListingID());
+        db.removeValue();
     }
 }
