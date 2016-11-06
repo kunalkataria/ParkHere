@@ -1,5 +1,6 @@
 package edu.usc.sunset.team7.www.parkhere;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.filters.LargeTest;
@@ -17,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.HomeActivity;
+import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -29,7 +31,7 @@ import static org.hamcrest.Matchers.anything;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class NavigationDrawerTest {
+public class NavigationFragmentTest {
 
     @Rule
     public ActivityTestRule<HomeActivity> activityRule =
@@ -49,14 +51,34 @@ public class NavigationDrawerTest {
         ListView listView = (ListView) activityRule.getActivity().findViewById(R.id.left_drawer);
 
         for (int i = 0; i < 5; i++) {
-            Assert.assertEquals(drawer.isDrawerOpen(listView), false);
-
+            String fragment_tag = "";
             DrawerActions.openDrawer(R.id.drawer_layout);
-
-            Assert.assertEquals(drawer.isDrawerOpen(listView), true);
 
             onData(anything()).inAdapterView(withId(R.id.left_drawer))
                     .atPosition(i).perform(click());
+
+            switch(i){
+                case 0:
+                    fragment_tag = Consts.SEARCH_FRAGMENT_TAG;
+                    break;
+                case 1:
+                    fragment_tag = Consts.LISTING_FRAGMENT_TAG;
+                    break;
+                case 2:
+                    fragment_tag = Consts.BOOKING_FRAGMENT_TAG;
+                    break;
+                case 3:
+                    fragment_tag = Consts.BALANCE_FRAGMENT_TAG;
+                    break;
+                case 4:
+                    fragment_tag = Consts.MY_PROFILE_FRAGMENT_TAG;
+                    break;
+            }
+
+            Fragment fragment = activityRule.getActivity().getFragmentManager()
+                    .findFragmentByTag(fragment_tag);
+
+            Assert.assertEquals(true, fragment.isVisible());
         }
     }
 }
