@@ -19,7 +19,7 @@ public class Tools {
     private static final String PASSWORD_REGEX = "^(?=.{10,})(?=.*[@#$%^&+=!?]).*$";
     // very basic email regex checker, main validation is done through email confirmation link
     public static boolean emailValid(String email) {
-        return email.matches(EMAIL_REGEX);
+        return email != null && email.matches(EMAIL_REGEX);
     }
 
     // returns true if name is valid (alpha characters and ' - . , and spaces only allowed)
