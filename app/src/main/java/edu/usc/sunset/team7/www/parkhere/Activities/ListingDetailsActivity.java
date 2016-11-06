@@ -82,7 +82,6 @@ public class ListingDetailsActivity extends AppCompatActivity {
         providerID = listingResult.getProviderID();
 
         myOwnListing = providerID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        //myOwnListing = getIntent().getBooleanExtra("test", false);
 
             DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
                     .child(providerID);
