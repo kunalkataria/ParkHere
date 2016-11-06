@@ -119,7 +119,7 @@ public class EditListingActivity extends AppCompatActivity {
     }
 
     //For populating the fields
-    protected void populateFields(Listing getListing) {
+    public void populateFields(Listing getListing) {
         parkingNameEditText.setText(getListing.getName());
         descriptionEditText.setText(getListing.getDescription());
         String origPrice = Double.toString(getListing.getPrice());
@@ -211,7 +211,7 @@ public class EditListingActivity extends AppCompatActivity {
     }
 
 
-    private boolean checkFields() {
+    public boolean checkFields() {
         nameString = parkingNameEditText.getText().toString();
         descriptionString =descriptionEditText.getText().toString();
         //possible invalid number format here
