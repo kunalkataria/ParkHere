@@ -82,6 +82,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         providerID = listingResult.getProviderID();
 
         myOwnListing = providerID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        //myOwnListing = getIntent().getBooleanExtra("test", false);
 
             DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
                     .child(providerID);
@@ -205,13 +206,18 @@ public class ListingDetailsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void deleteListing() {
+    public void deleteListing() {
         FirebaseDatabase.getInstance().getReference(Consts.LISTINGS_DATABASE).child(providerID)
                 .child(Consts.ACTIVE_LISTINGS).child(listingResult.getListingID()).setValue(null);
         System.out.println(providerID+"/"+Consts.ACTIVE_LISTINGS+"/"+listingResult.getListingID());
-        Toast.makeText(this,
-                "Listing deleted.",
-                Toast.LENGTH_SHORT).show();
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(ListingDetailsActivity.this,
+                        "Listing deleted.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
         finish();
     }
 }
