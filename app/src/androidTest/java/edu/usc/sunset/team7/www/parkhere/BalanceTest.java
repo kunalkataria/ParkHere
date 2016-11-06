@@ -64,17 +64,9 @@ public class BalanceTest {
 
     @Test
     public void validateDisplay() throws InterruptedException {
-//        FirebaseAuth.getInstance().signInWithEmailAndPassword("tester@test.me", "hello12345!");
-
-//        onView(withId(R.id.current_balance)).check(matches(withText(balanceString)));
-
         Intent intent = new Intent();
         intent.putExtra(FRAGMENT_TAG, Consts.BALANCE_FRAGMENT_TAG);
         activityTestRule.launchActivity(intent);
-
-        String actualText = ((AppCompatTextView) activityTestRule.getActivity().findViewById(R.id.current_balance)).getText().toString();
-
-        System.out.print("actual text: " + actualText);
 
         onView(withId(R.id.current_balance)).check(matches(withText(balanceString)));
     }
