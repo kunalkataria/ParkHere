@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.Semaphore;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.UserProfileActivity;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
@@ -52,10 +53,6 @@ public class UserProfileActivityTest {
 
     private String mFirstName, mUId;
     private float mRating;
-    //private Bitmap mImage;
-
-
-    private static final String TAG = "UserProfileTest";
 
     @Rule
     public ActivityTestRule<UserProfileActivity> activityRule =
@@ -64,48 +61,28 @@ public class UserProfileActivityTest {
     @Before
     public void initializeActivity(){
         FirebaseAuth.getInstance().signInWithEmailAndPassword("kunal@me.com", "hello12345");
-        //mUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mUId = "QqYwjQiGejP3mOf3a0O34csCmRH2";
 
-/*        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE)
-                .child(mUId);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        final Semaphore loginSemaphore = new Semaphore(0);
+
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //String imageURL = null;
-                for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    switch (child.getKey()){
-                        case Consts.USER_FIRSTNAME:
-                            mFirstName = child.getValue().toString();
-                            break;
-//                        case Consts.USER_PROFILE_PIC:
-//                            imageURL = child.getValue().toString();
-//                            break;
-                    }
-                }*/
-                /*if (imageURL == null){
-                    StorageReference storage = FirebaseStorage.getInstance()
-                            .getReferenceFromUrl(Consts.STORAGE_URL)
-                            .child(Consts.STORAGE_PROFILE_PICTURES).child(mUId);
-                    final long ONE_MEGABYTE = 5 * 1024 * 1024;
-                    storage.getBytes(ONE_MEGABYTE).addOnSuccessListener(
-                            new OnSuccessListener<byte[]>() {
-                                @Override
-                                public void onSuccess(byte[] bytes) {
-                                    // Data for "images/island.jpg" is returns, use this as needed
-                                    mImage = BitmapFactory
-                                            .decodeByteArray(bytes, 0, bytes.length);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                        }
-                    });
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null) {
+                    Log.i("TESTING LOG", "NOT LOGGED In");
+                } else {
+                    loginSemaphore.release();
+                    mUId = firebaseAuth.getCurrentUser().getUid();
                 }
             }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });*/
+        });
+        try {
+            loginSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return;
+        }
+
+
 
         DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE);
         reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -145,22 +122,10 @@ public class UserProfileActivityTest {
         intent.putExtras(bundle);
         activityRule.launchActivity(intent);
 
-
-//        ImageView imageView = (ImageView) activityRule.getActivity()
-//                .findViewById(R.id.userProfileImage);
-
         TextView textView = (TextView) activityRule.getActivity()
                 .findViewById(R.id.user_name_view);
         RatingBar ratingBar = (RatingBar) activityRule.getActivity()
                 .findViewById(R.id.user_rating_bar);
-
-        //Test for correct picture
-        /*BitmapDrawable profilePicture = (BitmapDrawable) imageView.getDrawable();
-        Bitmap testingBitmap = (Bitmap)
-
-        Assert.assertEquals(mImage.sameAs(profilePicture.getBitmap()),true);*/
-
-        //Test for correct name
 
 
         final String textString = textView.getText().toString();
