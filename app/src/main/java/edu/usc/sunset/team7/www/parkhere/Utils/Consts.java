@@ -93,6 +93,8 @@ public class Consts {
     public static final String LISTING_IMAGE = "Image URL";
     public static final String LISTING_IS_PAID = "Paid";
 
+    public static final String DEFAULT_PARKING_IMAGE = "https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2Fempty_parking.png?alt=media&token=9f2a1602-9248-4485-8eef-1c73f7a5ea77";
+
     //Booking Database
     public static final String BOOKING_ID = "Booking ID";
     public static final String BOOKING_START_TIME = "Start Time";
