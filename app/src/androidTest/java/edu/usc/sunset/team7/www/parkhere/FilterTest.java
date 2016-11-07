@@ -20,6 +20,8 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
@@ -69,7 +71,10 @@ public class FilterTest {
     @Test
     public void test_blackbox(){
         activityRule.launchActivity(new Intent());
-        final Semaphore semaphore = new Semaphore(0);
         onView(withId(R.id.filter_button)).perform(click());
+        onView(withId(R.id.filter_toolbar)).check(matches(isDisplayed()));
+        onView(withId(R.id.covered_button_control)).check(matches(isDisplayed()));
+        onView(withId(R.id.handicap_button_control)).check(matches(isDisplayed()));
+        onView(withId(R.id.compact_button_control)).check(matches(isDisplayed()));
     }
 }
