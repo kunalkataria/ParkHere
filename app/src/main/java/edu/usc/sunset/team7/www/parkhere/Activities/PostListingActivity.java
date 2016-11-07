@@ -360,6 +360,16 @@ public class PostListingActivity extends AppCompatActivity {
         } else {
             stopDateLayout.setErrorEnabled(false);
         }
+        if (startDate != 0 && stopDate != 0) {
+            long currentTime = System.currentTimeMillis() / 1000L;
+            if (startDate >= stopDate || stopDate <= currentTime || startDate <= currentTime) {
+                isValid = false;
+                startDateLayout.setError("Please select a valid start date");
+                startDateLayout.setErrorEnabled(true);
+                stopDateLayout.setError("Please select a valid stop date");
+                stopDateLayout.setErrorEnabled(true);
+            }
+        }
         if (latitude == -1 && longitude == -1) {
             isValid = false;
             Toast.makeText(PostListingActivity.this, "Please select a location through the search bar.",
