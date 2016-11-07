@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import edu.usc.sunset.team7.www.parkhere.Activities.HomeActivity;
 
 import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.anything;
@@ -48,15 +49,17 @@ public class NavigationDrawerTest {
                 .findViewById(R.id.drawer_layout);
         ListView listView = (ListView) activityRule.getActivity().findViewById(R.id.left_drawer);
 
-        for (int i = 0; i < 5; i++) {
-            Assert.assertEquals(drawer.isDrawerOpen(listView), false);
+        Assert.assertEquals(drawer.isDrawerOpen(listView), false);
 
-            DrawerActions.openDrawer(R.id.drawer_layout);
+        for (int i = 0; i < 5; i++) {
+            onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
 
             Assert.assertEquals(drawer.isDrawerOpen(listView), true);
 
             onData(anything()).inAdapterView(withId(R.id.left_drawer))
                     .atPosition(i).perform(click());
+
+            Assert.assertEquals(drawer.isDrawerOpen(listView), false);
         }
     }
 }

@@ -10,8 +10,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Hashtable;
-
 import edu.usc.sunset.team7.www.parkhere.Activities.PostListingActivity;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
@@ -21,19 +19,14 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
  */
 
 public class PostListingActivityTest {
-    private String nameString, descriptionString;
-    private double price;
+    private String currentUID;
 
-    private static Hashtable<Integer, String> cancellationIds;
-
-    private int startYear, startMonth, startDay, startHour, startMinute;
-
-    private int stopYear, stopMonth, stopDay, stopHour, getStopMinute;
-
-    private long startDate;
-    private long stopDate;
-
-    boolean isCompact,isHandicap, isCovered, isRefundable;
+    private String validName, validDescription;
+    private double validPrice;
+    private long validStartDate;
+    private long validStopDate;
+    private boolean isCompact,isHandicap, isCovered, isRefundable;
+    private double validLatitude, validLongitude;
 
     private Listing mListing;
 
