@@ -11,11 +11,16 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.Activities.ResultsActivity;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
  * Created by Acer on 11/6/2016.
@@ -51,7 +56,7 @@ public class FilterTest {
     }
 
     @Test
-    public void test() {
+    public void test_whitebox() {
         activityRule.launchActivity(new Intent());
         List<ResultsPair> compactResults = activityRule.getActivity().filteredResultsOnCompact(listings);
         Assert.assertEquals(compactResults.size(), 1);
@@ -59,5 +64,12 @@ public class FilterTest {
         Assert.assertEquals(coveredResults.size(), 1);
         List<ResultsPair> handicapResults = activityRule.getActivity().filterResultsOnHandicap(listings);
         Assert.assertEquals(handicapResults.size(), 1);
+    }
+
+    @Test
+    public void test_blackbox(){
+        activityRule.launchActivity(new Intent());
+        final Semaphore semaphore = new Semaphore(0);
+        onView(withId(R.id.filter_button)).perform(click());
     }
 }
