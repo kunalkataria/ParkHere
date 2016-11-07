@@ -51,7 +51,7 @@ public class FilterTest {
     }
 
     @Test
-    public void test() {
+    public void testFilterMethods_whitebox() {
         activityRule.launchActivity(new Intent());
         List<ResultsPair> compactResults = activityRule.getActivity().filteredResultsOnCompact(listings);
         Assert.assertEquals(compactResults.size(), 1);
