@@ -1,6 +1,9 @@
 package edu.usc.sunset.team7.www.parkhere;
 
-import android.app.Fragment;
+/**
+ * Created by Justin on 11/7/2016.
+ */
+
 import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.filters.LargeTest;
@@ -18,15 +21,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.HomeActivity;
-import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.not;
 
 /**
  * Created by Justin on 11/5/2016.
@@ -34,7 +38,7 @@ import static org.hamcrest.Matchers.anything;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class NavigationFragmentTest {
+public class NavigationDrawerUITest {
 
     @Rule
     public ActivityTestRule<HomeActivity> activityRule =
@@ -49,36 +53,20 @@ public class NavigationFragmentTest {
     public void runNavigationDrawerTest(){
         Intent intent = new Intent();
         activityRule.launchActivity(intent);
-        for (int i = 0; i < 5; i++) {
-            String fragment_tag = "";
 
-            onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.left_drawer)).check(matches(not(isDisplayed())));
+
+        for (int i = 0; i < 5; i++) {
+
+            onView(withId(R.id.drawer_layout)).perform(DrawerActions.open())
+                    .check(matches(isDisplayed()));
+            onView(withId(R.id.left_drawer)).check(matches(isDisplayed()));
 
             onData(anything()).inAdapterView(withId(R.id.left_drawer))
                     .atPosition(i).perform(click());
 
-            switch(i){
-                case 0:
-                    fragment_tag = Consts.SEARCH_FRAGMENT_TAG;
-                    break;
-                case 1:
-                    fragment_tag = Consts.LISTING_FRAGMENT_TAG;
-                    break;
-                case 2:
-                    fragment_tag = Consts.BOOKING_FRAGMENT_TAG;
-                    break;
-                case 3:
-                    fragment_tag = Consts.BALANCE_FRAGMENT_TAG;
-                    break;
-                case 4:
-                    fragment_tag = Consts.MY_PROFILE_FRAGMENT_TAG;
-                    break;
-            }
-
-            Fragment fragment = activityRule.getActivity().getFragmentManager()
-                    .findFragmentByTag(fragment_tag);
-
-            Assert.assertEquals(true, fragment.isVisible());
+            onView(withId(R.id.left_drawer)).check(matches(not(isDisplayed())));
         }
     }
 }
+

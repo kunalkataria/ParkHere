@@ -48,15 +48,17 @@ public class NavigationDrawerTest {
                 .findViewById(R.id.drawer_layout);
         ListView listView = (ListView) activityRule.getActivity().findViewById(R.id.left_drawer);
 
-        for (int i = 0; i < 5; i++) {
-            Assert.assertEquals(drawer.isDrawerOpen(listView), false);
+        Assert.assertEquals(drawer.isDrawerOpen(listView), false);
 
+        for (int i = 0; i < 5; i++) {
             DrawerActions.openDrawer(R.id.drawer_layout);
 
             Assert.assertEquals(drawer.isDrawerOpen(listView), true);
 
             onData(anything()).inAdapterView(withId(R.id.left_drawer))
                     .atPosition(i).perform(click());
+
+            Assert.assertEquals(drawer.isDrawerOpen(listView), false);
         }
     }
 }
