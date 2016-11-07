@@ -166,165 +166,165 @@ public class EditListingActivityTest {
 
     }
 
-//
-//    //black box
-//    @Test
-//    public void validateActivityPrefill() {
-//        try {
-//            mSemaphore.acquire();
-//            Intent i = new Intent();
-//            i.putExtra(Consts.LISTING_EDIT_EXTRA, testListing);
-//            activityTestRule.launchActivity(i);
-//            onView(withId(R.id.name_edittext)).check(matches(withText("test name")));
-//            onView(withId(R.id.description_edittext)).check(matches(withText("test description")));
-//            onView(withId(R.id.price_edittext)).check(matches(withText("3.5")));
-//            onView(withId(R.id.refundable_rButton)).check(matches(isChecked()));
-//            onView(withId(R.id.handicap_button_control)).check(matches((isChecked())));
-//            onView(withId(R.id.compact_button_control)).check(matches(not(isChecked())));
-//            onView(withId(R.id.covered_button_control)).check(matches(not(isChecked())));
-//            mSemaphore.release();
-//
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-//    //white box
-//    @Test
-//    public void testFields() {
-//        try {
-//            mSemaphore.acquire();
-//            Intent i = new Intent();
-//            i.putExtra(Consts.LISTING_EDIT_EXTRA, testListing);
-//            activityTestRule.launchActivity(i);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            return;
-//        }
-//        final Semaphore lock = new Semaphore(1);
-//        onView(withId(R.id.name_edittext)).perform(clearText());
-//        onView(withId(R.id.description_edittext)).perform(clearText());
-//        onView(withId(R.id.price_edittext)).perform(clearText());
-//        //might need to check the cancel policy but I think it should already be preset and we cant exit out of it
-//        activityTestRule.getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    lock.acquire();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                //System.out.println("INSIDE RUNNABLE THREAD");
-//                //clear fields
-//                //System.out.println("LINE SOMEWHERE UP IN THE MIDDLE");
-//
-//                Assert.assertEquals(false, activityTestRule.getActivity().checkFields());
-//                lock.release();
-//            }
-//        });
-//
-//        //insert name
-//        onView(withId(R.id.name_edittext)).perform(typeText(testListing.getName()));
-//        activityTestRule.getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    lock.acquire();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                Assert.assertEquals(false, activityTestRule.getActivity().checkFields());
-//                lock.release();
-//            }
-//        });
-//
-//        //insert description
-//        onView(withId(R.id.description_edittext)).perform(typeText(testListing.getDescription()));
-//        activityTestRule.getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    lock.acquire();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                Assert.assertEquals(false, activityTestRule.getActivity().checkFields());
-//                lock.release();
-//            }
-//        });
-//
-//        //insert price
-//        Double price = testListing.getPrice();
-//        String convert = price.toString();
-//        onView(withId(R.id.price_edittext)).perform(typeText(convert));
-//        activityTestRule.getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    lock.acquire();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                Assert.assertEquals(true, activityTestRule.getActivity().checkFields());
-//                lock.release();
-//            }
-//        });
-//        mSemaphore.release();
-//    }
-//
-//    //black box
-//    @Test
-//    public void checkFailSubmit() {
-//        try {
-//            mSemaphore.acquire();
-//            Intent i = new Intent();
-//            i.putExtra(Consts.LISTING_EDIT_EXTRA, testListing);
-//            activityTestRule.launchActivity(i);
-//            //clear fields
-//            onView(withId(R.id.name_edittext)).perform(clearText());
-//            onView(withId(R.id.description_edittext)).perform(clearText());
-//            onView(withId(R.id.price_edittext)).perform(clearText());
-//            onView(allOf(withId(R.id.name_textinputlayout), withText("Please enter a name.")));
-//            onView(allOf(withId(R.id.description_edittext), withText("Please enter a description.")));
-//            onView(allOf(withId(R.id.price_edittext), withText("Please enter a price greater than $0.")));
-//            mSemaphore.release();
-//
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    //black box
-//    @Test
-//    public void sendEditPosting() {
-//        try {
-//            mSemaphore.acquire();
-//            Intent i = new Intent();
-//            i.putExtra(Consts.LISTING_EDIT_EXTRA, testListing);
-//            activityTestRule.launchActivity(i);
-//
-//            Double price = editTestListing.getPrice();
-//            String convert = price.toString();
-//            onView(withId(R.id.name_edittext)).perform(clearText());
-//            onView(withId(R.id.description_edittext)).perform(clearText());
-//            onView(withId(R.id.price_edittext)).perform(clearText());
-//            onView(withId(R.id.name_edittext)).perform(typeText(editTestListing.getName()));
-//            onView(withId(R.id.price_edittext)).perform(typeText(convert));
-//            onView(withId(R.id.description_edittext)).perform(typeText(editTestListing.getDescription()));
-//            onView(withId(R.id.description_edittext)).perform(closeSoftKeyboard());
-//            onView(withId(R.id.nonrefundable_rButton)).perform(scrollTo()).perform(click()).check(matches(isChecked()));
-//            onView(withId(R.id.handicap_button_control)).perform(scrollTo()).perform(click()).check(matches(not(isChecked())));
-//            onView(withId(R.id.compact_button_control)).perform(scrollTo()).perform(click()).check(matches(isChecked()));
-//            onView(withId(R.id.covered_button_control)).perform(scrollTo()).perform(click()).check(matches(isChecked()));
-//            onView(withId(R.id.upload_listing_button)).perform(scrollTo()).perform(click());
-//
-//            onView(withId(R.id.listing_listview)).check(matches(isDisplayed()));
-//            mSemaphore.release();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    //black box
+    @Test
+    public void validateActivityPrefill() {
+        try {
+            mSemaphore.acquire();
+            Intent i = new Intent();
+            i.putExtra(Consts.LISTING_EDIT_EXTRA, testListing);
+            activityTestRule.launchActivity(i);
+            onView(withId(R.id.name_edittext)).check(matches(withText("test name")));
+            onView(withId(R.id.description_edittext)).check(matches(withText("test description")));
+            onView(withId(R.id.price_edittext)).check(matches(withText("3.5")));
+            onView(withId(R.id.refundable_rButton)).check(matches(isChecked()));
+            onView(withId(R.id.handicap_button_control)).check(matches((isChecked())));
+            onView(withId(R.id.compact_button_control)).check(matches(not(isChecked())));
+            onView(withId(R.id.covered_button_control)).check(matches(not(isChecked())));
+            mSemaphore.release();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //white box
+    @Test
+    public void testFields() {
+        try {
+            mSemaphore.acquire();
+            Intent i = new Intent();
+            i.putExtra(Consts.LISTING_EDIT_EXTRA, testListing);
+            activityTestRule.launchActivity(i);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return;
+        }
+        final Semaphore lock = new Semaphore(1);
+        onView(withId(R.id.name_edittext)).perform(clearText());
+        onView(withId(R.id.description_edittext)).perform(clearText());
+        onView(withId(R.id.price_edittext)).perform(clearText());
+        //might need to check the cancel policy but I think it should already be preset and we cant exit out of it
+        activityTestRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    lock.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //System.out.println("INSIDE RUNNABLE THREAD");
+                //clear fields
+                //System.out.println("LINE SOMEWHERE UP IN THE MIDDLE");
+
+                Assert.assertEquals(false, activityTestRule.getActivity().checkFields());
+                lock.release();
+            }
+        });
+
+        //insert name
+        onView(withId(R.id.name_edittext)).perform(typeText(testListing.getName()));
+        activityTestRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    lock.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Assert.assertEquals(false, activityTestRule.getActivity().checkFields());
+                lock.release();
+            }
+        });
+
+        //insert description
+        onView(withId(R.id.description_edittext)).perform(typeText(testListing.getDescription()));
+        activityTestRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    lock.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Assert.assertEquals(false, activityTestRule.getActivity().checkFields());
+                lock.release();
+            }
+        });
+
+        //insert price
+        Double price = testListing.getPrice();
+        String convert = price.toString();
+        onView(withId(R.id.price_edittext)).perform(typeText(convert));
+        activityTestRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    lock.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Assert.assertEquals(true, activityTestRule.getActivity().checkFields());
+                lock.release();
+            }
+        });
+        mSemaphore.release();
+    }
+
+    //black box
+    @Test
+    public void checkFailSubmit() {
+        try {
+            mSemaphore.acquire();
+            Intent i = new Intent();
+            i.putExtra(Consts.LISTING_EDIT_EXTRA, testListing);
+            activityTestRule.launchActivity(i);
+            //clear fields
+            onView(withId(R.id.name_edittext)).perform(clearText());
+            onView(withId(R.id.description_edittext)).perform(clearText());
+            onView(withId(R.id.price_edittext)).perform(clearText());
+            onView(allOf(withId(R.id.name_textinputlayout), withText("Please enter a name.")));
+            onView(allOf(withId(R.id.description_edittext), withText("Please enter a description.")));
+            onView(allOf(withId(R.id.price_edittext), withText("Please enter a price greater than $0.")));
+            mSemaphore.release();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //black box
+    @Test
+    public void sendEditPosting() {
+        try {
+            mSemaphore.acquire();
+            Intent i = new Intent();
+            i.putExtra(Consts.LISTING_EDIT_EXTRA, testListing);
+            activityTestRule.launchActivity(i);
+
+            Double price = editTestListing.getPrice();
+            String convert = price.toString();
+            onView(withId(R.id.name_edittext)).perform(clearText());
+            onView(withId(R.id.description_edittext)).perform(clearText());
+            onView(withId(R.id.price_edittext)).perform(clearText());
+            onView(withId(R.id.name_edittext)).perform(typeText(editTestListing.getName()));
+            onView(withId(R.id.price_edittext)).perform(typeText(convert));
+            onView(withId(R.id.description_edittext)).perform(typeText(editTestListing.getDescription()));
+            onView(withId(R.id.description_edittext)).perform(closeSoftKeyboard());
+            onView(withId(R.id.nonrefundable_rButton)).perform(scrollTo()).perform(click()).check(matches(isChecked()));
+            onView(withId(R.id.handicap_button_control)).perform(scrollTo()).perform(click()).check(matches(not(isChecked())));
+            onView(withId(R.id.compact_button_control)).perform(scrollTo()).perform(click()).check(matches(isChecked()));
+            onView(withId(R.id.covered_button_control)).perform(scrollTo()).perform(click()).check(matches(isChecked()));
+            onView(withId(R.id.upload_listing_button)).perform(scrollTo()).perform(click());
+
+            onView(withId(R.id.listing_listview)).check(matches(isDisplayed()));
+            mSemaphore.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void editPostingInDatabase() {
@@ -450,8 +450,8 @@ public class EditListingActivityTest {
 
     @After
     public void finishTest() {
-//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-//        mDatabase.child(Consts.LISTINGS_DATABASE).child(testListing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(testListing.getListingID()).removeValue();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child(Consts.LISTINGS_DATABASE).child(testListing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(testListing.getListingID()).removeValue();
         activityTestRule.getActivity().finish();
         System.out.println("FINISH TEST CALLED");
     }
