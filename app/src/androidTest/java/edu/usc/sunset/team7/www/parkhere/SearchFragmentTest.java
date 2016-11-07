@@ -27,7 +27,7 @@ public class SearchFragmentTest {
             new ActivityTestRule<HomeActivity>(HomeActivity.class, true, false);
 
     @Test
-    public void testForUIElements() {
+    public void testForUIElements_blackbox() {
         Intent intent = new Intent();
         intent.putExtra(HomeActivity.FRAGMENT_TAG, Consts.SEARCH_FRAGMENT_TAG);
         activityRule.launchActivity(intent);
