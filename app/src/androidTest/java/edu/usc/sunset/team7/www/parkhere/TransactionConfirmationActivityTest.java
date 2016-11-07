@@ -1,9 +1,14 @@
 package edu.usc.sunset.team7.www.parkhere;
 
+import android.app.Instrumentation;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.UiThreadTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,10 +25,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.Semaphore;
+
 import edu.usc.sunset.team7.www.parkhere.Activities.HomeActivity;
 import edu.usc.sunset.team7.www.parkhere.Activities.TransactionConfirmationActivity;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
  * Created by Acer on 11/6/2016.
@@ -41,9 +54,28 @@ public class TransactionConfirmationActivityTest {
     public ActivityTestRule<TransactionConfirmationActivity> activityRule =
             new ActivityTestRule<>(TransactionConfirmationActivity.class, true, false);
 
+    @Rule
+    public UiThreadTestRule activityUITestRule = new UiThreadTestRule();
+
     @Before
     public void initialize() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword("kunal@me.com", "hello12345");
+        final Semaphore loginSemaphore = new Semaphore(0);
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null) {
+                    Log.i("TESTING LOG", "NOT LOGGED In");
+                } else {
+                    loginSemaphore.release();
+                }
+            }
+        });
+        try { loginSemaphore.acquire(); }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+            return;
+        }
 
         //creating example listing
         sample = new Listing();
@@ -54,7 +86,7 @@ public class TransactionConfirmationActivityTest {
         sample.setCovered(true);
         sample.setName("Sample listing");
         sample.setListingID("Sample listing");
-        sample.setProviderID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        sample.setProviderID("Sample provider");
         sample.setRefundable(false);
 
         //creating example listingDetailsString and listing distance
@@ -64,7 +96,7 @@ public class TransactionConfirmationActivityTest {
     }
 
     @Test
-    public void testBooking() {
+    public void testBooking_whitebox() {
         Intent intent = new Intent();
         intent.putExtra(Consts.LISTING_TO_BE_BOOKED, sample);
         intent.putExtra(Consts.LISTING_DETAILS_STRING, listingDetailsString);
@@ -85,6 +117,23 @@ public class TransactionConfirmationActivityTest {
         db = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE)
                 .child(uid).child(Consts.INACTIVE_LISTINGS).child(sample.getListingID());
         Assert.assertEquals(false, db.getKey() == null); //properly written to inactive listings
+        activityRule.getActivity().finish();
+    }
+
+    @Test
+    public void testBooking_blackbox() {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Consts.LISTING_TO_BE_BOOKED, sample);
+        bundle.putSerializable(Consts.LISTING_DETAILS_STRING, listingDetailsString);
+        bundle.putSerializable(Consts.LISTING_DISTANCE, listingDistance);
+        bundle.putSerializable(Consts.PAYPAL_EMAIL, paypalEmail);
+        intent.putExtras(bundle);
+
+        activityRule.launchActivity(intent);
+        onView(withId(R.id.place_booking_button)).perform(click());
+        //check that its moved to the home activity
+        onView(withId(R.id.home_toolbar)).check(matches(isDisplayed()));
     }
 
     @After
