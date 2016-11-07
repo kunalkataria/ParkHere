@@ -304,56 +304,69 @@ public class PostListingActivity extends AppCompatActivity {
 
     private boolean checkFields(){
         nameString = parkingNameEditText.getText().toString();
-        descriptionString =descriptionEditText.getText().toString();
+        descriptionString = descriptionEditText.getText().toString();
         //possible invalid number format here
-        price = Double.parseDouble(priceEditText.getText().toString());
+        try {
+            price = Double.parseDouble(priceEditText.getText().toString());
+        } catch (NumberFormatException nfe){
+            Toast.makeText(PostListingActivity.this, "Not a valid price.",
+                    Toast.LENGTH_SHORT).show();
+        }
 
-        if(!nameString.equals("")){
-            parkingNameTextInputLayout.setErrorEnabled(false);
-            if(!descriptionString.equals("")){
-                descriptionTextInputLayout.setErrorEnabled(false);
-                if(price>=0){
-                    priceTextInputLayout.setErrorEnabled(false);
-                    if(sourceImageUri!=null) {
-                        if (radioGroup.getCheckedRadioButtonId() != -1) {
-                            if (startDate != 0) {
-                                if (stopDate != 0) {
-                                    if (latitude != -1 && longitude != -1) {
-                                        saveSwitchValues();
-                                        return true;
-                                    } else {
-                                        Toast.makeText(PostListingActivity.this, "Please select a location through the search bar.",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    stopDateLayout.setError("Please select a stop date");
-                                    stopDateLayout.setErrorEnabled(true);
-                                }
-                            } else {
-                                startDateLayout.setError("Please select a start date");
-                                startDateLayout.setErrorEnabled(true);
-                            }
-                        } else {
-                            Toast.makeText(PostListingActivity.this, "Please select a cancellation policy.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    } else{
-                        Toast.makeText(PostListingActivity.this, "Please upload a picture of your parking spot.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                } else{
-                    priceTextInputLayout.setErrorEnabled(true);
-                    priceTextInputLayout.setError("Please enter a price greater than $0");
-                }
-            } else{
-                descriptionTextInputLayout.setErrorEnabled(true);
-                descriptionTextInputLayout.setError("Please enter a description.");
-            }
-        } else{
+        boolean isValid = true;
+
+        if (nameString.equals("")) {
+            isValid = false;
             parkingNameTextInputLayout.setErrorEnabled(true);
             parkingNameTextInputLayout.setError("Please enter a name.");
+        } else {
+            parkingNameTextInputLayout.setErrorEnabled(false);
         }
-        return false;
+        if (descriptionString.equals("")){
+            isValid = false;
+            descriptionTextInputLayout.setErrorEnabled(true);
+            descriptionTextInputLayout.setError("Please enter a description.");
+        } else {
+            descriptionTextInputLayout.setErrorEnabled(false);
+        }
+        if (price<=0){
+            isValid = false;
+            priceTextInputLayout.setErrorEnabled(true);
+            priceTextInputLayout.setError("Please enter a price greater than $0");
+        } else {
+            priceTextInputLayout.setErrorEnabled(false);
+        }
+        if (sourceImageUri==null) {
+            isValid = false;
+            Toast.makeText(PostListingActivity.this, "Please upload a picture of your parking spot.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        if (radioGroup.getCheckedRadioButtonId() == -1) {
+            isValid = false;
+            Toast.makeText(PostListingActivity.this, "Please select a cancellation policy.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        if (startDate == 0) {
+            isValid = false;
+            startDateLayout.setError("Please select a start date");
+            startDateLayout.setErrorEnabled(true);
+        } else {
+            startDateLayout.setErrorEnabled(false);
+        }
+        if (stopDate == 0) {
+            isValid = false;
+            stopDateLayout.setError("Please select a stop date");
+            stopDateLayout.setErrorEnabled(true);
+        } else {
+            stopDateLayout.setErrorEnabled(false);
+        }
+        if (latitude == -1 && longitude == -1) {
+            isValid = false;
+            Toast.makeText(PostListingActivity.this, "Please select a location through the search bar.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        saveSwitchValues();
+        return isValid;
     }
 
     private void saveSwitchValues(){
