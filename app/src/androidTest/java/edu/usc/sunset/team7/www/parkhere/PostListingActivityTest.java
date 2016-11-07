@@ -1,26 +1,25 @@
 package edu.usc.sunset.team7.www.parkhere;
 
 import android.content.Intent;
-import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
+import android.support.test.rule.UiThreadTestRule;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.Hashtable;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.PostListingActivity;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 
 /**
  * Created by Acer on 11/5/2016.
  */
 
-@RunWith(AndroidJUnit4.class)
-@LargeTest
 public class PostListingActivityTest {
     private String nameString, descriptionString;
     private double price;
@@ -36,33 +35,81 @@ public class PostListingActivityTest {
 
     boolean isCompact,isHandicap, isCovered, isRefundable;
 
+    private Listing mListing;
+
     @Rule
     public ActivityTestRule<PostListingActivity> activityRule =
             new ActivityTestRule<>(PostListingActivity.class, true, false);
 
+    @Rule
+    public UiThreadTestRule activityUITestRule = new UiThreadTestRule();
+
     @Before
     public void setUp() {
-        nameString = "Wyatt";
-        descriptionString = "This is a cool spot";
-        price = 34.30;
+        mListing = new Listing();
+        mListing.setName("Test listing");
+        mListing.setDescription("Test description");
+        mListing.setPrice(34.30);
+        mListing.setRefundable(true);
+        mListing.setCovered(false);
+        mListing.setCompact(false);
+        mListing.setHandicap(true);
+        mListing.setLatitude(34.022858);
+        mListing.setLongitude(-118.279987);
+        mListing.setStartTime((System.currentTimeMillis() / 1000) + 10000);
+        mListing.setStopTime((System.currentTimeMillis() / 1000) + 86400);
 
+        activityRule.launchActivity(new Intent());
     }
 
     @Test
     public void validateUserWithCorrectFields() {
-        activityRule.launchActivity(new Intent());
+        activityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                activityRule.getActivity().fillInFields(mListing);
+                Assert.assertEquals(true, activityRule.getActivity().checkFields());
+            }
+        });
 
-
+        activityRule.getActivity().finish();
     }
 
     @Test
     public void validateUserWithIncorrectFields() {
-        activityRule.launchActivity(new Intent());
+
+        activityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mListing.setPrice(-1.5);
+                mListing.setStopTime(mListing.getStartTime() - 10000);
+                activityRule.getActivity().fillInFields(mListing);
+                Assert.assertEquals(false, activityRule.getActivity().checkFields());
+            }
+        });
+
+        activityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mListing.setStopTime((System.currentTimeMillis() / 1000) + 86400);
+                activityRule.getActivity().fillInFields(mListing);
+                Assert.assertEquals(false, activityRule.getActivity().checkFields());
+            }
+        });
+
+        activityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mListing.setPrice(34.30);
+                activityRule.getActivity().fillInFields(mListing);
+                Assert.assertEquals(true, activityRule.getActivity().checkFields());
+            }
+        });
 
     }
 
     @Test
-    public void validateStartAndStopTime(){
+    public void validateStartAndStopTime() {
         /*
         We don't have a check for if the start and stop times are valid (as in the start comes before the start time)
         Also, if the stop time is before the current time, the user should not be allowed to post the listing
