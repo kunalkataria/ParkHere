@@ -2,12 +2,14 @@ package edu.usc.sunset.team7.www.parkhere;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -28,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.Semaphore;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.HomeActivity;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
@@ -57,7 +60,26 @@ public class UserProfileFragmentTest {
     @Before
     public void initializeFragment() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword("kunal@me.com", "hello12345");
-        mUId = "QqYwjQiGejP3mOf3a0O34csCmRH2";
+
+        final Semaphore loginSemaphore = new Semaphore(0);
+
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null) {
+                    Log.i("TESTING LOG", "NOT LOGGED In");
+                } else {
+                    loginSemaphore.release();
+                    mUId = firebaseAuth.getCurrentUser().getUid();
+                }
+            }
+        });
+        try {
+            loginSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return;
+        }
 
         DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE);
         reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -94,7 +116,7 @@ public class UserProfileFragmentTest {
         Intent intent = new Intent();
         activityRule.launchActivity(intent);
 
-        DrawerActions.openDrawer(R.id.drawer_layout);
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
 
         onData(anything()).inAdapterView(withId(R.id.left_drawer)).atPosition(4).perform(click());
 
