@@ -1,10 +1,12 @@
 package edu.usc.sunset.team7.www.parkhere;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +22,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.Semaphore;
 
 import edu.usc.sunset.team7.www.parkhere.Activities.ListingDetailsActivity;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
@@ -41,6 +45,22 @@ public class ListingDetailsActivityTest {
     @Before
     public void addListingToBeRemoved() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword("kunal@me.com", "hello12345");
+        final Semaphore loginSemaphore = new Semaphore(0);
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null) {
+                    Log.i("TESTING LOG", "NOT LOGGED In");
+                } else {
+                    loginSemaphore.release();
+                }
+            }
+        });
+        try { loginSemaphore.acquire(); }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+            return;
+        }
 
         //first add an example listing
         sample = new Listing();
