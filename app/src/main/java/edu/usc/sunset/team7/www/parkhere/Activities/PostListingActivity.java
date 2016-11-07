@@ -46,11 +46,12 @@ import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 /**
  * Created by kunal on 10/23/16.
  */
-//NEED TO CHANGE HOW TO POST LISTING DUE TO DB RESTRUCTURING
+
 public class PostListingActivity extends AppCompatActivity {
 
     private static final String TAG = "PostListingActivity";
@@ -97,20 +98,11 @@ public class PostListingActivity extends AppCompatActivity {
     private TimePickerDialog startTimePicker;
     private TimePickerDialog stopTimePicker;
 
-    private int startYear;
-    private int startMonth;
-    private int startDay;
-    private int startHour;
-    private int startMinute;
+    private int startYear, startMonth, startDay, startHour, startMinute;
 
-    private int stopYear;
-    private int stopMonth;
-    private int stopDay;
-    private int stopHour;
-    private int stopMinute;
+    private int stopYear, stopMonth, stopDay, stopHour, stopMinute;
 
-    private long startDate;
-    private long stopDate;
+    private long startDate, stopDate;
 
     boolean isCompact,isHandicap, isCovered, isRefundable;
 
@@ -224,23 +216,27 @@ public class PostListingActivity extends AppCompatActivity {
             StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
             StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
             //Best way to store the data?
-            UploadTask uploadTask = parkingRef.child(listingID).putFile(sourceImageUri);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
-                    Log.d(TAG, exception.toString());
-                    Toast.makeText(PostListingActivity.this, "Unable to upload the image. Please check your internet connection and try again.",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                    firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
-                    newListingRef.child(Consts.LISTING_IMAGE).setValue(firebaseImageURL);
-                }
-            });
+            if (sourceImageUri == null) {
+                newListingRef.child(Consts.LISTING_IMAGE).setValue(Consts.DEFAULT_PARKING_IMAGE);
+            } else {
+                UploadTask uploadTask = parkingRef.child(listingID).putFile(sourceImageUri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Log.d(TAG, exception.toString());
+                        Toast.makeText(PostListingActivity.this, "Unable to upload the image. Please check your internet connection and try again.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
+                        newListingRef.child(Consts.LISTING_IMAGE).setValue(firebaseImageURL);
+                    }
+                });
+            }
             finish();
         }
     }
@@ -302,45 +298,52 @@ public class PostListingActivity extends AppCompatActivity {
     }
 
 
-    private boolean checkFields(){
+    public boolean checkFields(){
         nameString = parkingNameEditText.getText().toString();
         descriptionString = descriptionEditText.getText().toString();
-        //possible invalid number format here
+        boolean isValid = true;
         try {
             price = Double.parseDouble(priceEditText.getText().toString());
-        } catch (NumberFormatException nfe){
-            Toast.makeText(PostListingActivity.this, "Not a valid price.",
-                    Toast.LENGTH_SHORT).show();
+            if (price > 0) {
+                priceTextInputLayout.setErrorEnabled(false);
+            } else {
+                isValid = false;
+                priceTextInputLayout.setErrorEnabled(true);
+                priceTextInputLayout.setError("Not a valid price");
+            }
+        } catch (NumberFormatException nfe) {
+            isValid = false;
+            priceTextInputLayout.setErrorEnabled(true);
+            priceTextInputLayout.setError("Not a valid price");
         }
 
-        boolean isValid = true;
-
-        if (nameString.equals("")) {
+        if (nameString.isEmpty()) {
             isValid = false;
             parkingNameTextInputLayout.setErrorEnabled(true);
             parkingNameTextInputLayout.setError("Please enter a name.");
         } else {
             parkingNameTextInputLayout.setErrorEnabled(false);
         }
-        if (descriptionString.equals("")){
+        if (descriptionString.isEmpty()) {
             isValid = false;
             descriptionTextInputLayout.setErrorEnabled(true);
             descriptionTextInputLayout.setError("Please enter a description.");
         } else {
             descriptionTextInputLayout.setErrorEnabled(false);
         }
-        if (price<=0){
+        if (price <= 0){
             isValid = false;
             priceTextInputLayout.setErrorEnabled(true);
             priceTextInputLayout.setError("Please enter a price greater than $0");
         } else {
             priceTextInputLayout.setErrorEnabled(false);
         }
-        if (sourceImageUri==null) {
-            isValid = false;
-            Toast.makeText(PostListingActivity.this, "Please upload a picture of your parking spot.",
-                    Toast.LENGTH_SHORT).show();
-        }
+        // allow the user now to upload a parking space with the blank/default image
+//        if (sourceImageUri == null) {
+//            isValid = false;
+//            Toast.makeText(PostListingActivity.this, "Please upload a picture of your parking spot.",
+//                    Toast.LENGTH_SHORT).show();
+//        }
         if (radioGroup.getCheckedRadioButtonId() == -1) {
             isValid = false;
             Toast.makeText(PostListingActivity.this, "Please select a cancellation policy.",
@@ -384,5 +387,24 @@ public class PostListingActivity extends AppCompatActivity {
         isCovered = coveredSwitch.isChecked();
         isHandicap =  handicapSwitch.isChecked();
         isRefundable = radioGroup.getCheckedRadioButtonId() == R.id.refundable_rButton;
+    }
+
+    public void fillInFields(Listing listing) {
+        parkingNameEditText.setText(listing.getName());
+        descriptionEditText.setText(listing.getDescription());
+        priceEditText.setText(Double.toString(listing.getPrice()));
+        refundableRButton.toggle();
+        if (listing.isRefundable()) {
+            radioGroup.check(R.id.refundable_rButton);
+        } else {
+            radioGroup.check(R.id.nonrefundable_rButton);
+        }
+        compactSwitch.setChecked(listing.isCompact());
+        coveredSwitch.setChecked(listing.isCovered());
+        handicapSwitch.setChecked(listing.isHandicap());
+        latitude = listing.getLatitude();
+        longitude = listing.getLongitude();
+        startDate = listing.getStartTime();
+        stopDate = listing.getStopTime();
     }
 }
