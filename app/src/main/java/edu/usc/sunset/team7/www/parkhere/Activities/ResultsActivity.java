@@ -155,10 +155,8 @@ public class ResultsActivity extends AppCompatActivity {
                 if (compact) {
                     filteredResults = filteredResultsOnCompact(filteredResults);
                 }
-
                 populateResultsList(filteredResults);
             }
-
         }
     }
 
@@ -172,7 +170,7 @@ public class ResultsActivity extends AppCompatActivity {
         return true;
     }
 
-    private List<ResultsPair> filterResultsOnHandicap(List<ResultsPair> currentResults) {
+    public List<ResultsPair> filterResultsOnHandicap(List<ResultsPair> currentResults) {
         List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
         for (ResultsPair currentPair : currentResults) {
             if (currentPair.getListing().isHandicap()) {
@@ -182,7 +180,7 @@ public class ResultsActivity extends AppCompatActivity {
         return filteredResults;
     }
 
-    private List<ResultsPair> filterResultsOnCovered(List<ResultsPair> currentResults) {
+    public List<ResultsPair> filterResultsOnCovered(List<ResultsPair> currentResults) {
         List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
         for (ResultsPair currentPair : currentResults) {
             if (currentPair.getListing().isCovered()) {
@@ -192,7 +190,7 @@ public class ResultsActivity extends AppCompatActivity {
         return filteredResults;
     }
 
-    private List<ResultsPair> filteredResultsOnCompact(List<ResultsPair> currentResults) {
+    public List<ResultsPair> filteredResultsOnCompact(List<ResultsPair> currentResults) {
         List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
         for (ResultsPair currentPair : currentResults) {
             if (currentPair.getListing().isCompact()) {
