@@ -135,5 +135,6 @@ public class Consts {
     public static final String REVIEW_DESCRIPTION = "Review";
     public static final String REVIEW_RATING = "Rating";
 
+    public static final int RESULTS_LIST_VIEW_ID = 0;
 
 }

@@ -45,7 +45,7 @@ public class ResultsActivity extends AppCompatActivity {
     private boolean compact = false;
     private boolean handicap = false;
 
-    private SearchResult mSearchResult;
+    private  SearchResult mSearchResult;
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
 
@@ -71,6 +71,7 @@ public class ResultsActivity extends AppCompatActivity {
         mSearchResult = searchResult;
         ListViewCompat listView = new ListViewCompat(this);
         listView.setAdapter(new CustomResultsAdapter(this, searchResult.getAllListings()));
+        listView.setId(Consts.RESULTS_LIST_VIEW_ID);
         listContentSpace.addView(listView);
         if (mSearchResult.getAverageParkPrice() == -1.0) {
             parkWhizIntroTextView.setVisibility(View.GONE);
