@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,8 +25,6 @@ import org.junit.runner.RunWith;
 import edu.usc.sunset.team7.www.parkhere.Activities.RegisterActivity;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Acer on 11/5/2016.
@@ -66,7 +63,6 @@ public class RegisterActivityTest {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task)
                 {
-                    Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
                     if (task.isSuccessful()) {
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -124,8 +120,9 @@ public class RegisterActivityTest {
         intent.putExtra("test", true);
         activityRule.launchActivity(intent);
         Assert.assertEquals(checkRegisterValues(invalidFirstName, invalidLastName, invalidPhoneNumber, invalidEmail, invalidPassword), false);
-
     }
+
+
 
     public boolean checkRegisterValues(String fName, String lName, String pNumber, String emailAddress, String pword){
         boolean allValid = true;
