@@ -30,3 +30,7 @@ External Libraries used:
 Johnson Hui, Kunal Kataria, Wyatt Kim, Eddie Lou, Justin Lu, Jonathan Wang
 
 [Contributions Here](https://github.com/kunalkataria/ParkHere/graphs/contributors)
+
+This project needs to be run on an actual phone, many features do not work on the emulator.
+
+Tests are in the androidTest and Test folder, each test file has to be run individually, running the tests as a whole package does not work.
