@@ -215,9 +215,6 @@ public class EditListingActivityTest {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                //System.out.println("INSIDE RUNNABLE THREAD");
-                //clear fields
-                //System.out.println("LINE SOMEWHERE UP IN THE MIDDLE");
 
                 Assert.assertEquals(false, activityTestRule.getActivity().checkFields());
                 lock.release();
@@ -450,9 +447,15 @@ public class EditListingActivityTest {
 
     @After
     public void finishTest() {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child(Consts.LISTINGS_DATABASE).child(testListing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(testListing.getListingID()).removeValue();
-        activityTestRule.getActivity().finish();
-        System.out.println("FINISH TEST CALLED");
+        try {
+            mSemaphore.acquire();
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase.child(Consts.LISTINGS_DATABASE).child(testListing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(testListing.getListingID()).removeValue();
+            activityTestRule.getActivity().finish();
+            System.out.println("FINISH TEST CALLED");
+            mSemaphore.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

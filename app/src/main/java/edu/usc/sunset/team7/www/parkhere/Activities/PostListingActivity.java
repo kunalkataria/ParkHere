@@ -364,8 +364,7 @@ public class PostListingActivity extends AppCompatActivity {
             stopDateLayout.setErrorEnabled(false);
         }
         if (startDate != 0 && stopDate != 0) {
-            long currentTime = System.currentTimeMillis() / 1000L;
-            if (startDate >= stopDate || stopDate <= currentTime || startDate <= currentTime) {
+            if (startDate >= stopDate) {
                 isValid = false;
                 startDateLayout.setError("Please select a valid start date");
                 startDateLayout.setErrorEnabled(true);
