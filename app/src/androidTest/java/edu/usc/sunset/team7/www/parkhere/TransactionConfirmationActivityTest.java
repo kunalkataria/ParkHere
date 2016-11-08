@@ -34,6 +34,7 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -131,7 +132,7 @@ public class TransactionConfirmationActivityTest {
         intent.putExtras(bundle);
 
         activityRule.launchActivity(intent);
-        onView(withId(R.id.place_booking_button)).perform(click());
+        onView(withId(R.id.place_booking_button)).perform(scrollTo()).perform(click());
         //check that its moved to the home activity
         onView(withId(R.id.home_toolbar)).check(matches(isDisplayed()));
     }
