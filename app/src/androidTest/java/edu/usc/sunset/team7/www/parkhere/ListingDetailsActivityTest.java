@@ -77,7 +77,7 @@ public class ListingDetailsActivityTest {
     }
 
     @Test
-    public void deleteListingTest() {
+    public void deleteListingTest_whitebox() {
         //write to active listings database
         DatabaseReference nameRef = FirebaseDatabase.getInstance().getReference()
                 .child(Consts.LISTINGS_DATABASE).child(sample.getProviderID()).child(Consts.ACTIVE_LISTINGS)
@@ -112,7 +112,7 @@ public class ListingDetailsActivityTest {
     }
 
     @Test
-    public void deleteListingAfterStartTime() {
+    public void deleteListingAfterStartTime_blackbox() {
         //write to inactive listings database
         DatabaseReference nameRef = FirebaseDatabase.getInstance().getReference()
                 .child(Consts.LISTINGS_DATABASE).child(sample.getProviderID()).child(Consts.INACTIVE_LISTINGS)
