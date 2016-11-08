@@ -121,7 +121,7 @@ public class TransactionConfirmationActivityTest {
     }
 
     @Test
-    public void testBooking_blackbox() {
+    public void testPlaceBookingLeadsToHomeActivity_blackbox() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable(Consts.LISTING_TO_BE_BOOKED, sample);
