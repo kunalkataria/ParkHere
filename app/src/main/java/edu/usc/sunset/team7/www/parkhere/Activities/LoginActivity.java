@@ -152,6 +152,7 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick (R.id.register_button)
     protected void moveToRegister() {
         RegisterActivity.startActivity(this);
+        finish();
     }
 
     @OnClick (R.id.forgot_password_button)
