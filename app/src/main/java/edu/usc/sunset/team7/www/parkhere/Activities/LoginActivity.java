@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -131,29 +132,40 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         //Firebase sign in code
-        final Semaphore mSemaphore = new Semaphore(0);
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+        new LoginTask().execute(email, password);
+    }
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(LoginActivity.this, "Incorrect email or password. Please try again.",
-                                    Toast.LENGTH_SHORT).show();
+    private class LoginTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            final Semaphore mSemaphore = new Semaphore(0);
+            mAuth.signInWithEmailAndPassword(params[0], params[1])
+                    .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+
+                            // If sign in fails, display a message to the user. If sign in succeeds
+                            // the auth state listener will be notified and logic to handle the
+                            // signed in user can be handled in the listener.
+                            if (!task.isSuccessful()) {
+                                Log.w(TAG, "signInWithEmail:failed", task.getException());
+                                Toast.makeText(LoginActivity.this, "Incorrect email or password. Please try again.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            mSemaphore.release();
+
                         }
-                        mSemaphore.release();
+                    });
+            try {
+                mSemaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-                    }
-                });
-        try {
-            mSemaphore.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            return null;
         }
     }
 
