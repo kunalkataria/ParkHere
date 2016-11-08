@@ -132,7 +132,13 @@ public class RegisterActivityTest {
         Intent intent = new Intent();
         intent.putExtra("test", true);
         activityRule.launchActivity(intent);
-        Assert.assertEquals(checkRegisterValues(invalidFirstName, invalidLastName, invalidPhoneNumber, invalidEmail, invalidPassword), false);
+        activityRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Assert.assertEquals(false, activityRule.getActivity()
+                        .checkValues(invalidFirstName, invalidLastName, invalidPhoneNumber, invalidEmail, invalidPassword));
+            }
+        });
     }
 
     //black-box
@@ -170,25 +176,4 @@ public class RegisterActivityTest {
         onView(withId(R.id.search_button)).perform(scrollTo()).check(matches(isDisplayed()));
 
     }
-
-    public boolean checkRegisterValues(String fName, String lName, String pNumber, String emailAddress, String pword){
-        boolean allValid = true;
-        if(!Tools.nameValid(fName)) {
-            allValid = false;
-        }
-        if(!Tools.nameValid(lName)) {
-            allValid = false;
-        }
-        if(!Tools.phoneValid(pNumber)) {
-            allValid = false;
-        }
-        if(!Tools.emailValid(emailAddress)) {
-            allValid = false;
-        }
-        if(!Tools.passwordValid(pword)) {
-            allValid = false;
-        }
-        return allValid;
-    }
-
 }

@@ -95,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
         removeErrors();
         collectValues();
         if(checkValues(firstName, lastName, phoneNumber, email, password)){
-            writeToDatabase();
+            new RegisterTask().execute(email, password);
         }
     }
 
@@ -145,12 +145,12 @@ public class RegisterActivity extends AppCompatActivity {
         return allValid;
     }
 
-    private class RegisterTask extends AsyncTask<Void, Void, Void> {
+    private class RegisterTask extends AsyncTask<String, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(String... params) {
             final Semaphore mSemaphore = new Semaphore(0);
-            mAuth.createUserWithEmailAndPassword(email, password)
+            mAuth.createUserWithEmailAndPassword(params[0], params[1])
                     .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -197,8 +197,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 System.out.println("PROFILE PICTURE URL:      " + profilePictureURL);
                                 mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_PROFILE_PIC).setValue(profilePictureURL);
                                 mSemaphore.release();
-                                LoginActivity.startActivity(RegisterActivity.this);
-                                RegisterActivity.this.finish();
                             }
                         }
                     });
@@ -209,10 +207,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
             return null;
         }
-    }
 
-    private void writeToDatabase() {
-        new RegisterTask().execute();
+        @Override
+        protected void onPostExecute(Void result) {
+            LoginActivity.startActivity(RegisterActivity.this);
+            RegisterActivity.this.finish();
+        }
     }
 
     @OnClick(R.id.upload_button)
