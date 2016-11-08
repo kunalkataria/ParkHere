@@ -29,6 +29,7 @@ public class Consts {
     public static final String BOOKING_EXTRA = "booking_extra";
     public static final String LISTING_EXTRA = "listing_extra";
     public static final String INACTIVE_LISTINGS_EXTRA = "inactive_listings_extra";
+    public static final String SIGN_OUT_EXTRA = "sign_out_extra";
 
     public static final String LISTING_TO_BE_BOOKED = "listing_to_be_booked";
     public static final String LISTING_DISTANCE = "listing_distance";

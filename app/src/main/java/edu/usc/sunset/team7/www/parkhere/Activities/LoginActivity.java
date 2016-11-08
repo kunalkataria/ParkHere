@@ -24,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.concurrent.Semaphore;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -53,13 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         context.startActivity(i);
     }
 
-    //Firebase AuthListener checks for changes to the Auth (when the user logs in and out)
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -68,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -75,6 +71,10 @@ public class LoginActivity extends AppCompatActivity {
 
         //Firebase setup
         mAuth = FirebaseAuth.getInstance();
+
+        if (getIntent().getBooleanExtra(Consts.SIGN_OUT_EXTRA, false) && mAuth.getCurrentUser() != null) {
+            mAuth.signOut();
+        }
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -118,11 +118,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
+        mAuth.addAuthStateListener(mAuthListener);
 
     }
 
     @OnClick (R.id.login_button)
-    protected void attemptLogin() {
+    public void attemptLogin() {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
@@ -130,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         //Firebase sign in code
+        final Semaphore mSemaphore = new Semaphore(0);
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -144,9 +146,19 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Incorrect email or password. Please try again.",
                                     Toast.LENGTH_SHORT).show();
                         }
+                        mSemaphore.release();
 
                     }
                 });
+        try {
+            mSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @OnClick (R.id.register_button)
