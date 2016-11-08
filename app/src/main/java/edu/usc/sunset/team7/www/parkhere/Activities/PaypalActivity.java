@@ -68,7 +68,7 @@ public class PaypalActivity extends AppCompatActivity {
         password = passwordEditText.getText().toString();
     }
 
-    private boolean checkValues() {
+    public boolean checkValues() {
         if (Tools.emailValid(emailEditText.getText().toString())) {
             if (!passwordEditText.getText().toString().equals("")) {
                 return true;
