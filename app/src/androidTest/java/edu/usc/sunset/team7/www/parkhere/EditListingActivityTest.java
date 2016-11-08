@@ -282,6 +282,7 @@ public class EditListingActivityTest {
             onView(withId(R.id.name_edittext)).perform(clearText());
             onView(withId(R.id.description_edittext)).perform(clearText());
             onView(withId(R.id.price_edittext)).perform(clearText());
+            onView(withId(R.id.upload_listing_button)).perform(scrollTo()).perform(click());
             onView(allOf(withId(R.id.name_textinputlayout), withText("Please enter a name.")));
             onView(allOf(withId(R.id.description_edittext), withText("Please enter a description.")));
             onView(allOf(withId(R.id.price_edittext), withText("Please enter a price greater than $0.")));

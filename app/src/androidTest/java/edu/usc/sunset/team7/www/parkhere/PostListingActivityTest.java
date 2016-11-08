@@ -18,8 +18,11 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.allOf;
 
 
 /**
@@ -36,6 +39,7 @@ public class PostListingActivityTest {
     private boolean isCompact,isHandicap, isCovered, isRefundable;
     private double validLatitude, validLongitude;
 
+    final Semaphore mSemaphore = new Semaphore(0);
     private Listing mListing;
 
     @Rule
@@ -60,7 +64,8 @@ public class PostListingActivityTest {
         mListing.setStartTime((System.currentTimeMillis() / 1000) + 10000);
         mListing.setStopTime((System.currentTimeMillis() / 1000) + 86400);
 
-        activityRule.launchActivity(new Intent());
+        //activityRule.launchActivity(new Intent());
+        mSemaphore.release();
     }
 
 //    @Test
@@ -91,43 +96,70 @@ public class PostListingActivityTest {
 //    }
 
     @Test
+    public void validateCheckFieldsUI() {
+        try {
+            mSemaphore.acquire();
+            Intent i = new Intent();
+            activityRule.launchActivity(i);
+
+            //clear fields
+            onView(withId(R.id.name_edittext)).perform(clearText());
+            onView(withId(R.id.description_edittext)).perform(clearText());
+            onView(withId(R.id.price_edittext)).perform(clearText());
+            onView(withId(R.id.upload_listing_button)).perform(scrollTo()).perform(click());
+            onView(allOf(withId(R.id.name_textinputlayout), withText("Please enter a name.")));
+            onView(allOf(withId(R.id.description_edittext), withText("Please enter a description.")));
+            onView(allOf(withId(R.id.price_edittext), withText("Please enter a price greater than $0.")));
+            mSemaphore.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void validateUserWithIncorrectFields() {
-
-        final Semaphore mSemaphore = new Semaphore(0);
-
-        activityRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                activityRule.getActivity().fillInFields(mListing);
-            }
-        });
-
-        onView(withId(R.id.price_edittext)).perform(clearText());
-        onView(withId(R.id.price_edittext)).perform(typeText("0"));
-
-        activityRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Assert.assertEquals(false, activityRule.getActivity().checkFields());
-                mSemaphore.release();
-            }
-        });
-
-        onView(withId(R.id.price_edittext)).perform(clearText());
-        onView(withId(R.id.price_edittext)).perform(typeText("34.30"));
-
-        activityRule.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mSemaphore.acquire();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        final Semaphore lock = new Semaphore(0);
+        try {
+            mSemaphore.acquire();
+            Intent i = new Intent();
+            activityRule.launchActivity(i);
+            activityRule.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    activityRule.getActivity().fillInFields(mListing);
                 }
-                Assert.assertEquals(true, activityRule.getActivity().checkFields());
-                mSemaphore.release();
-            }
-        });
+            });
+
+            onView(withId(R.id.price_edittext)).perform(clearText());
+            onView(withId(R.id.price_edittext)).perform(typeText("0"));
+
+            activityRule.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Assert.assertEquals(false, activityRule.getActivity().checkFields());
+                    lock.release();
+                }
+            });
+
+            onView(withId(R.id.price_edittext)).perform(clearText());
+            onView(withId(R.id.price_edittext)).perform(typeText("34.30"));
+
+            activityRule.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        lock.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Assert.assertEquals(true, activityRule.getActivity().checkFields());
+                    lock.release();
+                }
+            });
+            mSemaphore.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
