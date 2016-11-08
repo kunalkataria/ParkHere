@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.concurrent.Semaphore;
+
 import edu.usc.sunset.team7.www.parkhere.Activities.HomeActivity;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
@@ -39,11 +41,13 @@ public class BalanceTest {
             new ActivityTestRule<>(HomeActivity.class, true, false);
 
 
+    private Semaphore mSemaphore = new Semaphore(0);
+
     // set balance of user to be $50
     @Before
     public void setup() {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword("tester@test.me", "hello12345!");
 
+        FirebaseAuth.getInstance().signInWithEmailAndPassword("tester@test.me", "hello12345!");
         FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -55,6 +59,7 @@ public class BalanceTest {
                             .child(Consts.USERS_DATABASE).child(currentUID);
 
                     balanceRef.child(Consts.USER_BALANCE).setValue(balanceAmount);
+                    mSemaphore.release();
 
                 }
             }
@@ -63,22 +68,34 @@ public class BalanceTest {
     }
 
     @Test
-    public void validateDisplay() throws InterruptedException {
+    public void validateDisplay() {
+        try {
+            mSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent();
         intent.putExtra(FRAGMENT_TAG, Consts.BALANCE_FRAGMENT_TAG);
         activityTestRule.launchActivity(intent);
 
         onView(withId(R.id.current_balance)).check(matches(withText(balanceString)));
+        mSemaphore.release();
     }
 
     @Test
     public void validateTransfer() {
+        try {
+            mSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent();
         intent.putExtra(FRAGMENT_TAG, Consts.BALANCE_FRAGMENT_TAG);
         activityTestRule.launchActivity(intent);
 
         onView(withId(R.id.transfer_button)).perform(click());
         onView(withId(R.id.current_balance)).check(matches(withText(emptyBalanceString)));
+        mSemaphore.release();
     }
 
 
