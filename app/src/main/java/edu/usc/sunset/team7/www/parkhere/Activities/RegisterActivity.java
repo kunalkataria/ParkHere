@@ -3,6 +3,7 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -20,11 +21,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.concurrent.Semaphore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -141,57 +145,74 @@ public class RegisterActivity extends AppCompatActivity {
         return allValid;
     }
 
-    private void writeToDatabase(){
-        mAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                if (!task.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this, "Registration failed. Please try again.",
-                            Toast.LENGTH_SHORT).show();
-                } else{
-                    mDatabase = FirebaseDatabase.getInstance().getReference();
-                    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private class RegisterTask extends AsyncTask<Void, Void, Void> {
 
-                    //Add user to users database
-                    mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_FIRSTNAME).setValue(firstName);
-                    mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_LASTNAME).setValue(lastName);
-                    mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_EMAIL).setValue(email);
-                    mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_PHONENUMBER).setValue(phoneNumber);
-                    mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_IS_PROVIDER).setValue(isProvider);
-                    mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_RATING).setValue(0);
-                    mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_BALANCE).setValue(0);
-
-                    if(sourceImageUri!=null){
-                        StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
-                        StorageReference profileRef = storageRef.child(Consts.STORAGE_PROFILE_PICTURES);
-                        System.out.println("Profile picture path!!!"+profileRef.toString());
-                        UploadTask uploadTask = profileRef.child(uid).putFile(sourceImageUri);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                Log.d(TAG, exception.toString());
-                                Toast.makeText(RegisterActivity.this, "Unable to upload the image. Please check your internet connection and try again.",
+        @Override
+        protected Void doInBackground(Void... voids) {
+            final Semaphore mSemaphore = new Semaphore(0);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(RegisterActivity.this, "Registration failed. Please try again.",
                                         Toast.LENGTH_SHORT).show();
+                            } else {
+                                mDatabase = FirebaseDatabase.getInstance().getReference();
+                                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                //Add user to users database
+                                mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_FIRSTNAME).setValue(firstName);
+                                mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_LASTNAME).setValue(lastName);
+                                mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_EMAIL).setValue(email);
+                                mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_PHONENUMBER).setValue(phoneNumber);
+                                mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_IS_PROVIDER).setValue(isProvider);
+                                mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_RATING).setValue(0);
+                                mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_BALANCE).setValue(0);
+
+                                if(sourceImageUri!=null){
+                                    StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
+                                    StorageReference profileRef = storageRef.child(Consts.STORAGE_PROFILE_PICTURES);
+                                    System.out.println("Profile picture path!!!"+profileRef.toString());
+                                    UploadTask uploadTask = profileRef.child(uid).putFile(sourceImageUri);
+                                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                            // Handle unsuccessful uploads
+                                            Log.d(TAG, exception.toString());
+                                            Toast.makeText(RegisterActivity.this, "Unable to upload the image. Please check your internet connection and try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                                            profilePictureURL = taskSnapshot.getDownloadUrl().toString();
+                                        }
+                                    });
+                                } else {
+                                    profilePictureURL = Consts.USER_DEFAULT_PROFILE_PIC_URL;
+                                }
+                                System.out.println("PROFILE PICTURE URL:      " + profilePictureURL);
+                                mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_PROFILE_PIC).setValue(profilePictureURL);
+                                mSemaphore.release();
+                                LoginActivity.startActivity(RegisterActivity.this);
+                                RegisterActivity.this.finish();
                             }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                                 profilePictureURL = taskSnapshot.getDownloadUrl().toString();
-                            }
-                        });
-                    } else {
-                        profilePictureURL = Consts.USER_DEFAULT_PROFILE_PIC_URL;
-                    }
-                    System.out.println("PROFILE PICTURE URL:      " + profilePictureURL);
-                    mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_PROFILE_PIC).setValue(profilePictureURL);
-                    finish();
-                }
-                }
-            });
+                        }
+                    });
+            try {
+                mSemaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private void writeToDatabase() {
+        new RegisterTask().execute();
     }
 
     @OnClick(R.id.upload_button)
@@ -217,5 +238,9 @@ public class RegisterActivity extends AppCompatActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    public FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
     }
 }

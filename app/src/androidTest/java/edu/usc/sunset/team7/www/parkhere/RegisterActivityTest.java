@@ -22,9 +22,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Random;
+
 import edu.usc.sunset.team7.www.parkhere.Activities.RegisterActivity;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
  * Created by Acer on 11/5/2016.
@@ -33,8 +43,9 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class RegisterActivityTest {
-
-    String validEmail = "wyatt@me.com";
+    Random rand = new Random();
+    int randomNumber = rand.nextInt(100000) + 1;
+    String validEmail = "wyatt" + randomNumber + "@me.com";
     String validPassword = "wyattkim5@";
     String validFirstName = "Wyatt";
     String validLastName = "Kim";
@@ -53,6 +64,7 @@ public class RegisterActivityTest {
     public ActivityTestRule<RegisterActivity> activityRule =
             new ActivityTestRule<>(RegisterActivity.class, true, false);
 
+    //white-box
     @Test
     public void validateUserWithCorrectFields() {
         Intent intent = new Intent();
@@ -114,6 +126,7 @@ public class RegisterActivityTest {
         }
     }
 
+    //white-box
     @Test
     public void validateUserWithIncorrectFields() {
         Intent intent = new Intent();
@@ -122,7 +135,41 @@ public class RegisterActivityTest {
         Assert.assertEquals(checkRegisterValues(invalidFirstName, invalidLastName, invalidPhoneNumber, invalidEmail, invalidPassword), false);
     }
 
+    //black-box
+    @Test
+    public void registerWithInvalidInfo() {
+        Intent intent = new Intent();
+        activityRule.launchActivity(intent);
 
+        onView(withId(R.id.firstname_edittext)).perform(typeText(invalidFirstName));
+        onView(withId(R.id.lastname_edittext)).perform(scrollTo()).perform(typeText(invalidLastName));
+        onView(withId(R.id.phonenumber_edittext)).perform(scrollTo()).perform(typeText(invalidPhoneNumber));
+        onView(withId(R.id.email_edittext)).perform(scrollTo()).perform(typeText(invalidEmail));
+        onView(withId(R.id.password_edittext)).perform(scrollTo()).perform(typeText(invalidPassword));
+        onView(withId(R.id.provider_switch)).perform(scrollTo()).perform(click());
+        onView(withId(R.id.register_button)).perform(scrollTo()).perform(click());
+
+        // check if the login button is available to login with now
+        onView(withId(R.id.register_button)).perform(scrollTo()).check(matches(isDisplayed()));
+    }
+
+    //black-box
+    @Test
+    public void registerWithValidInfo() throws InterruptedException {
+        Intent intent = new Intent();
+        activityRule.launchActivity(intent);
+
+        onView(withId(R.id.firstname_edittext)).perform(typeText(validFirstName));
+        onView(withId(R.id.lastname_edittext)).perform(scrollTo()).perform(typeText(validLastName));
+        onView(withId(R.id.phonenumber_edittext)).perform(scrollTo()).perform(typeText(validPhoneNumber));
+        onView(withId(R.id.email_edittext)).perform(scrollTo()).perform(typeText(validEmail));
+        onView(withId(R.id.password_edittext)).perform(scrollTo()).perform(typeText(validPassword));
+        onView(withId(R.id.provider_switch)).perform(scrollTo()).perform(click());
+        onView(withId(R.id.register_button)).perform(scrollTo()).perform(click());
+
+        onView(withId(R.id.search_button)).perform(scrollTo()).check(matches(isDisplayed()));
+
+    }
 
     public boolean checkRegisterValues(String fName, String lName, String pNumber, String emailAddress, String pword){
         boolean allValid = true;
