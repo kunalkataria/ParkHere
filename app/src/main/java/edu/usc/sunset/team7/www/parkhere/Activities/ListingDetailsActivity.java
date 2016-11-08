@@ -71,8 +71,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
         displayView();
     }
 
-    private void getData(){
-        if(!getIntent().hasExtra(Consts.LISTING_RESULT_EXTRA)){
+    private void getData() {
+        if (!getIntent().hasExtra(Consts.LISTING_RESULT_EXTRA)) {
             listingResult = (Listing) getIntent().getSerializableExtra(Consts.LISTING_EXTRA);
         } else {
             listingResultPair = (ResultsPair) getIntent().getSerializableExtra(Consts.LISTING_RESULT_EXTRA);
@@ -82,6 +82,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
         providerID = listingResult.getProviderID();
 
         myOwnListing = providerID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        if (!myOwnListing) {
 
             DatabaseReference providerNameRef = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE)
                     .child(providerID);
@@ -93,12 +95,14 @@ public class ListingDetailsActivity extends AppCompatActivity {
                     providerFirstName = dataSnapshot.child(Consts.USER_FIRSTNAME).getValue().toString();
                     providerNameTextView.setText("Owner: " + providerFirstName);
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
                 }
             });
         }
+    }
 
 
     private void displayView(){
