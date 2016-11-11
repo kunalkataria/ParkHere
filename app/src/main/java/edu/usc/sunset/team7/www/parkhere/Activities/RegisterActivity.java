@@ -1,12 +1,17 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -28,6 +33,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.Semaphore;
 
 import butterknife.BindView;
@@ -88,6 +97,10 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         imageView.setImageResource(R.mipmap.default_profile);
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                1);
     }
 
     @OnClick(R.id.register_button)
@@ -175,6 +188,31 @@ public class RegisterActivity extends AppCompatActivity {
                                     StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
                                     StorageReference profileRef = storageRef.child(Consts.STORAGE_PROFILE_PICTURES);
                                     System.out.println("Profile picture path!!!"+profileRef.toString());
+
+                                    //compress image
+                                    InputStream imageStream = null;
+                                    try {
+                                        imageStream = getContentResolver().openInputStream(sourceImageUri);
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+
+                                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                    String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmp,
+                                            "Title", null);
+                                    sourceImageUri = Uri.parse(path);
+
+                                    try {
+                                        stream.close();
+                                        stream = null;
+                                    } catch (IOException e) {
+
+                                        e.printStackTrace();
+                                    }
+
                                     UploadTask uploadTask = profileRef.child(uid).putFile(sourceImageUri);
                                     uploadTask.addOnFailureListener(new OnFailureListener() {
                                         @Override

@@ -1,13 +1,18 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
@@ -37,6 +42,10 @@ import com.google.firebase.storage.UploadTask;
 
 import org.joda.time.DateTime;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Hashtable;
 
@@ -175,6 +184,10 @@ public class PostListingActivity extends AppCompatActivity {
         cancellationIds.put(R.id.refundable_rButton, Consts.REFUNDABLE);
         cancellationIds.put(R.id.nonrefundable_rButton, Consts.NONREFUNDABLE);
 
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                1);
+
     }
 
     @OnClick(R.id.upload_parking_button)
@@ -219,6 +232,31 @@ public class PostListingActivity extends AppCompatActivity {
             if (sourceImageUri == null) {
                 newListingRef.child(Consts.LISTING_IMAGE).setValue(Consts.DEFAULT_PARKING_IMAGE);
             } else {
+                //compress image
+                InputStream imageStream = null;
+                try {
+                    imageStream = getContentResolver().openInputStream(sourceImageUri);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmp,
+                        "Title", null);
+                sourceImageUri = Uri.parse(path);
+
+                try {
+                    stream.close();
+                    stream = null;
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+
+
                 UploadTask uploadTask = parkingRef.child(listingID).putFile(sourceImageUri);
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
