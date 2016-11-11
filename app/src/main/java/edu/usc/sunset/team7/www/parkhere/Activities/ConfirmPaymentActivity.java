@@ -67,14 +67,14 @@ public class ConfirmPaymentActivity extends AppCompatActivity{
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 AlertDialog.Builder adb=new AlertDialog.Builder(ConfirmPaymentActivity.this);
                 adb.setTitle("Confirm Payment?");
-                adb.setMessage("Are you sure you want to confirm payment of " + inactiveListings.get(position).getName());
+                adb.setMessage("Are you sure you want to confirm payment of " + inactiveListings.get(position).getName() + " Note: ParkHere will take a 10% cut of the payment.");
                 final int positionToRemove = position;
                 adb.setNegativeButton("Cancel", null);
                 adb.setPositiveButton("Confirm", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Listing toRemove = inactiveListings.get(positionToRemove);
                         String providerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        final double addToBalance = toRemove.getPrice();
+                        final double addToBalance = toRemove.getPrice() * .9;
                         final DatabaseReference ref = mDatabase.child(Consts.USERS_DATABASE).child(providerID);
                         ref.addListenerForSingleValueEvent(new ValueEventListener(){
 
