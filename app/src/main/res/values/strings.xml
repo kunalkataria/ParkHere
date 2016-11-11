@@ -11,6 +11,7 @@
     <string name="last_name">Last name</string>
     <string name="phone_number">Phone number</string>
     <string name="sign_out">Sign Out</string>
+    <string name="report_issue">Report an issue</string>
     <string name="listing_name">Name of your listing</string>
     <string name="listing_description">Describe your listing</string>
     <string name="handicap_label">Handicap-friendly?</string>
