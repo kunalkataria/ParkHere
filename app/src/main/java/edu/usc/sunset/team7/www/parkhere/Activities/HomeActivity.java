@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
@@ -224,6 +226,17 @@ public class HomeActivity extends AppCompatActivity {
                     LoginActivity.startActivity(this);
                     finish();
                     return true;
+                case R.id.menu_action_report_issue:
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse("mailto:"));
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Issue with ParkHere");
+                    String[] address = new String[] {"parkhereteam@gmail.com"};
+                    intent.putExtra(Intent.EXTRA_EMAIL, address);
+                    if (intent.resolveActivity(this.getPackageManager()) != null) {
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(this, "Email application not found", Toast.LENGTH_SHORT).show();
+                    }
             }
         }
         return false;
