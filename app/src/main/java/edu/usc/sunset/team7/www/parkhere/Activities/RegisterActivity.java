@@ -196,6 +196,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
                                 System.out.println("PROFILE PICTURE URL:      " + profilePictureURL);
                                 mDatabase.child(Consts.USERS_DATABASE).child(uid).child(Consts.USER_PROFILE_PIC).setValue(profilePictureURL);
+                                sendEmailVerification();
                                 mSemaphore.release();
                             }
                         }
@@ -210,6 +211,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
+            Toast.makeText(RegisterActivity.this, "User registered! Be sure to check your email for a verification link.",
+                    Toast.LENGTH_LONG).show();
             LoginActivity.startActivity(RegisterActivity.this);
             RegisterActivity.this.finish();
         }
@@ -242,5 +245,19 @@ public class RegisterActivity extends AppCompatActivity {
 
     public FirebaseUser getCurrentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    private void sendEmailVerification() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Email sent.");
+                        }
+                    }
+                });
     }
 }
