@@ -3,8 +3,6 @@ package edu.usc.sunset.team7.www.parkhere.Services;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -19,4 +17,7 @@ public interface URLEndpoints {
                                   @Query("startTime") long startTime,
                                   @Query("stopTime") long stopTime);
 
+    @GET("/mail")
+    Call<Void> emailConfirmation(@Query("email") String email,
+                                 @Query("textBody") String textBody);
 }
