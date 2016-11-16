@@ -2,7 +2,6 @@ package edu.usc.sunset.team7.www.parkhere.Services;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -12,7 +11,6 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
-import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -21,31 +19,29 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by kunal on 10/24/16.
+ * Created by kunal on 11/15/16.
  */
 
-public class SearchService extends IntentService {
+public class EmailService extends IntentService {
 
-    public SearchService() {
-        super(Consts.SEARCH_SERVICE);
+    public EmailService() {
+        super(Consts.EMAIL_SERVICE);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
-        double latitude = intent.getDoubleExtra(Consts.LATITUDE_EXTRA, 0);
-        double longitude = intent.getDoubleExtra(Consts.LONGITUDE_EXTRA, 0);
-        long startTime = intent.getLongExtra(Consts.START_TIME_EXTRA, 0);
-        long stopTime = intent.getLongExtra(Consts.STOP_TIME_EXTRA, 0);
+        String email = intent.getStringExtra(Consts.EMAIL_EXTRA);
+        String textBody = intent.getStringExtra(Consts.TEXT_BODY_EXTRA);
 
         Gson gson = new GsonBuilder().create();
 
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
 
         HttpLoggingInterceptor httpLogger = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+
             @Override
             public void log(String message) {
-                Log.i("SearchService intercept", message);
+                Log.i("EmailService intercept:", message);
             }
         });
 
@@ -61,20 +57,15 @@ public class SearchService extends IntentService {
                 .client(okClient)
                 .build();
 
-        URLEndpoints urlService = retrofit.create(URLEndpoints.class);
+        URLEndpoints urlEndpoint = retrofit.create(URLEndpoints.class);
 
-        Call<SearchResult> searchResultReq = urlService.getResults(latitude, longitude, startTime, stopTime);
+        Call<Void> emailReq = urlEndpoint.emailConfirmation(email, textBody);
 
         try {
-            Response<SearchResult> searchResultResponse = searchResultReq.execute();
-            if (searchResultResponse.isSuccessful()) {
-                SearchResult searchResult = searchResultResponse.body();
-
-                Intent dataIntent = new Intent(Consts.SEARCH_INTENT_FILTER);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Consts.SEARCH_RESULT_EXTRA, searchResult);
-                dataIntent.putExtras(bundle);
-                LocalBroadcastManager.getInstance(SearchService.this).sendBroadcast(dataIntent);
+            Response<Void> emailRequestResponse = emailReq.execute();
+            if (emailRequestResponse.isSuccessful()) {
+                Intent finishedIntent = new Intent(Consts.EMAIL_INTENT_FILTER);
+                LocalBroadcastManager.getInstance(EmailService.this).sendBroadcast(finishedIntent);
             } else {
                 Log.i("TESTING*********", "REQUEST UNSUCCESSFUL");
             }
@@ -82,10 +73,4 @@ public class SearchService extends IntentService {
             ioe.printStackTrace();
         }
     }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent,flags,startId);
-    }
-
 }
