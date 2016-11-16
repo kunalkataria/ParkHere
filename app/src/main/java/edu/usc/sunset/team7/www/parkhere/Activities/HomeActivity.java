@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,14 +34,14 @@ import edu.usc.sunset.team7.www.parkhere.Fragments.SearchFragment;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     @BindView(R.id.home_toolbar) Toolbar homeToolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
 
     public static final String FRAGMENT_TAG = "fragment_tag";
-    public GoogleApiClient mGoogleApiClient;
+    public static GoogleApiClient mGoogleApiClient;
     private static final String[] fragmentTitles = new String[]
                     {"Search",
                     "Listings",
@@ -55,7 +56,11 @@ public class HomeActivity extends AppCompatActivity {
                     Consts.MY_PROFILE_FRAGMENT_TAG};
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    
+
+    public static GoogleApiClient getGoogleApiClient() {
+        return mGoogleApiClient;
+    }
+
     // call this static method if you want the homeactivity to start with the search fragment
     public static void startActivityForSearch(Context context) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -284,4 +289,8 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(this, "Unable to connect to GoogleApiClient", Toast.LENGTH_SHORT).show();
+    }
 }

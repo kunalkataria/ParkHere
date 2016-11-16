@@ -18,12 +18,10 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceDetectionApi;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
@@ -41,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import edu.usc.sunset.team7.www.parkhere.Activities.HomeActivity;
 import edu.usc.sunset.team7.www.parkhere.Activities.ResultsActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
@@ -95,11 +94,6 @@ public class SearchFragment extends Fragment {
 
     private Place locationSelected;
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    private GoogleApiClient mGoogleApiClient;
-
-    private PlaceDetectionApi mPlaceDetectionApi;
-
-    private int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 
     @Override
     public void onCreate(Bundle savedBundleInstance) {
@@ -160,20 +154,20 @@ public class SearchFragment extends Fragment {
                 ResultsActivity.startActivity(getActivity(), lat, lon, startDate, stopDate);
             } else {
                 if (searchCurrentLocationCheckbox.isChecked()) {
-                    if (mGoogleApiClient != null) {
+                    if (HomeActivity.getGoogleApiClient() != null) {
 
                         if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             return;
                         }
                         PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
-                                .getCurrentPlace(mGoogleApiClient, null);
+                                .getCurrentPlace(HomeActivity.getGoogleApiClient(), null);
 
                         result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
                             @Override
                             public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
                                 Log.i("Place", "onResult");
                                 if (likelyPlaces.getCount() <= 0) {
-                                    Toast.makeText(SearchFragment.this.getActivity(), "No place found", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SearchFragment.this.getActivity(), "Unable to detect Current Location", Toast.LENGTH_SHORT).show();
                                 }
                                 for (PlaceLikelihood placeLikelihood : likelyPlaces) {
                                     Log.i("Place", String.format("Place '%s' has likelihood: %g",
