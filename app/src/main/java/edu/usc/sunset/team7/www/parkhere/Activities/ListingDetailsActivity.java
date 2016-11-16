@@ -38,7 +38,15 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 public class ListingDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.listing_name) TextView listingNameTextView;
-    @BindView(R.id.listing_details) TextView listingDetailsTextView;
+    @BindView(R.id.listing_details_description) TextView listingDetailsDescriptionTextView;
+    @BindView(R.id.listing_details_start_time) TextView listingDetailsStartTimeTextView;
+    @BindView(R.id.listing_details_end_time) TextView listingDetailsStopTimeTextView;
+    @BindView(R.id.listing_details_distance_away) TextView listingDetailsDistanceTextView;
+    @BindView(R.id.listing_details_price) TextView listingDetailsPriceTextView;
+    @BindView(R.id.listing_details_refundable) TextView listingDetailsRefundableTextView;
+    @BindView(R.id.listing_details_handicap) TextView listingDetailsHandicapTextView;
+    @BindView(R.id.listing_details_covered) TextView listingDetailsCoveredTextView;
+    @BindView(R.id.listing_details_compact) TextView listingDetailsCompactTextView;
     @BindView(R.id.provider_name) TextView providerNameTextView;
     @BindView(R.id.parking_image) ImageView parkingImageView;
     @BindView(R.id.book_listing_button) Button bookListingButton;
@@ -134,9 +142,25 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
         listingNameTextView.setText(listingResult.getName());
         Picasso.with(this).load(listingResult.getImageURL()).into(parkingImageView);
-        listingDetailsTextView.setText(listingDetailsString());
+        listingDetailsDescriptionTextView.setText("Listing Description: " + listingResult.getDescription());
+        listingDetailsStartTimeTextView.setText("Start Time: " + Tools.convertUnixTimeToDateString(listingResult.getStartTime()));
+        listingDetailsStopTimeTextView.setText("End Time: " + Tools.convertUnixTimeToDateString(listingResult.getStopTime()));
+        if (!myOwnListing) {
+            listingDetailsDistanceTextView.setText("Distance Away: " + listingResultPair.getDistance() + " miles");
+        }
+        else {
+            listingDetailsDistanceTextView.setText("N/A");
+        }
+        listingDetailsPriceTextView.setText("Price: $" + listingResult.getPrice());
+        listingDetailsRefundableTextView.setText("Refundable? " +listingResult.isRefundable());
+        listingDetailsHandicapTextView.setText("Handicap? " + listingResult.isHandicap());
+        listingDetailsCoveredTextView.setText("Covered? " + listingResult.isCovered());
+        listingDetailsCompactTextView.setText("Compact? " + listingResult.isCompact());
+        //listingDetailsTextView.setText(listingDetailsString());
     }
 
+
+    //name, listing description, start time, end time, distance away, price, refundable handicap covered compact
     private String listingDetailsString() {
         Listing listing = listingResult;
         StringBuilder descriptionBuilder = new StringBuilder();
