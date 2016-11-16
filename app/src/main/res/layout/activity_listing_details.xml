@@ -43,6 +43,7 @@
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/profile_image_description"/>
 
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,10 +55,106 @@
                 android:textColor="@color/blueClick"/>
 
             <TextView
-                android:id="@+id/listing_details"
+                android:id="@+id/listing_details_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/listing_details"
+                android:text="@string/listing_details_description"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/listing_details_start_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details_start_time"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/listing_details_end_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details_end_time"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/listing_details_distance_away"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details_distance_away"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/listing_details_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details_price"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/listing_details_refundable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details_refundable"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/listing_details_handicap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details_handicap"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/listing_details_covered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details_covered"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/listing_details_compact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/listing_details_compact"
                 android:textSize="15sp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="20dp"
@@ -66,6 +163,7 @@
                 android:gravity="center"/>
 
             <include layout="@layout/divider"/>
+
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/book_listing_button"

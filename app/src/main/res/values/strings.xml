@@ -131,7 +131,20 @@
     <string name="or_search_by">Or search by coordinates:</string>
     <string name="other_options">Other search options:</string>
 
+
     <string name="search_by_currentlocation">Search by Current Location</string>
+
+    <string name="listing_details_name"> Listing Details Name </string>
+    <string name="listing_details_description"> Listing Details Description</string>
+    <string name="listing_details_start_time"> Listing Details Start Time</string>
+    <string name="listing_details_end_time"> Listing Details End Time</string>
+    <string name="listing_details_distance_away"> Listing Details Distance Away</string>
+    <string name="listing_details_price"> Listing Details Price</string>
+    <string name="listing_details_refundable"> Listing Details Refundable</string>
+    <string name="listing_details_handicap"> Listing Details Handicap</string>
+    <string name="listing_details_covered"> Listing Details Covered</string>
+    <string name="listing_details_compact"> Listing Details Compact</string>
+
 
 </resources>
 
