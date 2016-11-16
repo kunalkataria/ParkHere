@@ -173,4 +173,8 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         HomeActivity.startActivityPostBooking(this);
         finish();
     }
+
+    private String generateEmailText(){
+        return "";
+    }
 }
