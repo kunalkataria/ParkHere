@@ -1,6 +1,11 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
@@ -15,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
+import edu.usc.sunset.team7.www.parkhere.Services.EmailService;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
@@ -57,6 +63,8 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_confirmation);
         ButterKnife.bind(this);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(Consts.EMAIL_INTENT_FILTER));
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -170,11 +178,23 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
 //            }
 //        };
 //        providerRef.addListenerForSingleValueEvent(providerNameListener);
-        HomeActivity.startActivityPostBooking(this);
-        finish();
+        String email = "";
+        String textBody = "";
+        generateEmailText(email, textBody);
     }
 
-    private String generateEmailText(){
-        return "";
+    private void generateEmailText(String email, String textBody) {
+        Intent serviceIntent = new Intent(this, EmailService.class);
+        serviceIntent.putExtra(Consts.EMAIL_EXTRA, email);
+        serviceIntent.putExtra(Consts.TEXT_BODY_EXTRA, textBody);
+        startService(serviceIntent);
     }
+
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            HomeActivity.startActivityPostBooking(TransactionConfirmationActivity.this);
+            finish();
+        }
+    };
 }

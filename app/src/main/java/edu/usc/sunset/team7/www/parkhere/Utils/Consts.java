@@ -30,16 +30,20 @@ public class Consts {
     public static final String LISTING_EXTRA = "listing_extra";
     public static final String INACTIVE_LISTINGS_EXTRA = "inactive_listings_extra";
     public static final String SIGN_OUT_EXTRA = "sign_out_extra";
+    public static final String EMAIL_EXTRA = "email_extra";
+    public static final String TEXT_BODY_EXTRA = "text_body_extra";
 
     public static final String LISTING_TO_BE_BOOKED = "listing_to_be_booked";
     public static final String LISTING_DISTANCE = "listing_distance";
     public static final String LISTING_DETAILS_STRING = "listing_details_string";
 
     public static final String SEARCH_INTENT_FILTER = "search_intent_filter";
+    public static final String EMAIL_INTENT_FILTER = "email_intent_filter";
 
     public static final int FILTERS_CHANGED = 1001;
     public static final int FILTERS_UNCHANGED = 1002;
 
+    public static final String EMAIL_SERVICE = "Email Service";
     public static final String SEARCH_SERVICE = "Search Service";
     public static final String BASE_URL = "http://parkhere-ceccb.appspot.com";
 
