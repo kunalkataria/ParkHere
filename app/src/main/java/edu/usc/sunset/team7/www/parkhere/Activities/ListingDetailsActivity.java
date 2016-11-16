@@ -149,7 +149,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
             listingDetailsDistanceTextView.setText("Distance Away: " + listingResultPair.getDistance() + " miles");
         }
         else {
-            listingDetailsDistanceTextView.setText("N/A");
+            listingDetailsDistanceTextView.setVisibility(View.GONE);
         }
         listingDetailsPriceTextView.setText("Price: $" + listingResult.getPrice());
         listingDetailsRefundableTextView.setText("Refundable? " +listingResult.isRefundable());
