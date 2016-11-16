@@ -131,5 +131,7 @@
     <string name="or_search_by">Or search by coordinates:</string>
     <string name="other_options">Other search options:</string>
 
+    <string name="search_by_currentlocation">Search by Current Location</string>
+
 </resources>
 

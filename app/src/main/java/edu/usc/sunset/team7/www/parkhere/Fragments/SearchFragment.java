@@ -1,13 +1,15 @@
 package edu.usc.sunset.team7.www.parkhere.Fragments;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +19,14 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceDetectionApi;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
@@ -45,15 +53,24 @@ import static com.google.android.gms.internal.zzs.TAG;
 
 public class SearchFragment extends Fragment {
 
-    @BindView(R.id.start_date_inputlayout) TextInputLayout startDateInputlayout;
-    @BindView(R.id.stop_date_inputlayout) TextInputLayout stopDateInputLayout;
-    @BindView(R.id.start_date_edittext) AppCompatEditText startDateEditText;
-    @BindView(R.id.stop_date_edittext) AppCompatEditText stopDateEditText;
+    @BindView(R.id.start_date_inputlayout)
+    TextInputLayout startDateInputlayout;
+    @BindView(R.id.stop_date_inputlayout)
+    TextInputLayout stopDateInputLayout;
+    @BindView(R.id.start_date_edittext)
+    AppCompatEditText startDateEditText;
+    @BindView(R.id.stop_date_edittext)
+    AppCompatEditText stopDateEditText;
 
-    @BindView(R.id.latitude_edittext) AppCompatEditText latitudeEditText;
-    @BindView(R.id.longitude_edittext) AppCompatEditText longitudeEditText;
+    @BindView(R.id.latitude_edittext)
+    AppCompatEditText latitudeEditText;
+    @BindView(R.id.longitude_edittext)
+    AppCompatEditText longitudeEditText;
 
-    @BindView(R.id.search_date_checkbox) AppCompatCheckBox searchDateCheckbox;
+    @BindView(R.id.search_date_checkbox)
+    AppCompatCheckBox searchDateCheckbox;
+    @BindView(R.id.search_currentlocation_checkbox)
+    AppCompatCheckBox searchCurrentLocationCheckbox;
 
     private DatePickerDialog startDatePicker;
     private DatePickerDialog stopDatePicker;
@@ -80,6 +97,10 @@ public class SearchFragment extends Fragment {
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private GoogleApiClient mGoogleApiClient;
 
+    private PlaceDetectionApi mPlaceDetectionApi;
+
+    private int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+
     @Override
     public void onCreate(Bundle savedBundleInstance) {
         super.onCreate(savedBundleInstance);
@@ -88,7 +109,7 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
         ButterKnife.bind(this, view);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
@@ -130,7 +151,7 @@ public class SearchFragment extends Fragment {
                     !longitudeEditText.getEditableText().toString().isEmpty()) {
                 double lat = Double.parseDouble(latitudeEditText.getEditableText().toString());
                 double lon = Double.parseDouble(longitudeEditText.getEditableText().toString());
-                System.out.println(lat + " " + lon );
+                System.out.println(lat + " " + lon);
                 // set start date to current time if the time is not selected
                 if (startDate == -1) {
                     Calendar c = Calendar.getInstance();
@@ -138,8 +159,38 @@ public class SearchFragment extends Fragment {
                 }
                 ResultsActivity.startActivity(getActivity(), lat, lon, startDate, stopDate);
             } else {
-                Toast.makeText(getActivity(), "Please enter both a latitude and longitude",
-                        Toast.LENGTH_SHORT).show();
+                if (searchCurrentLocationCheckbox.isChecked()) {
+                    if (mGoogleApiClient != null) {
+
+                        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        }
+                        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+                                .getCurrentPlace(mGoogleApiClient, null);
+
+                        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+                            @Override
+                            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                                Log.i("Place", "onResult");
+                                if (likelyPlaces.getCount() <= 0) {
+                                    Toast.makeText(SearchFragment.this.getActivity(), "No place found", Toast.LENGTH_SHORT).show();
+                                }
+                                for (PlaceLikelihood placeLikelihood : likelyPlaces) {
+                                    Log.i("Place", String.format("Place '%s' has likelihood: %g",
+                                            placeLikelihood.getPlace().getName(),
+                                            placeLikelihood.getLikelihood()));
+                                }
+                                likelyPlaces.release();
+                            }
+                        });
+                    }
+                    else{
+                        Toast.makeText(SearchFragment.this.getActivity(), "No GoogleApiClient", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Please enter search criteria",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
 
         }
