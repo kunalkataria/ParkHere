@@ -13,8 +13,11 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,11 +36,9 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
 
     //Listing Information
     private Listing listing;
-    private double distance;
-    private String providerFirstName, startTime, endTime;
+    private String providerFirstName, providerLastName, providerPhoneNumber, providerEmail;
 
-
-    private String billingText;
+    private String billingText, listingText;
     //Payment Information
     private String paymentType;
 
@@ -74,9 +75,9 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         if(bundle!=null){
             if(bundle.containsKey(Consts.LISTING_DISTANCE) && bundle.containsKey(Consts.LISTING_TO_BE_BOOKED)
                     &&  bundle.containsKey(Consts.LISTING_DETAILS_STRING)) {
-                distance = bundle.getDouble(Consts.LISTING_DISTANCE);
                 listing = (Listing)bundle.getSerializable(Consts.LISTING_TO_BE_BOOKED);
-                listingDetailsTextView.setText(bundle.getString(Consts.LISTING_DETAILS_STRING));
+                listingText = bundle.getString(Consts.LISTING_DETAILS_STRING);
+                listingDetailsTextView.setText(listingText);
             } else{
                 Log.d(TAG, "LISTING AND DISTANCE NOT FOUND");
                 placeBookingButton.setEnabled(false);
@@ -110,7 +111,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
     }
 
     private void displayCreditCardInfo(){
-        billingText = "Payment Type: Credit Card" + "\n" + creditCardType + " - " + hideCreditCardNumber() +
+        billingText = "Payment Type: Credit Card" + "\nName: " + name +"\n" + creditCardType + " - " + hideCreditCardNumber() +
                 "\nSecurity Code:" + securityCode + "\nExpiration Date: " + month +"/" + year +
                 "\n\nBilling Address: \n" + billingAddressText();
         billingInformationTextView.setText(billingText);
@@ -161,33 +162,52 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         //Remove listing from active
         mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(listing.getListingID()).removeValue();
 
-//        final DatabaseReference providerRef = mDatabase.child(Consts.USERS_DATABASE)
-//                .child(listing.getProviderID()).child(Consts.USER_BALANCE);
+        //get values for the provider variable
+        getProviderInformation();
+    }
 
-//        //Get and add balance from provider
-//        ValueEventListener providerNameListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Double balance = Double.parseDouble(dataSnapshot.getValue().toString());
-//                providerRef.setValue(balance + listing.getPrice());
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.w(TAG, "loadProviderName:onCancelled", databaseError.toException());
-//            }
-//        };
-//        providerRef.addListenerForSingleValueEvent(providerNameListener);
-        String email = "";
-        String textBody = "";
-        generateEmailText(email, textBody);
+    private void getProviderInformation(){
+        Log.d(TAG, "GET PROVIDER INFORMATION REACHED!");
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE).child(listing.getProviderID());
+
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                providerFirstName = dataSnapshot.child(Consts.USER_FIRSTNAME).getValue().toString();
+                providerLastName = dataSnapshot.child(Consts.USER_LASTNAME).getValue().toString();
+                providerPhoneNumber = dataSnapshot.child(Consts.USER_PHONENUMBER).getValue().toString();
+                providerEmail = dataSnapshot.child(Consts.USER_EMAIL).getValue().toString();
+                makeEmailBody();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+
+    private void makeEmailBody(){
+        Log.d(TAG, "************MAKE EMAIL BODY REACHED!");
+        String s = "Thanks for choosing ParkHere! Below are the details of your transaction.\n\n" +
+        "Provider Contact Information:\n" +
+                "\tName: " + providerFirstName + " " + providerLastName +
+                "\n\tPhone number: " + providerPhoneNumber +
+                "\n\tEmail: " + providerEmail +
+        "\n\nParking Spot Location: (" + listing.getLongitude() + ", " + listing.getLatitude() + ")" +
+        "\n\nListing Details:\n" + listingText +
+        "\n\nBilling Details:\n" + billingText +
+        "\n\nHappy parking!\nParkHere Team" +
+        "\n\nQuestions? Too bad!";
+        generateEmailText(mAuth.getCurrentUser().getEmail(), s);
     }
 
     private void generateEmailText(String email, String textBody) {
+        Log.d(TAG, "********GENERATE EMAIL TEXT REACHED!");
+
         Intent serviceIntent = new Intent(this, EmailService.class);
         serviceIntent.putExtra(Consts.EMAIL_EXTRA, email);
         serviceIntent.putExtra(Consts.TEXT_BODY_EXTRA, textBody);
         startService(serviceIntent);
+
     }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {

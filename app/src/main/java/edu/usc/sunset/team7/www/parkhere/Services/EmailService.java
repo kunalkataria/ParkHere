@@ -30,6 +30,7 @@ public class EmailService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d("EMAIL SERVICE", "**********EMAIL SERVICE ON HANDLE INTENT");
         String email = intent.getStringExtra(Consts.EMAIL_EXTRA);
         String textBody = intent.getStringExtra(Consts.TEXT_BODY_EXTRA);
 
