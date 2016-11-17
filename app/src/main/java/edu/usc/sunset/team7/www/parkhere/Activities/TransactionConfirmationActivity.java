@@ -162,8 +162,10 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         //Remove listing from active
         mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(listing.getListingID()).removeValue();
 
-        //get values for the provider variable
-        getProviderInformation();
+        //Get provider variables and send the email
+        //getProviderInformation();
+        HomeActivity.startActivityPostBooking(TransactionConfirmationActivity.this);
+        finish();
     }
 
     private void getProviderInformation(){
@@ -213,8 +215,8 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            HomeActivity.startActivityPostBooking(TransactionConfirmationActivity.this);
-            finish();
+//            HomeActivity.startActivityPostBooking(TransactionConfirmationActivity.this);
+//            finish();
         }
     };
 }
