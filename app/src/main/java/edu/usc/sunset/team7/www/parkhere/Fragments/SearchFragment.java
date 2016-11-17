@@ -22,7 +22,6 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -168,11 +167,14 @@ public class SearchFragment extends Fragment {
                                 Log.i("Place", "onResult");
                                 if (likelyPlaces.getCount() <= 0) {
                                     Toast.makeText(SearchFragment.this.getActivity(), "Unable to detect Current Location", Toast.LENGTH_SHORT).show();
-                                }
-                                for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                                    Log.i("Place", String.format("Place '%s' has likelihood: %g",
-                                            placeLikelihood.getPlace().getName(),
-                                            placeLikelihood.getLikelihood()));
+                                } else {
+                                    LatLng latLng = likelyPlaces.get(0).getPlace().getLatLng();
+                                    // set start date to current time if the time is not selected
+                                    if (startDate == -1) {
+                                        Calendar c = Calendar.getInstance();
+                                        startDate = c.getTimeInMillis() / 1000;
+                                    }
+                                    ResultsActivity.startActivity(getActivity(), latLng.latitude, latLng.longitude, startDate, stopDate);
                                 }
                                 likelyPlaces.release();
                             }
