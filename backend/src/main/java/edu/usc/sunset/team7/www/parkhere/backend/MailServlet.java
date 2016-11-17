@@ -29,8 +29,13 @@ public class MailServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //Unpack email text
         String email = req.getParameter("email");
-        String textBody = req.getParameter("text");
+        String textBody = req.getParameter("textBody");
+        System.out.println("************EMAIL:" + email);
+        System.out.println("************TEXTBODY:" + textBody);
+
+
         sendSimpleMail(email, textBody);
+
     }
 
     private void sendSimpleMail(String email, String textBody) {
@@ -42,7 +47,7 @@ public class MailServlet extends HttpServlet {
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress("parkhereteam@gmail.com", "Park Here Team"));
             msg.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress(email));
+                    new InternetAddress(email, "ParkHere Customer"));
             msg.setSubject("Your ParkHere Invoice");
             msg.setText(textBody);
             Transport.send(msg);

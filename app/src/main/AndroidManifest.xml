@@ -109,6 +109,7 @@
             </intent-filter>
         </activity>
         <service android:name=".Services.SearchService" />
+        <service android:name=".Services.EmailService" />
         <receiver android:name=".Services.ConnectivityChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>

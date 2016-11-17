@@ -46,8 +46,8 @@ public class BookingDetailsActivity extends AppCompatActivity {
     private static final String TAG = "BookingDetailsActivity";
     private Booking booking;
     private Listing listing;
-    private String providerFirstName;
-    private String seekerFirstName;
+    private String providerFullName;
+    private String providerEmail;
     private String providerPhoneNumber;
 
     @Override
@@ -79,8 +79,9 @@ public class BookingDetailsActivity extends AppCompatActivity {
     }
 
     private void getFirebaseData() {
-        providerFirstName = null;
+        providerFullName = null;
         providerPhoneNumber = null;
+        providerEmail = null;
 
         //getting first name of provider
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(Consts.USERS_DATABASE)
@@ -99,8 +100,11 @@ public class BookingDetailsActivity extends AppCompatActivity {
     }
 
     private void getFirstNameAndPhoneNumber(DataSnapshot userData) {
-        providerFirstName = userData.child(Consts.USER_FIRSTNAME).getValue().toString();
+        providerFullName = userData.child(Consts.USER_FIRSTNAME).getValue().toString();
+        providerFullName += " " + userData.child(Consts.USER_LASTNAME).getValue().toString();
         providerPhoneNumber = userData.child(Consts.USER_PHONENUMBER).getValue().toString();
+        providerEmail = userData.child(Consts.USER_EMAIL).getValue().toString();
+
         displayBooking();
     }
 
@@ -109,7 +113,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
             cancelBookingButton.setEnabled(false);
         }
         bookingName.setText(listing.getName());
-        providerName.setText(providerFirstName);
+        providerName.setText(providerFullName);
         Picasso.with(this).load(listing.getImageURL()).into(parkingImage);
         bookingDetails.setText(bookingDetailsString());
     }
@@ -120,8 +124,9 @@ public class BookingDetailsActivity extends AppCompatActivity {
         descriptionBuilder.append("\nListing Description: "  + listing.getDescription());
         descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()));
         descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
-        descriptionBuilder.append("\nListing provider: " + providerFirstName);
+        descriptionBuilder.append("\nListing provider: " + providerFullName);
         descriptionBuilder.append("\nProvider phone number: " + providerPhoneNumber);
+        descriptionBuilder.append("\nProvider email: " + providerEmail);
 
         descriptionBuilder.append("\n\nParking Information");
         descriptionBuilder.append("\nLocation: (" + listing.getLatitude() + "," + listing.getLongitude() + ")");
