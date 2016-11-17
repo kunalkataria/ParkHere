@@ -99,6 +99,10 @@ public class SearchFragment extends Fragment {
         super.onCreate(savedBundleInstance);
         startDate = -1;
         stopDate = -1;
+
+        ActivityCompat.requestPermissions(this.getActivity(),
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                1);
     }
 
     @Override
