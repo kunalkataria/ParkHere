@@ -10,21 +10,15 @@ public class Listing implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private ParkingSpot parkingSpot;
     private String name;
-    private double latitude;
-    private double longitude;
     private String description;
-    private boolean handicap;
-    private boolean covered;
-    private boolean compact;
     private long startTime;
     private long stopTime;
-    //private PublicUserProfile owner
     private boolean refundable;
     private String listingID;
     private double price;
     private String providerID;
-    private String imageURL;
     //need to add functionality for can cancel policy
     //need to add picture functionality & list of pictures
     public Listing() {
@@ -39,16 +33,12 @@ public class Listing implements Serializable {
     }
 
     public double getLatitude() {
-        return latitude;
+        return parkingSpot.getLatitude();
     }
 
     public double getLongitude() {
-        return longitude;
+        return parkingSpot.getLongitude();
     }
-
-    public void setLatitude (double latitude) { this.latitude = latitude; }
-
-    public void setLongitude (double longitude) { this.longitude = longitude; }
 
     public String getDescription() {
         return description;
@@ -59,22 +49,16 @@ public class Listing implements Serializable {
     }
 
     public boolean isHandicap() {
-        return handicap;
+        return parkingSpot.isHandicap();
     }
 
     public boolean isCovered() {
-        return covered;
+        return parkingSpot.isCovered();
     }
 
     public boolean isCompact() {
-        return compact;
+        return parkingSpot.isCompact();
     }
-
-    public void setHandicap(boolean handicap) { this.handicap = handicap; }
-
-    public void setCovered(boolean covered) { this.covered = covered; }
-
-    public void setCompact(boolean compact) { this.compact = compact; }
 
     public long getStartTime() {
         return startTime;
@@ -113,11 +97,7 @@ public class Listing implements Serializable {
     }
 
     public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+        return parkingSpot.getImageURL();
     }
 
     public String getProviderID() {
