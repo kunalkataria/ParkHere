@@ -29,6 +29,10 @@
     <string name="start_time_label">Start Time Label</string>
     <string name="end_time_label">End Time Label</string>
 
+    <string name="delete_parking_spot">Delete parking spot</string>
+    <string name="post_parking_spot">Post a parking spot</string>
+    <string name="edit_parking_spot">Edit the listing</string>
+
     <string name="delete_listing">Delete Listing</string>
     <string name="post_listing">Post a listing</string>
     <string name="search">Search</string>
@@ -39,6 +43,7 @@
     <string name="booking">My Bookings</string>
     <string name="balance">My Balance</string>
     <string name="profile">My Profile</string>
+    <string name="parking_spot">My Parking Spots</string>
     <string name="upload_picture">Upload profile image</string>
     <string name="profile_image_description">Profile Image</string>
     <string name="select_picture">Select Picture</string>
@@ -72,8 +77,8 @@
     <string name="distance_label">Distance label</string>
 
     <!-- Strings for cancellation policies-->
-    <string name = "refundable_policy">Refundable</string>
-    <string name = "nonrefundable_policy">Nonrefundable</string>
+    <string name="refundable_policy">Refundable</string>
+    <string name="nonrefundable_policy">Nonrefundable</string>
     <string name="flexible_policy">Flexible</string>
     <string name="moderate_policy">Moderate</string>
     <string name="strict_policy">Strict</string>
@@ -112,7 +117,7 @@
     <string name="listing_details">Listing Details</string>
     <string name="billing_information">Billing Information</string>
 
-    <string name ="booking_details">Booking Details</string>
+    <string name="booking_details">Booking Details</string>
     <string name="place_booking">Place Booking</string>
     <string name="expiration_date_month_year"> Expiration Date (Month and Year)</string>
 
@@ -144,6 +149,9 @@
     <string name="listing_details_handicap"> Listing Details Handicap</string>
     <string name="listing_details_covered"> Listing Details Covered</string>
     <string name="listing_details_compact"> Listing Details Compact</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
