@@ -12,6 +12,7 @@ public class Consts {
     public static final String LISTING_FRAGMENT_TAG = "listing_fragment";
     public static final String BALANCE_FRAGMENT_TAG = "balance_fragment";
     public static final String MY_PROFILE_FRAGMENT_TAG = "my_profile_fragment";
+    public static final String PARKING_SPOTS_FRAGMENT_TAG = "parking_spots_fragment";
 
     public static final String IMAGE_URI = "image_uri";
 
@@ -66,6 +67,7 @@ public class Consts {
     public static final String LISTINGS_DATABASE = "Listings";
     public static final String BOOKINGS_DATABASE = "Bookings";
     public static final String REVIEWS_DATABASE = "Reviews";
+    public static final String PARKING_SPOTS_DATABASE = "Parking Spots";
 
     //User Database
     public static final String USER_FIRSTNAME = "First Name";
