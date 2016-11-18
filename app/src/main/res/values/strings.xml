@@ -29,6 +29,7 @@
     <string name="start_time_label">Start Time Label</string>
     <string name="end_time_label">End Time Label</string>
 
+    <string name="edit_spot">Edit parking spot</string>
     <string name="delete_parking_spot">Delete parking spot</string>
     <string name="post_parking_spot">Post a parking spot</string>
     <string name="edit_parking_spot">Edit the listing</string>
@@ -117,6 +118,8 @@
     <string name="listing_details">Listing Details</string>
     <string name="billing_information">Billing Information</string>
 
+    <string name="parking_spot_details">Parking Spot Details</string>
+
     <string name="booking_details">Booking Details</string>
     <string name="place_booking">Place Booking</string>
     <string name="expiration_date_month_year"> Expiration Date (Month and Year)</string>
@@ -149,6 +152,13 @@
     <string name="listing_details_handicap"> Listing Details Handicap</string>
     <string name="listing_details_covered"> Listing Details Covered</string>
     <string name="listing_details_compact"> Listing Details Compact</string>
+
+    <string name="parking_spot_details_name"> Parking Spot Details Name </string>
+    <string name="parking_spot_details_location"> Parking Spot Details Location</string>
+    <string name="parking_spot_details_handicap"> Parking Spot Details Handicap</string>
+    <string name="parking_spot_details_covered"> Parking Spot Details Covered</string>
+    <string name="parking_spot_details_compact"> Parking Spot Details Compact</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
