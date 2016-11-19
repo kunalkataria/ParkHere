@@ -1,10 +1,14 @@
 package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
+import java.io.Serializable;
+
 /**
  * Created by Acer on 11/18/2016.
  */
 
-public class ParkingSpot {
+public class ParkingSpot implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String name;
     private double latitude;
