@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/base_toolbar"
-        android:id="@+id/listing_details_toolbar"/>
+        android:id="@+id/parking_spot_details_toolbar"/>
 
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +17,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/listing_name"
+                android:id="@+id/parking_spot_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details"
@@ -44,7 +44,7 @@
                 android:textColor="@color/blueClick"/>
 
             <TextView
-                android:id="@+id/listing_details_description"
+                android:id="@+id/parking_spot_details_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details_location"
@@ -56,7 +56,7 @@
                 android:gravity="center"/>
 
             <TextView
-                android:id="@+id/listing_details_handicap"
+                android:id="@+id/parking_spot_details_handicap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details_handicap"
@@ -68,7 +68,7 @@
                 android:gravity="center"/>
 
             <TextView
-                android:id="@+id/listing_details_covered"
+                android:id="@+id/parking_spot_details_covered"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details_covered"
@@ -80,7 +80,7 @@
                 android:gravity="center"/>
 
             <TextView
-                android:id="@+id/listing_details_compact"
+                android:id="@+id/parking_spot_details_compact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details_compact"
@@ -94,7 +94,7 @@
             <include layout="@layout/divider"/>
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/edit_listing_button"
+                android:id="@+id/edit_parking_spot_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/edit_spot"
@@ -104,7 +104,7 @@
                 android:textSize="18dp"/>
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/delete_listing_button"
+                android:id="@+id/delete_parking_spot_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Widget.AppCompat.Button.Borderless"
