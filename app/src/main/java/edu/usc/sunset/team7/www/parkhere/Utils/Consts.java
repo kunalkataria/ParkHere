@@ -147,4 +147,16 @@ public class Consts {
 
     public static final int RESULTS_LIST_VIEW_ID = 0;
 
+    //Parking
+    public static final String PARKING_SPOTS_ID = "ParkingID";
+    public static final String PARKING_SPOTS_PROVIDER_ID = "ProviderID";
+    public static final String PARKING_SPOTS_COMPACT = "Compact";
+    public static final String PARKING_SPOTS_COVERED = "Covered";
+    public static final String PARKING_SPOTS_HANDICAP = "Handicap";
+    public static final String PARKING_SPOTS_LONGITUDE = "Longitude";
+    public static final String PARKING_SPOTS_LATITUDE = "Latitude";
+    public static final String PARKING_SPOTS_IMAGE = "ImageURL";
+    public static final String PARKING_SPOTS_BOOKING_COUNT = "Booking Count";
+    public static final String PARKING_SPOTS_NAME = "Name";
+
 }
