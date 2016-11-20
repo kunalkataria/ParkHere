@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/base_toolbar"
+        android:id="@+id/parking_spot_details_toolbar"/>
+
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/parking_spot_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/parking_spot_details"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="40dp"/>
+
+            <ImageView
+                android:id="@+id/parking_image"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/profile_image_description"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/parking_spot_details"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/blueClick"/>
+
+            <TextView
+                android:id="@+id/parking_spot_details_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/parking_spot_details_location"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/parking_spot_details_handicap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/parking_spot_details_handicap"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/parking_spot_details_covered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/parking_spot_details_covered"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/parking_spot_details_compact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/parking_spot_details_compact"
+                android:textSize="15sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+
+            <include layout="@layout/divider"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/edit_parking_spot_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_spot"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="20dp"
+                android:textSize="18dp"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/delete_parking_spot_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:text="@string/delete_parking_spot"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

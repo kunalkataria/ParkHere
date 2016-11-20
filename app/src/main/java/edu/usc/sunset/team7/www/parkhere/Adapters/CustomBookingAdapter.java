@@ -87,7 +87,7 @@ public class CustomBookingAdapter extends BaseAdapter {
         return rowView;
     }
 
-    public class ItemShell{
+    private class ItemShell{
         TextView bookingLabel;
         TextView dateLabel;
         ImageView imgView;

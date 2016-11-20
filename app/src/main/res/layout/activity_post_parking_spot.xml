@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/base_toolbar"
-        android:id="@+id/post_listing_toolbar"/>
+        android:id="@+id/post_parking_spot_toolbar"/>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -30,10 +30,10 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="96dp"
-                android:id="@+id/post_listing_autocomplete_layout">
+                android:id="@+id/post_parking_spot_autocomplete_layout">
 
                 <fragment
-                    android:id="@+id/post_listing_autocomplete_fragment"
+                    android:id="@+id/post_parking_spot_autocomplete_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
@@ -41,115 +41,18 @@
             </FrameLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/description_textinputlayout"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/description_edittext"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/listing_description"
-                    android:inputType="textMultiLine"/>
-            </android.support.design.widget.TextInputLayout>
-
-            <TextView
-                android:text="@string/dates_available"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/blueClick"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/start_date_inputlayout"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:hint="@string/start_date">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/start_time_edittext"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:focusable="false"
-                        android:longClickable="false"/>
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/stop_date_inputlayout"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:hint="@string/stop_date">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/stop_time_edittext"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:focusable="false"
-                        android:longClickable="false"/>
-
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/price_textinputlayout"
+                android:id="@+id/parking_spot_name_textinputlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
                 <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/parking_spot_name_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:ems="10"
-                    android:id="@+id/price_edittext"
-                    android:hint="@string/listing_price" />
+                    android:hint="@string/parking_spot_name" />
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:text="@string/cancellation_policy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/blueClick"
-                android:layout_marginTop="10dp"/>
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/myRadioGroup"
-                android:checkedButton="@+id/selectedCancellationPolicy"
-                android:layout_marginBottom="10dp">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/refundable_rButton"
-                    android:text="@string/refundable_policy"
-                    />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/nonrefundable_rButton"
-                    android:text="@string/nonrefundable_policy"/>
-
-            </RadioGroup>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -161,7 +64,7 @@
                 android:layout_marginRight="10dp">
 
                 <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/covered_button_control"
+                    android:id="@+id/parking_spot_covered_button_control"
                     android:text="@string/covered_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -180,7 +83,7 @@
                 android:layout_marginRight="10dp">
 
                 <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/compact_button_control"
+                    android:id="@+id/parking_spot_compact_button_control"
                     android:text="@string/compact_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -200,7 +103,7 @@
                 android:layout_marginBottom="20dp">
 
                 <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/handicap_button_control"
+                    android:id="@+id/parking_spot_handicap_button_control"
                     android:text="@string/handicap_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -214,7 +117,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/upload_parking_button"
+                android:id="@+id/upload_parking_spot_picture_button"
                 android:text="@string/upload_parking_image"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:textColor="@color/colorAccent"
@@ -222,7 +125,7 @@
                 android:layout_marginTop="10dp"/>
 
             <ImageView
-                android:id="@+id/parkingImage"
+                android:id="@+id/parking_spot_Image"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_gravity="center_horizontal"
@@ -232,7 +135,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/upload_listing_button"
+                android:id="@+id/upload_parking_spot_button"
                 android:text="@string/submit"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:textColor="@color/colorAccent"

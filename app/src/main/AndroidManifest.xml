@@ -3,11 +3,11 @@
     package="edu.usc.sunset.team7.www.parkhere">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -15,110 +15,121 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.HomeActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
-        </activity>
-        <activity android:name=".Activities.RegisterActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
-        </activity>
-        <activity android:name=".Activities.PostListingActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+        <activity
+            android:name=".Activities.HomeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.RegisterActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.PostListingActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity" />
         </activity>
-        <activity android:name=".Activities.PaypalActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
-        </activity>
-        <activity android:name=".Activities.CreditCardActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
-        </activity>
-        <activity android:name=".Activities.TransactionActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
-        </activity>
-        <activity android:name=".Activities.ResultsActivity"
+        <activity
+            android:name=".Activities.PaypalActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.CreditCardActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.TransactionActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.ResultsActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:parentActivityName=".Activities.HomeActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity" />
         </activity>
-        <activity android:name=".Activities.TransactionConfirmationActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
-        </activity>
-        <activity android:name=".Activities.ConfirmPaymentActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+        <activity
+            android:name=".Activities.TransactionConfirmationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.ConfirmPaymentActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity" />
-
         </activity>
-        <activity android:name=".Activities.FilterActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+        <activity
+            android:name=".Activities.FilterActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.ResultsActivity" />
         </activity>
-        <activity android:name=".Activities.UserProfileActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+        <activity
+            android:name=".Activities.UserProfileActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.ListingDetailsActivity" />
         </activity>
-        <activity android:name=".Activities.ListingDetailsActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
-        </activity>
-        <activity android:name=".Activities.EditListingActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
-        </activity>
-        <activity android:name=".Activities.BookingDetailsActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+        <activity
+            android:name=".Activities.ListingDetailsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.EditListingActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.BookingDetailsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity" />
         </activity>
-        <activity android:name=".Activities.ReviewActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+        <activity
+            android:name=".Activities.ReviewActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.BookingDetailsActivity" />
         </activity>
-
-        <activity android:name=".Activities.LoginActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name=".Services.SearchService" />
         <service android:name=".Services.EmailService" />
+
         <receiver android:name=".Services.ConnectivityChangeReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBhtkejbszLnmGCGf3ZfcNiNzMrYXrjOo8" />
 
+        <activity android:name=".Activities.PostParkingSpotActivity">
+        </activity>
     </application>
 
 </manifest>

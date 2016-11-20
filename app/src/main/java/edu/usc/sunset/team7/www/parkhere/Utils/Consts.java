@@ -33,6 +33,7 @@ public class Consts {
     public static final String SIGN_OUT_EXTRA = "sign_out_extra";
     public static final String EMAIL_EXTRA = "email_extra";
     public static final String TEXT_BODY_EXTRA = "text_body_extra";
+    public static final String PARKING_SPOT_EXTRA = "parking_spot_extra";
 
     public static final String LISTING_TO_BE_BOOKED = "listing_to_be_booked";
     public static final String LISTING_DISTANCE = "listing_distance";
@@ -144,6 +145,19 @@ public class Consts {
     public static final String REVIEW_DESCRIPTION = "Review";
     public static final String REVIEW_RATING = "Rating";
 
+    public static final String PARKING_SPOT_DATABASE = "Parking Spots";
     public static final int RESULTS_LIST_VIEW_ID = 0;
+
+    //Parking
+    public static final String PARKING_SPOTS_ID = "ParkingID";
+    public static final String PARKING_SPOTS_PROVIDER_ID = "ProviderID";
+    public static final String PARKING_SPOTS_COMPACT = "Compact";
+    public static final String PARKING_SPOTS_COVERED = "Covered";
+    public static final String PARKING_SPOTS_HANDICAP = "Handicap";
+    public static final String PARKING_SPOTS_LONGITUDE = "Longitude";
+    public static final String PARKING_SPOTS_LATITUDE = "Latitude";
+    public static final String PARKING_SPOTS_IMAGE = "ImageURL";
+    public static final String PARKING_SPOTS_BOOKING_COUNT = "Booking Count";
+    public static final String PARKING_SPOTS_NAME = "Name";
 
 }
