@@ -5,47 +5,29 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import org.joda.time.DateTime;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Hashtable;
 
@@ -56,6 +38,7 @@ import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.Utils.Tools;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
 
 /**
  * Created by kunal on 10/23/16.
@@ -65,13 +48,15 @@ public class PostListingActivity extends AppCompatActivity {
 
     private static final String TAG = "PostListingActivity";
 
-    @BindView(R.id.name_textinputlayout) TextInputLayout parkingNameTextInputLayout;
+    @BindView(R.id.name_textinputlayout) TextInputLayout listingNameTextInput;
     @BindView(R.id.description_textinputlayout) TextInputLayout descriptionTextInputLayout;
     @BindView(R.id.price_textinputlayout) TextInputLayout priceTextInputLayout;
+    @BindView(R.id.parkingspot_textinputlayout) TextInputLayout parkingSpotTextInput;
 
     @BindView(R.id.name_edittext) AppCompatEditText parkingNameEditText;
     @BindView(R.id.description_edittext) AppCompatEditText descriptionEditText;
     @BindView(R.id.price_edittext) AppCompatEditText priceEditText;
+    @BindView(R.id.parkingspot_edittext) AppCompatEditText parkingSpotEditText;
 
     private String nameString, descriptionString;
     private double price;
@@ -85,8 +70,7 @@ public class PostListingActivity extends AppCompatActivity {
     //Parking image controls
     @BindView(R.id.upload_parking_button) Button uploadParkingImageButton;
 
-    @BindView(R.id.parkingImage)
-    ImageView parkingImageView;
+    @BindView(R.id.parkingImage) ImageView parkingImageView;
 
     //Parking Type Buttons
     @BindView(R.id.handicap_button_control) SwitchCompat handicapSwitch;
@@ -101,6 +85,8 @@ public class PostListingActivity extends AppCompatActivity {
 
     @BindView(R.id.post_listing_toolbar) Toolbar postListingToolbar;
 
+    private ParkingSpot currentParkingSpot;
+
     private DatePickerDialog startDatePicker;
     private DatePickerDialog stopDatePicker;
 
@@ -113,22 +99,14 @@ public class PostListingActivity extends AppCompatActivity {
 
     private long startDate, stopDate;
 
-    boolean isCompact,isHandicap, isCovered, isRefundable;
+    boolean isRefundable;
 
-    @BindView(R.id.upload_listing_button)
-    Button uploadListingButton;
+    @BindView(R.id.upload_listing_button) Button uploadListingButton;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private FirebaseStorage storage;
     private FirebaseUser currentUser;
-    private Uri sourceImageUri = null;
-    private String firebaseImageURL = "";
-
-    //NEED TO GET LONGITUDE AND LATITUDE
-    private double longitude, latitude;
-
-//    private Place locationSelected;
 
     public static void startActivity(Context context) {
         Intent i = new Intent(context, PostListingActivity.class);
@@ -157,6 +135,7 @@ public class PostListingActivity extends AppCompatActivity {
         price = 0.0;
         startDate = 0;
         stopDate = 0;
+        currentParkingSpot = null;
 
         cancellationIds = new Hashtable<Integer, String>();
         cancellationIds.put(R.id.refundable_rButton, Consts.REFUNDABLE);
@@ -172,9 +151,10 @@ public class PostListingActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Make sure the gallery Intent called this method
-        if(requestCode == Consts.PARKING_SPOT_REQUEST && resultCode == RESULT_OK && data != null ) {
-            
+        if(requestCode == Consts.PARKING_SPOT_REQUEST
+                && resultCode == Consts.PARKING_SPOT_SUCCESSFUL_RESULT && data != null ) {
+            currentParkingSpot = (ParkingSpot) data.getSerializableExtra(Consts.PARKING_SPOT_EXTRA);
+            parkingSpotEditText.setText(currentParkingSpot.getName());
         }
     }
 
@@ -279,10 +259,10 @@ public class PostListingActivity extends AppCompatActivity {
 
         if (nameString.isEmpty()) {
             isValid = false;
-            parkingNameTextInputLayout.setErrorEnabled(true);
-            parkingNameTextInputLayout.setError("Please enter a name.");
+            listingNameTextInput.setErrorEnabled(true);
+            listingNameTextInput.setError("Please enter a name.");
         } else {
-            parkingNameTextInputLayout.setErrorEnabled(false);
+            listingNameTextInput.setErrorEnabled(false);
         }
         if (descriptionString.isEmpty()) {
             isValid = false;
@@ -290,6 +270,13 @@ public class PostListingActivity extends AppCompatActivity {
             descriptionTextInputLayout.setError("Please enter a description.");
         } else {
             descriptionTextInputLayout.setErrorEnabled(false);
+        }
+        if (currentParkingSpot == null) {
+            isValid = false;
+            parkingSpotTextInput.setErrorEnabled(true);
+            parkingSpotTextInput.setError("Select a parking space");
+        } else {
+            parkingSpotTextInput.setErrorEnabled(false);
         }
         if (price <= 0){
             isValid = false;
@@ -334,11 +321,9 @@ public class PostListingActivity extends AppCompatActivity {
         } else {
             radioGroup.check(R.id.nonrefundable_rButton);
         }
-        compactSwitch.setChecked(listing.isCompact());
+        compactSwitch.setChecked(listing.isCompact()); 
         coveredSwitch.setChecked(listing.isCovered());
         handicapSwitch.setChecked(listing.isHandicap());
-        latitude = listing.getLatitude();
-        longitude = listing.getLongitude();
         startDate = listing.getStartTime();
         stopDate = listing.getStopTime();
     }

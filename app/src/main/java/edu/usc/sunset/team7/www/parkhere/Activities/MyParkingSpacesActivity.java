@@ -54,7 +54,12 @@ public class MyParkingSpacesActivity extends AppCompatActivity {
     }
 
     public void sendParkingSpace(ParkingSpot selectedSpace) {
+        Intent data = new Intent();
+        data.putExtra(Consts.PARKING_SPOT_EXTRA, selectedSpace);
+        int resultCode = Consts.PARKING_SPOT_SUCCESSFUL_RESULT;
 
+        setResult(resultCode, data);
+        finish();
     }
 
 

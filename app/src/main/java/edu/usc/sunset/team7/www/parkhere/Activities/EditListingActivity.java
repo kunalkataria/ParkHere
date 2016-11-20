@@ -237,9 +237,9 @@ public class EditListingActivity extends AppCompatActivity {
 //                descriptionTextInputLayout.setError("Please enter a description.");
 //            }
 //        } else {
-//            parkingNameTextInputLayout.setErrorEnabled(true);
+//            listingNameTextInput.setErrorEnabled(true);
 //            System.out.println("NAME FAIL");
-//            parkingNameTextInputLayout.setError("Please enter a name.");
+//            listingNameTextInput.setError("Please enter a name.");
 //        }
 //        return false;
     }
