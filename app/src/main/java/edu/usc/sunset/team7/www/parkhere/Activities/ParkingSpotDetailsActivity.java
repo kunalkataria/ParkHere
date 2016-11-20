@@ -12,8 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +27,7 @@ import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Review;
 
 public class ParkingSpotDetailsActivity extends AppCompatActivity {
 
@@ -68,6 +75,30 @@ public class ParkingSpotDetailsActivity extends AppCompatActivity {
         parkingSpotDetailsHandicapTextView.setText("Handicap? " + parkingSpot.isHandicap());
         parkingSpotDetailsCoveredTextView.setText("Covered? " + parkingSpot.isCovered());
         parkingSpotDetailsCompactTextView.setText("Compact? " + parkingSpot.isCompact());
+
+        //make a review listview later
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final String userID = mAuth.getCurrentUser().getUid();
+        final ArrayList<Review> reviewsListing = new ArrayList<Review>();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Consts.REVIEWS_DATABASE).child(userID).child(parkingSpot.getParkingSpotID());
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    //youre at each parking spot id so need to iterate through all booking ids, possible threading problems here later
+                    Review toAdd = parseBookingID(child);
+                    reviewsListing.add(toAdd);
+                }
+                Review[] reviewParkingSpotArray = new Review[reviewsListing.size()];
+                reviewParkingSpotArray = reviewsListing.toArray(reviewParkingSpotArray);
+                //set adapter here
+                /*ParkingSpaceListView.setAdapter(new CustomParkingSpaceSelectionAdapter
+                        (MyParkingSpacesActivity.this, parkingSpotArray));*/
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     @Override
@@ -115,5 +146,21 @@ public class ParkingSpotDetailsActivity extends AppCompatActivity {
             }
         });
         finish();
+    }
+
+    private Review parseBookingID(DataSnapshot bookingSnapShot) {
+        //possible threading problems
+        Review toAdd = new Review();
+        for(DataSnapshot child : bookingSnapShot.getChildren()) {
+            switch(child.getKey()) {
+                case Consts.REVIEW_DESCRIPTION:
+                    toAdd.setReview(child.getValue().toString());
+                    break;
+                case Consts.REVIEW_RATING:
+                    toAdd.setReviewRating(Integer.parseInt(child.getValue().toString()));
+                    break;
+            }
+        }
+        return toAdd;
     }
 }
