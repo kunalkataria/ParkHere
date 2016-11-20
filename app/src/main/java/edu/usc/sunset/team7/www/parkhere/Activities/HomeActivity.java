@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
 import edu.usc.sunset.team7.www.parkhere.Fragments.BalanceFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.BookingFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.ListingFragment;
+import edu.usc.sunset.team7.www.parkhere.Fragments.ParkingSpotFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.ProfileFragment;
 import edu.usc.sunset.team7.www.parkhere.Fragments.SearchFragment;
 import edu.usc.sunset.team7.www.parkhere.R;
@@ -44,12 +45,14 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public static GoogleApiClient mGoogleApiClient;
     private static final String[] fragmentTitles = new String[]
                     {"Search",
+                    "Parking Spots",
                     "Listings",
                     "Bookings",
                     "Balance",
                     "My Profile"};
     private static final String[] fragmentTags = new String[]
                     {Consts.SEARCH_FRAGMENT_TAG,
+                    Consts.PARKING_SPOTS_FRAGMENT_TAG,
                     Consts.LISTING_FRAGMENT_TAG,
                     Consts.BOOKING_FRAGMENT_TAG,
                     Consts.BALANCE_FRAGMENT_TAG,
@@ -157,6 +160,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 }
                 setToolbarTitle(getResources().getString(R.string.search));
                 break;
+            case Consts.PARKING_SPOTS_FRAGMENT_TAG:
+                if (getFragmentManager().findFragmentByTag(Consts.PARKING_SPOTS_FRAGMENT_TAG) != null) {
+                    currentFragment = getFragmentManager().findFragmentByTag(Consts.PARKING_SPOTS_FRAGMENT_TAG);
+                } else {
+                    currentFragment = new ParkingSpotFragment();
+                }
+                setToolbarTitle(getResources().getString(R.string.parking_spot));
             case Consts.BOOKING_FRAGMENT_TAG:
                 if (getFragmentManager().findFragmentByTag(Consts.BOOKING_FRAGMENT_TAG) != null) {
                     currentFragment = getFragmentManager().findFragmentByTag(Consts.BOOKING_FRAGMENT_TAG);
@@ -257,6 +267,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 case Consts.SEARCH_FRAGMENT_TAG:
                     currentFragment = new SearchFragment();
                     setToolbarTitle(getResources().getString(R.string.search));
+                    break;
+                case Consts.PARKING_SPOTS_FRAGMENT_TAG:
+                    currentFragment = new ParkingSpotFragment();
+                    setToolbarTitle(getResources().getString(R.string.parking_spot));
                     break;
                 case Consts.LISTING_FRAGMENT_TAG:
                     currentFragment = new ListingFragment();
