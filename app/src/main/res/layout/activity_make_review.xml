@@ -24,17 +24,32 @@
         android:theme="@style/RatingBarTheme"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"/>
 
-    <android.support.v7.widget.AppCompatEditText
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/review_text"
         android:layout_width="match_parent"
-        android:layout_height="100sp"
-        android:inputType="textMultiLine"
-        android:id="@+id/review_description_text"
-        android:textSize="20sp"
-        android:hint="@string/review"
+        android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:inputType="textMultiLine"
+            android:id="@+id/review_description_text"
+            android:textSize="20sp"
+            android:hint="@string/review_text_placeholder"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"/>
+    </android.support.design.widget.TextInputLayout>
+
+
+
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/submit_review_button"
         android:layout_width="match_parent"
