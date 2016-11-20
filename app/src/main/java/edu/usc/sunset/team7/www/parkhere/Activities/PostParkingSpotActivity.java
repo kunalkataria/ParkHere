@@ -62,7 +62,7 @@ public class PostParkingSpotActivity extends AppCompatActivity {
     @BindView(R.id.parking_spot_compact_button_control) SwitchCompat compactSwitch;
     @BindView(R.id.parking_spot_covered_button_control) SwitchCompat coveredSwitch;
 
-    boolean isCompact,isHandicap, isCovered, isRefundable;
+    boolean isCompact,isHandicap, isCovered;
 
     @BindView(R.id.post_parking_spot_toolbar) Toolbar postParkingSpotToolbar;
 
