@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 
@@ -46,18 +47,23 @@ public class SearchServlet extends HttpServlet {
     public boolean done;
     public PrintWriter pw;
 
+    public double latitude;
+    public double longitude;
+    public long startTime;
+    public long stopTime;
+
+    public DataSnapshot db;
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         resp.setContentType("application/json");
         pw = resp.getWriter();
 
-        final double latitude = Double.parseDouble(req.getParameter("lat"));
-        final double longitude = Double.parseDouble(req.getParameter("lon"));
-        final long startTime = Long.parseLong(req.getParameter("startTime"));
-        final long stopTime = Long.parseLong(req.getParameter("stopTime"));
-
-        searchResult = new SearchResult(avgParkingCost(latitude, longitude));
+        latitude = Double.parseDouble(req.getParameter("lat"));
+        longitude = Double.parseDouble(req.getParameter("lon"));
+        startTime = Long.parseLong(req.getParameter("startTime"));
+        stopTime = Long.parseLong(req.getParameter("stopTime"));
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setServiceAccount(getServletContext().getResourceAsStream("/WEB-INF/ParkHere-9f6082855b14.json"))
@@ -82,34 +88,42 @@ public class SearchServlet extends HttpServlet {
 
         DatabaseReference ref = FirebaseDatabase
                 .getInstance()
-                .getReference("Listings");
+                .getReference();
 
         resp.setStatus(HttpServletResponse.SC_OK);
         done = false;
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //looping through providers
-                for(DataSnapshot provider : dataSnapshot.getChildren()) {
-                    String providerID = provider.getKey();
-                    //looping through active listings
-                    for(DataSnapshot listing : provider.child("Active Listings").getChildren()) {
-                        String listingID = listing.getKey();
-                        processListing(listing, latitude, longitude,
-                                startTime, stopTime, providerID, listingID);
-                    }
-                }
-                done = true;
+                startSearch(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+    }
 
-        while(!done) {
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException e) { e.printStackTrace(); }
+    private void startSearch(DataSnapshot db) {
+        this.db = db;
+        DataSnapshot listingsDB = db.child("Listings");
+        String userID;
+        String spotID;
+
+        SearchResult result = new SearchResult(avgParkingCost(latitude, longitude));
+
+        for(DataSnapshot user : listingsDB.getChildren()){
+            userID = user.getKey();
+            for(DataSnapshot activeListing : user.child("Active Listings").getChildren()) {
+                spotID = activeListing.child("Spot ID").getValue().toString();
+                if(isWithinRadius(userID,spotID)) {
+                    Listing listing = parseListing(activeListing);
+                    listing.setParkingSpot(parseParkingSpot(userID, spotID));
+                    double distance = distance(listing.getLatitude(), listing.getLongitude(),
+                            latitude, longitude);
+                    ResultsPair pair = new ResultsPair(listing, distance);
+                    result.addListing(pair);
+                }
+            }
         }
 
         String searchResultAsJson = new Gson().toJson(searchResult);
@@ -131,15 +145,13 @@ public class SearchServlet extends HttpServlet {
         return d;
     }
 
-    //checks if a listing is within 3 miles of the searched location
-    private boolean isWithinRadius(DataSnapshot child, double latitude, double longitude) {
-        double listingLat = -1, listingLong = -1;
-        for(DataSnapshot childSnap : child.getChildren()) {
-            if(childSnap.getKey().equals("Latitude")) listingLat = Double.valueOf(childSnap.getValue().toString());
-            else if(childSnap.getKey().equals("Longitude")) listingLong = Double.valueOf(childSnap.getValue().toString());
-        }
-        if(listingLat == -1 || listingLong == -1) return false;
-        return (distance(listingLat, listingLong, latitude, longitude) <= 3);
+    //checks if a parking spot is within 3 miles of the searched location
+    private boolean isWithinRadius(String userID, String spotID) {
+        DataSnapshot parkingSpot = db.child("Parking Spots").child(userID).child(spotID);
+        double latitude = Double.parseDouble(parkingSpot.child("Latitude").getValue().toString());
+        double longitude = Double.parseDouble(parkingSpot.child("Longitude").getValue().toString());
+        if (distance(latitude, longitude, this.latitude, this.longitude) <= 3 ) return true;
+        return false;
     }
 
     @Override
@@ -147,52 +159,42 @@ public class SearchServlet extends HttpServlet {
             throws IOException {
         resp.getWriter().println("POST requests are not supported");
     }
-    //checks if a listing is within searched time constraints
-    private boolean isWithinTimeConstraints(DataSnapshot child, long startTime, long stopTime,
-                                            String providerID, String listingID) {
-        long listingStartTime = -1;
-        long listingStopTime = -1;
-        for(DataSnapshot childSnap : child.getChildren()) {
-            if(childSnap.getKey().equals("Start Time")) {
-                listingStartTime = Long.parseLong(childSnap.getValue().toString());
-            } else if(childSnap.getKey().equals("End Time")) {
-                listingStopTime = Long.parseLong(childSnap.getValue().toString());
-            }
-        }
-        if(listingStartTime == -1 || listingStopTime == -1) return false;
-        if(listingStopTime < (System.currentTimeMillis()/1000)){
-            moveListingToInactive(child, providerID, listingID);
-            return false;
-        }
-        if(listingStartTime > startTime) return false;
-        if(stopTime != -1 && listingStopTime < stopTime) return false;
-        return true;
-    }
 
-    private Listing parseListing (DataSnapshot snapshot) {
-        Listing listing = new Listing();
-        for (DataSnapshot child : snapshot.getChildren()) {
-            switch (child.getKey()) {
+    private ParkingSpot parseParkingSpot (String providerID, String spotID) {
+        DataSnapshot parkingSpotSnapshot = db.child("Parking Spots").child(providerID).child(spotID);
+        ParkingSpot spot = new ParkingSpot();
+        spot.setParkingSpotID(Integer.parseInt(parkingSpotSnapshot.getKey()));
+        for(DataSnapshot param : parkingSpotSnapshot.getChildren()) {
+            switch(param.getKey()) {
                 case "Compact":
-                    listing.setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                    spot.setCompact(Boolean.parseBoolean(param.getValue().toString()));
                     break;
                 case "Covered":
-                    listing.setCovered(Boolean.parseBoolean(child.getValue().toString()));
-                    break;
-                case "Listing Description":
-                    listing.setDescription(child.getValue().toString());
+                    spot.setCovered(Boolean.parseBoolean(param.getValue().toString()));
                     break;
                 case "Handicap":
-                    listing.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
+                    spot.setHandicap(Boolean.parseBoolean(param.getValue().toString()));
                     break;
                 case "Image URL":
-                    listing.setImageURL(child.getValue().toString());
+                    spot.setImageURL(param.getValue().toString());
                     break;
                 case "Latitude":
-                    listing.setLatitude(Double.parseDouble(child.getValue().toString()));
+                    spot.setLatitude(Double.parseDouble(param.getValue().toString()));
                     break;
                 case "Longitude":
-                    listing.setLongitude(Double.parseDouble(child.getValue().toString()));
+                    spot.setLongitude(Double.parseDouble(param.getValue().toString()));
+                    break;
+            }
+        }
+        return spot;
+    }
+
+    private Listing parseListing (DataSnapshot activeListing) {
+        Listing listing = new Listing();
+        for (DataSnapshot child : activeListing.getChildren()) {
+            switch (child.getKey()) {
+                case "Listing Description":
+                    listing.setDescription(child.getValue().toString());
                     break;
                 case "Listing Name":
                     listing.setName(child.getValue().toString());
@@ -210,48 +212,40 @@ public class SearchServlet extends HttpServlet {
                     break;
                 case "Price":
                     listing.setPrice(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case "Increment":
+                    listing.setIncrement(Long.parseLong(child.getValue().toString()));
+                    break;
+                case "Times Available":
+                    listing.setTimesAvailable(child.getValue().toString());
             }
         }
         return listing;
     }
 
-    private void processListing(DataSnapshot dataSnapshot, double latitude, double longitude,
-                                long startTime, long stopTime, String providerID, String listingID) {
-        if(isWithinRadius(dataSnapshot, latitude, longitude) &&
-                isWithinTimeConstraints(dataSnapshot, startTime, stopTime, providerID, listingID)) {
-            System.out.println("Listing processed");
-            Listing listing = parseListing(dataSnapshot);
-            listing.setProviderID(providerID);
-            listing.setListingID(listingID);
-            double distance = distance(listing.getLatitude(), listing.getLongitude(), latitude, longitude);
-            ResultsPair resultsPair = new ResultsPair(listing, distance);
-            searchResult.addListing(resultsPair);
-        }
-    }
-
-    private void moveListingToInactive(DataSnapshot listing, String providerID, String listingID) {
-        Listing toMove = parseListing(listing);
-        //Move Listing to inactive
-        DatabaseReference inactiveListingRef = FirebaseDatabase.getInstance().getReference()
-                .child("Listings").child(providerID).child("Inactive Listings").child(listingID);
-        inactiveListingRef.child("Listing Name").setValue(toMove.getName());
-        inactiveListingRef.child("Listing Description").setValue(toMove.getDescription());
-        inactiveListingRef.child("Is Refundable").setValue(toMove.isRefundable());
-        inactiveListingRef.child("Price").setValue(toMove.getPrice());
-        inactiveListingRef.child("Compact").setValue(toMove.isCompact());
-        inactiveListingRef.child("Covered").setValue(toMove.isCovered());
-        inactiveListingRef.child("Handicap").setValue(toMove.isHandicap());
-        inactiveListingRef.child("Latitude").setValue(toMove.getLatitude());
-        inactiveListingRef.child("Longitude").setValue(toMove.getLongitude());
-        inactiveListingRef.child("Start Time").setValue(toMove.getStartTime());
-        inactiveListingRef.child("End Time").setValue(toMove.getStopTime());
-        inactiveListingRef.child("Paid").setValue(true);
-
-        //Remove listing from active
-        FirebaseDatabase.getInstance().getReference().child("Listings").child(providerID)
-                .child("Active Listings").child(listingID).removeValue();
-        Log.info("Listing moved from active to inactive due to invalid stop time");
-    }
+//    private void moveListingToInactive(DataSnapshot listing, String providerID, String listingID) {
+//        Listing toMove = parseListing(listing);
+//        //Move Listing to inactive
+//        DatabaseReference inactiveListingRef = FirebaseDatabase.getInstance().getReference()
+//                .child("Listings").child(providerID).child("Inactive Listings").child(listingID);
+//        inactiveListingRef.child("Listing Name").setValue(toMove.getName());
+//        inactiveListingRef.child("Listing Description").setValue(toMove.getDescription());
+//        inactiveListingRef.child("Is Refundable").setValue(toMove.isRefundable());
+//        inactiveListingRef.child("Price").setValue(toMove.getPrice());
+//        inactiveListingRef.child("Compact").setValue(toMove.isCompact());
+//        inactiveListingRef.child("Covered").setValue(toMove.isCovered());
+//        inactiveListingRef.child("Handicap").setValue(toMove.isHandicap());
+//        inactiveListingRef.child("Latitude").setValue(toMove.getLatitude());
+//        inactiveListingRef.child("Longitude").setValue(toMove.getLongitude());
+//        inactiveListingRef.child("Start Time").setValue(toMove.getStartTime());
+//        inactiveListingRef.child("End Time").setValue(toMove.getStopTime());
+//        inactiveListingRef.child("Paid").setValue(true);
+//
+//        //Remove listing from active
+//        FirebaseDatabase.getInstance().getReference().child("Listings").child(providerID)
+//                .child("Active Listings").child(listingID).removeValue();
+//        Log.info("Listing moved from active to inactive due to invalid stop time");
+//    }
 
     private double avgParkingCost(double lat, double lon) {
         try {

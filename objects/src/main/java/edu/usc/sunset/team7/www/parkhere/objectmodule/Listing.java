@@ -15,15 +15,33 @@ public class Listing implements Serializable {
     private String description;
     private long startTime;
     private long stopTime;
+    private String timesAvailable;
     private boolean refundable;
     private String listingID;
     private double price;
     private String providerID;
-    //need to add functionality for can cancel policy
-    //need to add picture functionality & list of pictures
+    private long increment;
+
     public Listing() {
 
     }
+
+    public ParkingSpot getParkingSpot() {
+        return parkingSpot;
+    }
+
+    public void setParkingSpot(ParkingSpot parkingSpot) {
+        this.parkingSpot = parkingSpot;
+    }
+
+    public long getIncrement() {return increment;}
+
+    public void setIncrement(long increment) {this.increment = increment;}
+
+    public String getTimesAvailable() {return timesAvailable;}
+
+    public void setTimesAvailable(String timesAvailable) {this.timesAvailable = timesAvailable;}
+
     public String getName() {
         return name;
     }
