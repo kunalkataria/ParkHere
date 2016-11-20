@@ -46,9 +46,9 @@ public class FilterTest {
         compact = new Listing();
         none = new Listing();
 
-        handicap.setHandicap(true);
-        covered.setCovered(true);
-        compact.setCompact(true);
+        handicap.getParkingSpot().setHandicap(true);
+        covered.getParkingSpot().setCovered(true);
+        compact.getParkingSpot().setCompact(true);
 
         listings = new ArrayList<ResultsPair>();
         listings.add(new ResultsPair(handicap, 0));

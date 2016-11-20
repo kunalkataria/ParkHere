@@ -107,14 +107,14 @@ public class EditListingActivityTest {
         testListing = new Listing();
         testListing.setProviderID(currentUID);
         testListing.setPrice(3.50);
-        testListing.setCompact(false);
-        testListing.setCovered(false);
-        testListing.setHandicap(true);
+        testListing.getParkingSpot().setCompact(false);
+        testListing.getParkingSpot().setCovered(false);
+        testListing.getParkingSpot().setHandicap(true);
         testListing.setName("test name");
         testListing.setDescription("test description");
-        testListing.setImageURL("https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2F-KVkrHf_L55sVNtSn0AW?alt=media&token=448c50fc-1e7a-49bf-bf49-0fc522f6f3cb");
-        testListing.setLatitude(34.0223519);
-        testListing.setLongitude(-118.285117);
+        testListing.getParkingSpot().setImageURL("https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2F-KVkrHf_L55sVNtSn0AW?alt=media&token=448c50fc-1e7a-49bf-bf49-0fc522f6f3cb");
+        testListing.getParkingSpot().setLatitude(34.0223519);
+        testListing.getParkingSpot().setLongitude(-118.285117);
         testListing.setStartTime(1477983600);
         testListing.setStopTime(1478678400);
         testListing.setRefundable(true);
@@ -124,14 +124,14 @@ public class EditListingActivityTest {
         editTestListing = new Listing();
         editTestListing.setName("test edit name");
         editTestListing.setPrice(5.55);
-        editTestListing.setCompact(true);
-        editTestListing.setCovered(true);
-        editTestListing.setHandicap(false);
+        editTestListing.getParkingSpot().setCompact(true);
+        editTestListing.getParkingSpot().setCovered(true);
+        editTestListing.getParkingSpot().setHandicap(false);
         editTestListing.setDescription("test edit description");
         editTestListing.setRefundable(false);
-        editTestListing.setImageURL("https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2F-KVkrHf_L55sVNtSn0AW?alt=media&token=448c50fc-1e7a-49bf-bf49-0fc522f6f3cb");
-        editTestListing.setLatitude(34.0223519);
-        editTestListing.setLongitude(-118.285117);
+        editTestListing.getParkingSpot().setImageURL("https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2F-KVkrHf_L55sVNtSn0AW?alt=media&token=448c50fc-1e7a-49bf-bf49-0fc522f6f3cb");
+        editTestListing.getParkingSpot().setLatitude(34.0223519);
+        editTestListing.getParkingSpot().setLongitude(-118.285117);
         editTestListing.setStartTime(1477983600);
         editTestListing.setStopTime(1478678400);
         //editTestListing.setListingID("1");
@@ -360,26 +360,26 @@ public class EditListingActivityTest {
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         switch (child.getKey()) {
                             case Consts.LISTING_COMPACT:
-                                toCompare.setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                                toCompare.getParkingSpot().setCompact(Boolean.parseBoolean(child.getValue().toString()));
                                 break;
                             case Consts.LISTING_COVERED:
-                                toCompare.setCovered(Boolean.parseBoolean(child.getValue().toString()));
+                                toCompare.getParkingSpot().setCovered(Boolean.parseBoolean(child.getValue().toString()));
                                 break;
                             case Consts.LISTING_HANDICAP:
-                                toCompare.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
+                                toCompare.getParkingSpot().setHandicap(Boolean.parseBoolean(child.getValue().toString()));
                                 break;
                             case Consts.LISTING_DESCRIPTION:
                                 System.out.println("JUST READ DESCRIPTION");
                                 toCompare.setDescription(child.getValue().toString());
                                 break;
                             case Consts.LISTING_IMAGE:
-                                toCompare.setImageURL(child.getValue().toString());
+                                toCompare.getParkingSpot().setImageURL(child.getValue().toString());
                                 break;
                             case Consts.LISTING_LATITUDE:
-                                toCompare.setLatitude(Double.parseDouble(child.getValue().toString()));
+                                toCompare.getParkingSpot().setLatitude(Double.parseDouble(child.getValue().toString()));
                                 break;
                             case Consts.LISTING_LONGITUDE:
-                                toCompare.setLongitude(Double.parseDouble(child.getValue().toString()));
+                                toCompare.getParkingSpot().setLongitude(Double.parseDouble(child.getValue().toString()));
                                 break;
                             case Consts.LISTING_NAME:
                                 toCompare.setName(child.getValue().toString());

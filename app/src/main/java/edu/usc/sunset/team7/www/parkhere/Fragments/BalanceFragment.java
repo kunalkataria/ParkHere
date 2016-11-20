@@ -146,25 +146,25 @@ public class BalanceFragment extends Fragment {
             for (DataSnapshot child : snapshot.getChildren()) {
                 switch (child.getKey()) {
                     case "Compact":
-                        listing.setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                        listing.getParkingSpot().setCompact(Boolean.parseBoolean(child.getValue().toString()));
                         break;
                     case "Covered":
-                        listing.setCovered(Boolean.parseBoolean(child.getValue().toString()));
+                        listing.getParkingSpot().setCovered(Boolean.parseBoolean(child.getValue().toString()));
                         break;
                     case "Listing Description":
                         listing.setDescription(child.getValue().toString());
                         break;
                     case "Handicap":
-                        listing.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
+                        listing.getParkingSpot().setHandicap(Boolean.parseBoolean(child.getValue().toString()));
                         break;
                     case "Image URL":
-                        listing.setImageURL(child.getValue().toString());
+                        listing.getParkingSpot().setImageURL(child.getValue().toString());
                         break;
                     case "Latitude":
-                        listing.setLatitude(Double.parseDouble(child.getValue().toString()));
+                        listing.getParkingSpot().setLatitude(Double.parseDouble(child.getValue().toString()));
                         break;
                     case "Longitude":
-                        listing.setLongitude(Double.parseDouble(child.getValue().toString()));
+                        listing.getParkingSpot().setLongitude(Double.parseDouble(child.getValue().toString()));
                         break;
                     case "Listing Name":
                         listing.setName(child.getValue().toString());
