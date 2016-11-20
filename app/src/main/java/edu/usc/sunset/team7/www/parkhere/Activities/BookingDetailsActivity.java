@@ -58,7 +58,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
         setSupportActionBar(bookingDetailsToolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Booking details");
+            getSupportActionBar().setTitle("Booking Details");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -122,8 +122,8 @@ public class BookingDetailsActivity extends AppCompatActivity {
         StringBuilder descriptionBuilder = new StringBuilder();
         descriptionBuilder.append("Name of Listing: " + listing.getName());
         descriptionBuilder.append("\nListing Description: "  + listing.getDescription());
-        descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()));
-        descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
+        descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(booking.getBookStartTime()));
+        descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(booking.getBookEndTime()));
         descriptionBuilder.append("\nListing provider: " + providerFullName);
         descriptionBuilder.append("\nProvider phone number: " + providerPhoneNumber);
         descriptionBuilder.append("\nProvider email: " + providerEmail);
@@ -207,26 +207,8 @@ public class BookingDetailsActivity extends AppCompatActivity {
                     for(DataSnapshot child : dataSnapshot.getChildren()){
                         //add back to active listing
                         switch (child.getKey()) {
-                            case "Compact":
-                                addToActive.child(Consts.LISTING_COMPACT).setValue(child.getValue());
-                                break;
-                            case "Covered":
-                                addToActive.child(Consts.LISTING_COVERED).setValue(child.getValue());
-                                break;
                             case "Listing Description":
                                 addToActive.child(Consts.LISTING_DESCRIPTION).setValue(child.getValue());
-                                break;
-                            case "Handicap":
-                                addToActive.child(Consts.LISTING_HANDICAP).setValue(child.getValue());
-                                break;
-                            case "Image URL":
-                                addToActive.child(Consts.LISTING_IMAGE).setValue(child.getValue());
-                                break;
-                            case "Latitude":
-                                addToActive.child(Consts.LISTING_LATITUDE).setValue(child.getValue());
-                                break;
-                            case "Longitude":
-                                addToActive.child(Consts.LISTING_LONGITUDE).setValue(child.getValue());
                                 break;
                             case "Listing Name":
                                 addToActive.child(Consts.LISTING_NAME).setValue(child.getValue());
@@ -242,6 +224,12 @@ public class BookingDetailsActivity extends AppCompatActivity {
                                 break;
                             case "Price":
                                 addToActive.child(Consts.LISTING_PRICE).setValue(child.getValue());
+                                break;
+                            case "Increment":
+                                addToActive.child("Increment").setValue(child.getValue());
+                                break;
+                            case "Times Available":
+                                addToActive.child("Tims Available").setValue(child.getValue());
                                 break;
                         }
                     }

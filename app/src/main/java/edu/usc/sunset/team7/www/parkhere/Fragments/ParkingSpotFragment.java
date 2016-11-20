@@ -74,7 +74,7 @@ public class ParkingSpotFragment extends Fragment {
 
     private ParkingSpot parseParkingSpot(DataSnapshot parkingSpotSnapshot) {
         ParkingSpot spot = new ParkingSpot();
-        spot.setParkingSpotID(Integer.parseInt(parkingSpotSnapshot.getKey()));
+        spot.setParkingSpotID(parkingSpotSnapshot.getKey().toString());
         for(DataSnapshot param : parkingSpotSnapshot.getChildren()) {
             String key = param.getKey();
             switch(key) {

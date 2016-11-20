@@ -17,7 +17,7 @@ public class ParkingSpot implements Serializable {
     private boolean covered;
     private boolean compact;
     private String imageURL;
-    private int parkingSpotID;
+    private String parkingSpotID;
 
     public boolean isCompact() {
         return compact;
@@ -75,11 +75,11 @@ public class ParkingSpot implements Serializable {
         this.imageURL = imageURL;
     }
 
-    public int getParkingSpotID() {
+    public String getParkingSpotID() {
         return parkingSpotID;
     }
 
-    public void setParkingSpotID(int parkingSpotID) {
+    public void setParkingSpotID(String parkingSpotID) {
         this.parkingSpotID = parkingSpotID;
     }
 }
