@@ -45,6 +45,7 @@ public class Consts {
     public static final int FILTERS_CHANGED = 1001;
     public static final int FILTERS_UNCHANGED = 1002;
     public static final int PARKING_SPOT_REQUEST = 1003;
+    public static final int PARKING_SPOT_SUCCESSFUL_RESULT = 10004;
 
     public static final String EMAIL_SERVICE = "Email Service";
     public static final String SEARCH_SERVICE = "Search Service";
