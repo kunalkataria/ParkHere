@@ -26,6 +26,7 @@
     <string name="dates_available">Dates space is available</string>
     <string name="submit_review">Submit Review</string>
     <string name="parking_spot_name">Name of your parking spot</string>
+    <string name="select_parking_spot">Select the parking space</string>
 
     <string name="start_time_label">Start Time Label</string>
     <string name="end_time_label">End Time Label</string>

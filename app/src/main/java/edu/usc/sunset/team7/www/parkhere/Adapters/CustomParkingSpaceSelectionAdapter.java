@@ -2,7 +2,6 @@ package edu.usc.sunset.team7.www.parkhere.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import edu.usc.sunset.team7.www.parkhere.Activities.ParkingSpotDetailsActivity;
+import edu.usc.sunset.team7.www.parkhere.Activities.MyParkingSpacesActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
-import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
 
 /**
@@ -24,10 +22,10 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
 public class CustomParkingSpaceSelectionAdapter extends BaseAdapter {
     private ParkingSpot[] myParkingSpaces;
     private static LayoutInflater inflater = null;
-    private Context context;
+    private MyParkingSpacesActivity myActivity;
 
-    public CustomParkingSpaceSelectionAdapter(Activity activity, ParkingSpot[] allParkingSpaces) {
-        this.context = activity;
+    public CustomParkingSpaceSelectionAdapter(MyParkingSpacesActivity activity, ParkingSpot[] allParkingSpaces) {
+        this.myActivity = activity;
         this.myParkingSpaces = allParkingSpaces;
     }
 
@@ -51,11 +49,11 @@ public class CustomParkingSpaceSelectionAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         ItemShell item;
         View rowView = view;
         if(rowView == null) {
-            inflater = ((Activity) context).getLayoutInflater();
+            inflater = myActivity.getLayoutInflater();
             rowView = inflater.inflate(R.layout.parking_spot_view, viewGroup, false);
 
             item = new ItemShell();
@@ -71,12 +69,13 @@ public class CustomParkingSpaceSelectionAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //TODO: IMPLEMENT THIS TO RETURN THE OBJECT FOR ACTIVITY RESULT
+                myActivity.sendParkingSpace((ParkingSpot) getItem(i));
             }
         });
 
         ParkingSpot currentSpace = (ParkingSpot)getItem(i);
 
-        Picasso.with(this.context).load(currentSpace.getImageURL()).into(item.imgView);
+        Picasso.with(myActivity).load(currentSpace.getImageURL()).into(item.imgView);
         item.parkingLabel.setText(currentSpace.getName());
 
         return rowView;
