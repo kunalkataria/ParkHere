@@ -128,7 +128,7 @@ public class PostListingActivity extends AppCompatActivity {
     //NEED TO GET LONGITUDE AND LATITUDE
     private double longitude, latitude;
 
-    private Place locationSelected;
+//    private Place locationSelected;
 
     public static void startActivity(Context context) {
         Intent i = new Intent(context, PostListingActivity.class);
@@ -147,26 +147,6 @@ public class PostListingActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.post_listing_autocomplete_fragment);
-
-        if (autocompleteFragment != null) {
-            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                @Override
-                public void onPlaceSelected(Place place) {
-                    locationSelected = place;
-                    latitude = locationSelected.getLatLng().latitude;
-                    longitude = locationSelected.getLatLng().longitude;
-                    Log.i(TAG, "Place: " + place.getName());
-                }
-
-                @Override
-                public void onError(Status status) {// TODO: Handle the error.
-                    Log.i(TAG, "An error occurred: " + status);
-                }
-            });
-        }
-
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -174,11 +154,9 @@ public class PostListingActivity extends AppCompatActivity {
 
         nameString = "";
         descriptionString = "";
-        price=0.0;
+        price = 0.0;
         startDate = 0;
         stopDate = 0;
-        latitude = -1;
-        longitude = -1;
 
         cancellationIds = new Hashtable<Integer, String>();
         cancellationIds.put(R.id.refundable_rButton, Consts.REFUNDABLE);
@@ -190,21 +168,19 @@ public class PostListingActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.upload_parking_button)
-    protected void uploadImage() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, 1);
-    }
-
-    //Method called when user selects a picture
+    // Method called when user selects a parking space
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Make sure the gallery Intent called this method
-        if(requestCode==1 && resultCode==RESULT_OK && data!=null ){
-            sourceImageUri = data.getData();
-            parkingImageView.setImageURI(sourceImageUri);
+        if(requestCode == Consts.PARKING_SPOT_REQUEST && resultCode == RESULT_OK && data != null ) {
+            
         }
+    }
+
+    @OnClick (R.id.parkingspot_edittext)
+    protected void selectParkingSpot() {
+        MyParkingSpacesActivity.startActivityForResult(Consts.PARKING_SPOT_REQUEST, PostListingActivity.this);
     }
 
     @OnClick(R.id.upload_listing_button)
@@ -218,63 +194,9 @@ public class PostListingActivity extends AppCompatActivity {
             newListingRef.child(Consts.LISTING_DESCRIPTION).setValue(descriptionString);
             newListingRef.child(Consts.LISTING_REFUNDABLE).setValue(isRefundable);
             newListingRef.child(Consts.LISTING_PRICE).setValue(price);
-            newListingRef.child(Consts.LISTING_COMPACT).setValue(isCompact);
-            newListingRef.child(Consts.LISTING_COVERED).setValue(isCovered);
-            newListingRef.child(Consts.LISTING_HANDICAP).setValue(isHandicap);
-            newListingRef.child(Consts.LISTING_LATITUDE).setValue(latitude);
-            newListingRef.child(Consts.LISTING_LONGITUDE).setValue(longitude);
             newListingRef.child(Consts.LISTING_START_TIME).setValue(startDate);
             newListingRef.child(Consts.LISTING_END_TIME).setValue(stopDate);
-
-            StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
-            StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
-            //Best way to store the data?
-            if (sourceImageUri == null) {
-                newListingRef.child(Consts.LISTING_IMAGE).setValue(Consts.DEFAULT_PARKING_IMAGE);
-            } else {
-                //compress image
-                InputStream imageStream = null;
-                try {
-                    imageStream = getContentResolver().openInputStream(sourceImageUri);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                Bitmap bmp = BitmapFactory.decodeStream(imageStream);
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmp,
-                        "Title", null);
-                sourceImageUri = Uri.parse(path);
-
-                try {
-                    stream.close();
-                    stream = null;
-                } catch (IOException e) {
-
-                    e.printStackTrace();
-                }
-
-
-                UploadTask uploadTask = parkingRef.child(listingID).putFile(sourceImageUri);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        Log.d(TAG, exception.toString());
-                        Toast.makeText(PostListingActivity.this, "Unable to upload the image. Please check your internet connection and try again.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
-                        newListingRef.child(Consts.LISTING_IMAGE).setValue(firebaseImageURL);
-                    }
-                });
-            }
+            newListingRef.child(Consts.PARKING_SPOTS_ID).setValue("");
             finish();
         }
     }
@@ -336,7 +258,7 @@ public class PostListingActivity extends AppCompatActivity {
     }
 
 
-    public boolean checkFields(){
+    public boolean checkFields() {
         nameString = parkingNameEditText.getText().toString();
         descriptionString = descriptionEditText.getText().toString();
         boolean isValid = true;
@@ -376,17 +298,6 @@ public class PostListingActivity extends AppCompatActivity {
         } else {
             priceTextInputLayout.setErrorEnabled(false);
         }
-        // allow the user now to upload a parking space with the blank/default image
-//        if (sourceImageUri == null) {
-//            isValid = false;
-//            Toast.makeText(PostListingActivity.this, "Please upload a picture of your parking spot.",
-//                    Toast.LENGTH_SHORT).show();
-//        }
-        if (radioGroup.getCheckedRadioButtonId() == -1) {
-            isValid = false;
-            Toast.makeText(PostListingActivity.this, "Please select a cancellation policy.",
-                    Toast.LENGTH_SHORT).show();
-        }
         if (startDate == 0) {
             isValid = false;
             startDateLayout.setError("Please select a start date");
@@ -410,20 +321,7 @@ public class PostListingActivity extends AppCompatActivity {
                 stopDateLayout.setErrorEnabled(true);
             }
         }
-        if (latitude == -1 && longitude == -1) {
-            isValid = false;
-            Toast.makeText(PostListingActivity.this, "Please select a location through the search bar.",
-                    Toast.LENGTH_SHORT).show();
-        }
-        saveSwitchValues();
         return isValid;
-    }
-
-    private void saveSwitchValues(){
-        isCompact = compactSwitch.isChecked();
-        isCovered = coveredSwitch.isChecked();
-        isHandicap =  handicapSwitch.isChecked();
-        isRefundable = radioGroup.getCheckedRadioButtonId() == R.id.refundable_rButton;
     }
 
     public void fillInFields(Listing listing) {
