@@ -67,6 +67,8 @@ public class MyParkingSpacesActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+
+        //return view;
     }
 
     public void sendParkingSpace(ParkingSpot selectedSpace) {

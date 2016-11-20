@@ -7,6 +7,11 @@ package edu.usc.sunset.team7.www.parkhere.objectmodule;
 public class Review {
     private int reviewRating;
     private String review;
+
+    public Review() {
+        this.reviewRating = 0;
+        this.review = "";
+    }
     public Review(int reviewRating, String review){
         this.reviewRating = reviewRating;
         this.review = review;
