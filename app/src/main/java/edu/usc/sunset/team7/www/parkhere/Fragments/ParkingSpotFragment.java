@@ -2,8 +2,8 @@ package edu.usc.sunset.team7.www.parkhere.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +22,6 @@ import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ParkingSpotFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ParkingSpotFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ParkingSpotFragment extends Fragment {
 
     private FirebaseAuth mAuth;
