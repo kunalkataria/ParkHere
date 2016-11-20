@@ -40,7 +40,7 @@
     <string name="post_listing">Post a listing</string>
     <string name="search">Search</string>
     <string name="edit_listing">Edit the listing</string>
-    <string name="leave_review">Rate the booking out of 5 stars and leave a comment!</string>
+    <string name="leave_review">Rate the parking spot from 1 to 5 stars and leave a comment!</string>
 
     <string name="listing">My Listings</string>
     <string name="booking">My Bookings</string>
@@ -61,6 +61,7 @@
     <string name="start_time">Start time</string>
     <string name="stop_time">Stop time</string>
     <string name="review">Review</string>
+    <string name="review_text_placeholder">Leave a comment!</string>
     <string name="current_balance">Current Balance</string>
     <string name="are_you_providing">Will you be providing parking spots?</string>
     <string name="transfer_to_bank">Transfer balance to bank account</string>
