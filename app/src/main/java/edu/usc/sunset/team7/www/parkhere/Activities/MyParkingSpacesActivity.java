@@ -7,13 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.usc.sunset.team7.www.parkhere.Adapters.CustomListingAdapter;
 import edu.usc.sunset.team7.www.parkhere.Adapters.CustomParkingSpaceSelectionAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
@@ -43,21 +47,65 @@ public class MyParkingSpacesActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         final String userID = mAuth.getCurrentUser().getUid();
         final ArrayList<ParkingSpot> userListings = new ArrayList<ParkingSpot>();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Consts.PARKING_SPOT_DATABASE).child(userID);
 
-        /*DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child
-                (Consts.PARKING_SPOT_DATABASE).child(userID).child(Consts.ACTIVE_LISTINGS);*/
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    ParkingSpot currentParkingSpot = parseParkingSpot(child);
+                    currentParkingSpot.setProviderID(userID);
+                    userListings.add(currentParkingSpot);
+                }
+                ParkingSpot[] parkingSpotArray = new ParkingSpot[userListings.size()];
+                parkingSpotArray = userListings.toArray(parkingSpotArray);
 
-        ParkingSpot[] parkingSpotArray = new ParkingSpot[userListings.size()];
-        parkingSpotArray = userListings.toArray(parkingSpotArray);
+                ParkingSpaceListView.setAdapter(new CustomParkingSpaceSelectionAdapter
+                        (MyParkingSpacesActivity.this, parkingSpotArray));
+            }
 
-        ParkingSpaceListView.setAdapter(new CustomParkingSpaceSelectionAdapter(this, parkingSpotArray));
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     public void sendParkingSpace(ParkingSpot selectedSpace) {
 
     }
 
-
-
+    public ParkingSpot parseParkingSpot(DataSnapshot parkingSnapShot) {
+        ParkingSpot pSpot = new ParkingSpot();
+        //dont knw if we need this but insertedt the id as well
+        pSpot.setParkingSpotID(parkingSnapShot.getValue().toString());
+        for(DataSnapshot child : parkingSnapShot.getChildren()) {
+            switch (child.getKey()) {
+                case Consts.PARKING_SPOTS_COMPACT:
+                    pSpot.setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_COVERED:
+                    pSpot.setCovered(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_HANDICAP:
+                    pSpot.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_LONGITUDE:
+                    pSpot.setLongitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_LATITUDE:
+                    pSpot.setLatitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_IMAGE:
+                    pSpot.setImageURL(child.getValue().toString());
+                    break;
+                case Consts.PARKING_SPOTS_NAME:
+                    pSpot.setName(child.getValue().toString());
+                    break;
+                case Consts.PARKING_SPOTS_BOOKING_COUNT:
+                    pSpot.setBookingCount(Integer.parseInt(child.getValue().toString()));
+                    break;
+            }
+        }
+        return pSpot;
+    }
 
 }

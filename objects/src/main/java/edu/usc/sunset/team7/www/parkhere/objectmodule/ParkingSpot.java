@@ -18,6 +18,8 @@ public class ParkingSpot implements Serializable {
     private boolean compact;
     private String imageURL;
     private String parkingSpotID;
+    private int bookingCount;
+    private String providerID;
 
     public boolean isCompact() {
         return compact;
@@ -82,4 +84,22 @@ public class ParkingSpot implements Serializable {
     public void setParkingSpotID(String parkingSpotID) {
         this.parkingSpotID = parkingSpotID;
     }
+
+    public int getBookingCount() {
+        return bookingCount;
+    }
+
+    public void setBookingCount(int bookingCount) {
+        this.bookingCount = bookingCount;
+    }
+
+    public String getProviderID() {
+        return providerID;
+    }
+
+    public void setProviderID(String providerID) {
+        this.providerID = providerID;
+    }
+
+
 }
