@@ -44,7 +44,7 @@
                 android:textColor="@color/blueClick"/>
 
             <TextView
-                android:id="@+id/parking_spot_details_description"
+                android:id="@+id/parking_spot_details_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details_location"
