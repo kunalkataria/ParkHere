@@ -125,22 +125,22 @@ public class BookingFragment extends Fragment {
                 case Consts.LISTING_REFUNDABLE:
                     curListing.setRefundable(Boolean.parseBoolean(child.getValue().toString()));
                 case Consts.LISTING_COMPACT:
-                    curListing.setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                    curListing.getParkingSpot().setCompact(Boolean.parseBoolean(child.getValue().toString()));
                     break;
                 case Consts.LISTING_COVERED:
-                    curListing.setCovered(Boolean.parseBoolean(child.getValue().toString()));
+                    curListing.getParkingSpot().setCovered(Boolean.parseBoolean(child.getValue().toString()));
                     break;
                 case Consts.LISTING_HANDICAP:
-                    curListing.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
+                    curListing.getParkingSpot().setHandicap(Boolean.parseBoolean(child.getValue().toString()));
                     break;
                 case Consts.LISTING_PRICE:
                     curListing.setPrice(Double.parseDouble(child.getValue().toString()));
                     break;
                 case Consts.LISTING_LATITUDE:
-                    curListing.setLatitude(Double.parseDouble(child.getValue().toString()));
+                    curListing.getParkingSpot().setLatitude(Double.parseDouble(child.getValue().toString()));
                     break;
                 case Consts.LISTING_LONGITUDE:
-                    curListing.setLongitude(Double.parseDouble(child.getValue().toString()));
+                    curListing.getParkingSpot().setLongitude(Double.parseDouble(child.getValue().toString()));
                     break;
                 case Consts.LISTING_START_TIME:
                     curListing.setStartTime(Long.valueOf(child.getValue().toString()));
@@ -149,7 +149,7 @@ public class BookingFragment extends Fragment {
                     curListing.setStopTime(Long.valueOf(child.getValue().toString()));
                     break;
                 case Consts.LISTING_IMAGE:
-                    curListing.setImageURL(child.getValue().toString());
+                    curListing.getParkingSpot().setImageURL(child.getValue().toString());
                     break;
             }
         }

@@ -66,9 +66,9 @@ public class ListingDetailsActivityTest {
         sample = new Listing();
         sample.setDescription("Description!");
         sample.setPrice(20.99);
-        sample.setHandicap(false);
-        sample.setCompact(false);
-        sample.setCovered(true);
+        sample.getParkingSpot().setHandicap(false);
+        sample.getParkingSpot().setCompact(false);
+        sample.getParkingSpot().setCovered(true);
         sample.setName("Sample listing");
         sample.setListingID("Sample listing");
         sample.setProviderID(FirebaseAuth.getInstance().getCurrentUser().getUid());

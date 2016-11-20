@@ -82,9 +82,9 @@ public class TransactionConfirmationActivityTest {
         sample = new Listing();
         sample.setDescription("Description!");
         sample.setPrice(20.99);
-        sample.setHandicap(false);
-        sample.setCompact(false);
-        sample.setCovered(true);
+        sample.getParkingSpot().setHandicap(false);
+        sample.getParkingSpot().setCompact(false);
+        sample.getParkingSpot().setCovered(true);
         sample.setName("Sample listing");
         sample.setListingID("Sample listing");
         sample.setProviderID("Sample provider");

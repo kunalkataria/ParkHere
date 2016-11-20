@@ -56,11 +56,11 @@ public class PostListingActivityTest {
         mListing.setDescription("Test description");
         mListing.setPrice(34.30);
         mListing.setRefundable(true);
-        mListing.setCovered(false);
-        mListing.setCompact(false);
-        mListing.setHandicap(true);
-        mListing.setLatitude(34.022858);
-        mListing.setLongitude(-118.279987);
+        mListing.getParkingSpot().setCovered(false);
+        mListing.getParkingSpot().setCompact(false);
+        mListing.getParkingSpot().setHandicap(true);
+        mListing.getParkingSpot().setLatitude(34.022858);
+        mListing.getParkingSpot().setLongitude(-118.279987);
         mListing.setStartTime((System.currentTimeMillis() / 1000) + 10000);
         mListing.setStopTime((System.currentTimeMillis() / 1000) + 86400);
 
