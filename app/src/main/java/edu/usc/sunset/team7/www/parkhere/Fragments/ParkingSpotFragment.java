@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,30 +19,31 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import edu.usc.sunset.team7.www.parkhere.Adapters.CustomParkingAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
 
 public class ParkingSpotFragment extends Fragment {
 
+    @BindView(R.id.parking_spot_listview) ListView parkingListView;
+
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-
-    public ParkingSpotFragment() {
-        // Required empty public constructor
-    }
-
-    public static ParkingSpotFragment newInstance(String param1, String param2) {
-        ParkingSpotFragment fragment = new ParkingSpotFragment();
-        Bundle args = new Bundle();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getParkingSpots();
     }
 
@@ -49,7 +51,10 @@ public class ParkingSpotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_parking_spot, container, false);
+        View view = inflater.inflate(R.layout.fragment_parking_spot, container, false);
+        ButterKnife.bind(this, view);
+
+        return view;
     }
 
     private void getParkingSpots() {
@@ -65,6 +70,8 @@ public class ParkingSpotFragment extends Fragment {
                     userParkingSpots.add(spot);
                 }
                 //use adapter to display spots
+                ParkingSpot[] toAdapter = userParkingSpots.toArray(new ParkingSpot[userParkingSpots.size()]);
+                parkingListView.setAdapter(new CustomParkingAdapter(getActivity(), toAdapter));
             }
 
             @Override
