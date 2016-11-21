@@ -49,8 +49,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details_location"
                 android:textSize="15sp"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"/>
@@ -61,8 +61,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details_handicap"
                 android:textSize="15sp"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"/>
@@ -73,8 +73,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details_covered"
                 android:textSize="15sp"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"/>
@@ -85,8 +85,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/parking_spot_details_compact"
                 android:textSize="15sp"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"/>
