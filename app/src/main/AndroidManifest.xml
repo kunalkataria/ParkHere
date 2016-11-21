@@ -89,6 +89,15 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".Activities.ParkingSpotDetailsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.EditParkingSpotActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".Activities.BookingDetailsActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait">
