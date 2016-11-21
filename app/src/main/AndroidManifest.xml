@@ -96,6 +96,10 @@
             android:name=".Activities.EditParkingSpotActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.MyParkingSpacesActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".Activities.BookingDetailsActivity"

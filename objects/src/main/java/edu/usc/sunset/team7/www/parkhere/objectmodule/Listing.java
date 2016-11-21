@@ -23,7 +23,7 @@ public class Listing implements Serializable {
     private long increment;
 
     public Listing() {
-
+        parkingSpot = new ParkingSpot();
     }
 
     public ParkingSpot getParkingSpot() {

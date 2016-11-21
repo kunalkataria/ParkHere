@@ -35,7 +35,7 @@ public class MyParkingSpacesActivity extends AppCompatActivity {
 
     public static void startActivityForResult(int requestCode, Activity activity) {
         Intent intent = new Intent(activity, MyParkingSpacesActivity.class);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class MyParkingSpacesActivity extends AppCompatActivity {
     public ParkingSpot parseParkingSpot(DataSnapshot parkingSnapShot) {
         ParkingSpot pSpot = new ParkingSpot();
         //dont knw if we need this but insertedt the id as well
-        pSpot.setParkingSpotID(parkingSnapShot.getValue().toString());
+        pSpot.setParkingSpotID(parkingSnapShot.getKey());
         for(DataSnapshot child : parkingSnapShot.getChildren()) {
             switch (child.getKey()) {
                 case Consts.PARKING_SPOTS_COMPACT:

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -64,11 +65,6 @@ public class PostListingActivity extends AppCompatActivity {
     @BindView(R.id.nonrefundable_rButton) RadioButton nonrefundableRButton;
 
     private static Hashtable<Integer, String> cancellationIds;
-
-    //Parking Type Buttons
-    @BindView(R.id.handicap_button_control) SwitchCompat handicapSwitch;
-    @BindView(R.id.compact_button_control) SwitchCompat compactSwitch;
-    @BindView(R.id.covered_button_control) SwitchCompat coveredSwitch;
 
     // Date selector pieces
     @BindView(R.id.start_date_inputlayout) TextInputLayout startDateLayout;
@@ -143,6 +139,7 @@ public class PostListingActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("TESTING****", "ONACTIVITYRESULT REQUEST CODE:" + requestCode + " RESULT CODE: " + resultCode);
         if(requestCode == Consts.PARKING_SPOT_REQUEST
                 && resultCode == Consts.PARKING_SPOT_SUCCESSFUL_RESULT && data != null ) {
             currentParkingSpot = (ParkingSpot) data.getSerializableExtra(Consts.PARKING_SPOT_EXTRA);
@@ -168,7 +165,7 @@ public class PostListingActivity extends AppCompatActivity {
             newListingRef.child(Consts.LISTING_PRICE).setValue(price);
             newListingRef.child(Consts.LISTING_START_TIME).setValue(startDate);
             newListingRef.child(Consts.LISTING_END_TIME).setValue(stopDate);
-            newListingRef.child(Consts.PARKING_SPOTS_ID).setValue("");
+            newListingRef.child(Consts.PARKING_SPOTS_ID).setValue(currentParkingSpot.getParkingSpotID());
             finish();
         }
     }
@@ -313,9 +310,6 @@ public class PostListingActivity extends AppCompatActivity {
         } else {
             radioGroup.check(R.id.nonrefundable_rButton);
         }
-        compactSwitch.setChecked(listing.isCompact()); 
-        coveredSwitch.setChecked(listing.isCovered());
-        handicapSwitch.setChecked(listing.isHandicap());
         startDate = listing.getStartTime();
         stopDate = listing.getStopTime();
     }
