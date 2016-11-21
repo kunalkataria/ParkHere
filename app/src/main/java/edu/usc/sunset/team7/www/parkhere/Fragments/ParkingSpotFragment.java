@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +23,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.usc.sunset.team7.www.parkhere.Adapters.CustomParkingAdapter;
+import butterknife.OnClick;
+import edu.usc.sunset.team7.www.parkhere.Activities.PostListingActivity;
+import edu.usc.sunset.team7.www.parkhere.Activities.PostParkingSpotActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
@@ -33,6 +37,17 @@ public class ParkingSpotFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    @BindView(R.id.post_parking_spot_button) Button postParkingSpotButton;
+
+    public ParkingSpotFragment() {
+        // Required empty public constructor
+    }
+
+    public static ParkingSpotFragment newInstance(String param1, String param2) {
+        ParkingSpotFragment fragment = new ParkingSpotFragment();
+        Bundle args = new Bundle();
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +68,6 @@ public class ParkingSpotFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_parking_spot, container, false);
         ButterKnife.bind(this, view);
-
         return view;
     }
 
@@ -78,6 +92,10 @@ public class ParkingSpotFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {}
         });
     }
+
+    @OnClick(R.id.post_parking_spot_button)
+    protected void postParkingSpot() {PostParkingSpotActivity.startActivity(getActivity());}
+
 
     private ParkingSpot parseParkingSpot(DataSnapshot parkingSpotSnapshot) {
         ParkingSpot spot = new ParkingSpot();
