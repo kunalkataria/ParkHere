@@ -6,120 +6,120 @@
     <include layout="@layout/base_toolbar"
         android:id="@+id/edit_parking_toolbar"/>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/parking_spot_name_textinputlayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp">
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/parking_spot_name_edittext"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/parking_spot_name" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/parking_description_textinputlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp">
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/parking_description_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/parking_description" />
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/parking_spot_name_textinputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp">
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/parking_spot_name_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/parking_spot_name" />
+            </android.support.design.widget.TextInputLayout>
 
-    <Button
-        android:id="@+id/upload_parking_image_button"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="@string/upload_parking_image"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:textColor="@color/colorAccent"
-        android:layout_marginTop="20dp"
-        android:textSize="20dp"/>
+            <Button
+                android:id="@+id/upload_parking_image_button"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="@string/upload_parking_image"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="20dp"
+                android:textSize="20dp"/>
+
+            <ImageView
+                android:id="@+id/parking_image"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/profile_image_description"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_small"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/covered_button_control"
+                    android:text="@string/covered_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@color/blueClick"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_small"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/compact_button_control"
+                    android:text="@string/compact_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@color/blueClick"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_small"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/handicap_button_control"
+                    android:text="@string/handicap_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@color/blueClick"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/upload_parking_spot_button"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/submit"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/colorAccent"
+                android:textSize="25dp"/>
 
 
-    <ImageView
-        android:id="@+id/parking_image"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/profile_image_description"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_small"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp">
+        </LinearLayout>
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/covered_button_control"
-            android:text="@string/covered_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:textColor="@color/blueClick"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_small"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp">
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/compact_button_control"
-            android:text="@string/compact_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:textColor="@color/blueClick"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_small"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="20dp">
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/handicap_button_control"
-            android:text="@string/handicap_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:textColor="@color/blueClick"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/upload_parking_spot_button"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/submit"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:textColor="@color/colorAccent"
-        android:textSize="25dp"/>
+    </ScrollView>
 
 
 </LinearLayout>

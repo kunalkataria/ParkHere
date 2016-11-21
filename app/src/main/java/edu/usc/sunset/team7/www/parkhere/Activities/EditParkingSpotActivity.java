@@ -86,7 +86,7 @@ public class EditParkingSpotActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Edit parking spot");
         }
-        
+
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         editParkingSpot = (ParkingSpot) getIntent().getSerializableExtra(Consts.PARKING_SPOT_EDIT_EXTRA);
@@ -125,34 +125,8 @@ public class EditParkingSpotActivity extends AppCompatActivity {
             StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
             StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
 
-            //Best way to store the data?
-            if (sourceImageUri == null) {
-                editListingRef.child(Consts.PARKING_SPOTS_IMAGE).setValue(Consts.DEFAULT_PARKING_IMAGE);
-            } else {
-                //compress image
-                InputStream imageStream = null;
-                try {
-                    imageStream = getContentResolver().openInputStream(sourceImageUri);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                Bitmap bmp = BitmapFactory.decodeStream(imageStream);
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmp,
-                        "Title", null);
-                sourceImageUri = Uri.parse(path);
-
-                try {
-                    stream.close();
-                    stream = null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                UploadTask uploadTask = parkingRef.child(editParkingSpot.getParkingSpotID()).putFile(sourceImageUri);
+            if (sourceImageUri != null) {
+                UploadTask uploadTask = parkingRef.child(uid).putFile(sourceImageUri);
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
@@ -165,12 +139,14 @@ public class EditParkingSpotActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                         firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
-                        editListingRef.child(Consts.PARKING_SPOTS_IMAGE).setValue(firebaseImageURL);
                     }
                 });
-                finish();
+                editListingRef.child(Consts.PARKING_SPOTS_IMAGE).setValue(firebaseImageURL);
+            } else {
+                editListingRef.child(Consts.PARKING_SPOTS_IMAGE).setValue(editParkingSpot.getImageURL());
             }
-
+            // TODO: REDIRECT TO HOME ACTIVITY
+            finish();
         }
     }
 
