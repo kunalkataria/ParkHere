@@ -5,57 +5,24 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_public_profile_layout">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:layout_marginTop="40dp"
+        android:hint="@string/first_name"
+        android:id="@+id/user_name_view_fragment"
+        android:layout_marginBottom="20dp"/>
 
-        <ImageView
-            android:id="@+id/userProfileImage_fragment"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/profile_image_description"/>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="15dp">
-
-            <TextView
-                android:hint="@string/first_name"
-                android:textSize="30sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/user_name_view_fragment"
-                android:layout_weight="1" />
-
-            <RatingBar
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/user_rating_bar_fragment"
-                android:numStars="5"
-                android:rating="0.0"
-                android:stepSize = "0.1"
-                android:layout_weight="1"
-                style="?android:attr/ratingBarStyleSmall"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft = "10dp"
-        android:layout_marginRight= "10dp"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/review_content_space_fragment">
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/profile_image_description"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
 </LinearLayout>
