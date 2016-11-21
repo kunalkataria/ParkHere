@@ -2,17 +2,36 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,10 +47,7 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
 public class EditParkingSpotActivity extends AppCompatActivity {
 
     @BindView(R.id.parking_spot_name_textinputlayout) TextInputLayout parkingNameTextInput;
-    @BindView(R.id.parking_description_textinputlayout) TextInputLayout parkingDescriptionTextInput;
-
     @BindView(R.id.parking_spot_name_edittext) AppCompatEditText parkingNameEditText;
-    @BindView(R.id.parking_description_edittext) AppCompatEditText parkingDescriptionEditText;
 
     ///Image
     @BindView(R.id.parking_image) ImageView parkingImageView;
@@ -40,16 +56,19 @@ public class EditParkingSpotActivity extends AppCompatActivity {
     @BindView(R.id.covered_button_control) SwitchCompat coveredSwitch;
     @BindView(R.id.compact_button_control) SwitchCompat compactSwitch;
 
+    @BindView(R.id.edit_parking_toolbar) Toolbar editParkingToolbar;
+
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private ParkingSpot editParkingSpot;
     private Uri sourceImageUri = null;
 
     private String nameString;
-    private String descriptionString;
     private boolean isHandicap;
     private boolean isCovered;
     private boolean isCompact;
+
+    private String firebaseImageURL = "";
 
     public static void startActivity(Context context, ParkingSpot parkingSpot) {
         Intent i = new Intent(context, EditParkingSpotActivity.class);
@@ -63,10 +82,11 @@ public class EditParkingSpotActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_parking_spot);
         ButterKnife.bind(this);
 
-//        setSupportActionBar();
+        setSupportActionBar(editParkingToolbar);
         if (getSupportActionBar() != null) {
-
+            getSupportActionBar().setTitle("Edit parking spot");
         }
+        
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         editParkingSpot = (ParkingSpot) getIntent().getSerializableExtra(Consts.PARKING_SPOT_EXTRA);
@@ -94,13 +114,68 @@ public class EditParkingSpotActivity extends AppCompatActivity {
     protected void updateParkingSpot() {
         saveValues();
         if (checkFields()) {
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            String uid = currentUser.getUid();
+            final DatabaseReference editListingRef = mDatabase.child(Consts.PARKING_SPOT_DATABASE).child(uid).child(editParkingSpot.getParkingSpotID());
+            editListingRef.child(Consts.PARKING_SPOTS_COMPACT).setValue(isCompact);
+            editListingRef.child(Consts.PARKING_SPOTS_COVERED).setValue(isCovered);
+            editListingRef.child(Consts.PARKING_SPOTS_HANDICAP).setValue(isHandicap);
+            editListingRef.child(Consts.PARKING_SPOTS_NAME).setValue(nameString);
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
+            StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
+
+            //Best way to store the data?
+            if (sourceImageUri == null) {
+                editListingRef.child(Consts.PARKING_SPOTS_IMAGE).setValue(Consts.DEFAULT_PARKING_IMAGE);
+            } else {
+                //compress image
+                InputStream imageStream = null;
+                try {
+                    imageStream = getContentResolver().openInputStream(sourceImageUri);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmp,
+                        "Title", null);
+                sourceImageUri = Uri.parse(path);
+
+                try {
+                    stream.close();
+                    stream = null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                UploadTask uploadTask = parkingRef.child(editParkingSpot.getParkingSpotID()).putFile(sourceImageUri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Toast.makeText(EditParkingSpotActivity.this, "Unable to upload the image. Please check your internet connection and try again.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        firebaseImageURL = taskSnapshot.getDownloadUrl().toString();
+                        editListingRef.child(Consts.PARKING_SPOTS_IMAGE).setValue(firebaseImageURL);
+                    }
+                });
+                finish();
+            }
 
         }
     }
 
     private void populateFields() {
         parkingNameEditText.setText(editParkingSpot.getName());
-        parkingDescriptionEditText.setText(editParkingSpot.getDescription());
         handicapSwitch.setChecked(editParkingSpot.isHandicap());
         coveredSwitch.setChecked(editParkingSpot.isCovered());
         compactSwitch.setChecked(editParkingSpot.isCompact());
@@ -109,7 +184,6 @@ public class EditParkingSpotActivity extends AppCompatActivity {
 
     private void saveValues() {
         nameString = parkingNameEditText.getText().toString();
-        descriptionString = parkingDescriptionEditText.getText().toString();
         isHandicap = handicapSwitch.isChecked();
         isCovered = coveredSwitch.isChecked();
         isCompact = compactSwitch.isChecked();
@@ -121,13 +195,6 @@ public class EditParkingSpotActivity extends AppCompatActivity {
             isValid = false;
             parkingNameTextInput.setErrorEnabled(true);
             parkingNameTextInput.setError("Parking name must not be empty");
-        } else {
-            parkingNameTextInput.setErrorEnabled(false);
-        }
-        if (descriptionString.isEmpty()) {
-            isValid = false;
-            parkingDescriptionTextInput.setErrorEnabled(true);
-            parkingDescriptionTextInput.setError("Parking description must not be empty");
         } else {
             parkingNameTextInput.setErrorEnabled(false);
         }
