@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +19,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import edu.usc.sunset.team7.www.parkhere.Activities.PostListingActivity;
+import edu.usc.sunset.team7.www.parkhere.Activities.PostParkingSpotActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
@@ -26,6 +32,8 @@ public class ParkingSpotFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+
+    @BindView(R.id.post_parking_spot_button) Button postParkingSpotButton;
 
     public ParkingSpotFragment() {
         // Required empty public constructor
@@ -49,7 +57,9 @@ public class ParkingSpotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_parking_spot, container, false);
+        View view = inflater.inflate(R.layout.fragment_parking_spot, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
     private void getParkingSpots() {
@@ -71,6 +81,10 @@ public class ParkingSpotFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {}
         });
     }
+
+    @OnClick(R.id.post_parking_spot_button)
+    protected void postParkingSpot() {PostParkingSpotActivity.startActivity(getActivity());}
+
 
     private ParkingSpot parseParkingSpot(DataSnapshot parkingSpotSnapshot) {
         ParkingSpot spot = new ParkingSpot();
