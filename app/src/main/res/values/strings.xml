@@ -14,6 +14,7 @@
     <string name="report_issue">Report an issue</string>
     <string name="listing_name">Name of your listing</string>
     <string name="listing_description">Describe your listing</string>
+    <string name="parking_description">Describe your parking spot</string>
     <string name="handicap_label">Handicap-friendly?</string>
     <string name="covered_label">Covered?</string>
     <string name="compact_label">Compact?</string>

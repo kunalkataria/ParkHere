@@ -68,16 +68,6 @@ public class EditListingActivity extends AppCompatActivity {
     private String nameString, descriptionString;
     private double price;
 
-    ///Image
-    @BindView(R.id.parking_image) ImageView parkingImageView;
-
-    //Parking Type Buttons
-    @BindView(R.id.handicap_button_control) SwitchCompat handicapSwitch;
-    @BindView(R.id.compact_button_control) SwitchCompat compactSwitch;
-    @BindView(R.id.covered_button_control) SwitchCompat coveredSwitch;
-
-    boolean isCompact, isHandicap, isCovered;
-
     //Cancellation policies
     @BindView(R.id.myRadioGroup) RadioGroup radioGroup;
     @BindView(R.id.refundable_rButton) RadioButton refundableRButton;
@@ -126,13 +116,7 @@ public class EditListingActivity extends AppCompatActivity {
         descriptionEditText.setText(getListing.getDescription());
         String origPrice = Double.toString(getListing.getPrice());
         priceEditText.setText(origPrice);
-        handicapSwitch.setChecked(getListing.isHandicap());
-        compactSwitch.setChecked(getListing.isCompact());
-        coveredSwitch.setChecked(getListing.isCovered());
         listingId = getListing.getListingID();
-        sourceImageUri = null;
-        URL url = null;
-        Picasso.with(this).load(getListing.getImageURL()).into(parkingImageView);
 
         boolean isRefundable = getListing.isRefundable();
         if(isRefundable){
@@ -154,27 +138,9 @@ public class EditListingActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.upload_parking_button)
-    protected void uploadImage() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, 1);
-    }
-
-    //Method called when user selects a picture
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //Make sure the gallery Intent called this method
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            sourceImageUri = data.getData();
-            parkingImageView.setImageURI(sourceImageUri);
-        }
-    }
-
-
     public boolean checkFields() {
         nameString = parkingNameEditText.getText().toString();
-        descriptionString =descriptionEditText.getText().toString();
+        descriptionString = descriptionEditText.getText().toString();
         //possible invalid number format here
         String checkPrice = priceEditText.getText().toString();
         if(checkPrice.length() > 0) {
@@ -208,46 +174,7 @@ public class EditListingActivity extends AppCompatActivity {
             Toast.makeText(EditListingActivity.this, "Please select a cancellation policy.",
                     Toast.LENGTH_SHORT).show();
         }
-        if (isValid) {
-            saveSwitchValues();
-        }
         return isValid;
-
-
-//        if(!nameString.equals("")){
-//            if(!descriptionString.equals("")) {
-//                if(price>=0){
-//                    if (radioGroup.getCheckedRadioButtonId() != -1) {
-//                        saveSwitchValues();
-//                        return true;
-//                    } else {
-//                        System.out.println("RADIO BUTTON FAIL");
-//
-//                        Toast.makeText(EditListingActivity.this, "Please select a cancellation policy.",
-//                                Toast.LENGTH_SHORT).show();
-//                    }
-//                } else {
-//                    priceTextInputLayout.setErrorEnabled(true);
-//                    System.out.println("PRICE FAIL");
-//                    priceTextInputLayout.setError("Please enter a price greater than $0");
-//                }
-//            } else {
-//                descriptionTextInputLayout.setErrorEnabled(true);
-//                System.out.println("DESCRIPTION FAIL");
-//                descriptionTextInputLayout.setError("Please enter a description.");
-//            }
-//        } else {
-//            listingNameTextInput.setErrorEnabled(true);
-//            System.out.println("NAME FAIL");
-//            listingNameTextInput.setError("Please enter a name.");
-//        }
-//        return false;
-    }
-
-    public void saveSwitchValues(){
-        isCompact = compactSwitch.isChecked();
-        isCovered = coveredSwitch.isChecked();
-        isHandicap =  handicapSwitch.isChecked();
     }
 
     private class UpdateListingTask extends AsyncTask<Integer, Void, Void> {
@@ -268,9 +195,6 @@ public class EditListingActivity extends AppCompatActivity {
             nameRef.child(Consts.LISTING_DESCRIPTION).setValue(descriptionString);
             nameRef.child(Consts.LISTING_PRICE).setValue(price);
 
-            nameRef.child(Consts.LISTING_HANDICAP).setValue(isHandicap);
-            nameRef.child(Consts.LISTING_COMPACT).setValue(isCompact);
-            nameRef.child(Consts.LISTING_COVERED).setValue(isCovered);
             nameRef.child(Consts.LISTING_NAME).setValue(nameString);
             nameRef.child(Consts.LISTING_REFUNDABLE).setValue(cancellationIds.get(radioButton[0]));
             semaphore.release();
