@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,18 +22,21 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.usc.sunset.team7.www.parkhere.Adapters.CustomParkingAdapter;
 import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.Activities.PostListingActivity;
 import edu.usc.sunset.team7.www.parkhere.Activities.PostParkingSpotActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
 
 public class ParkingSpotFragment extends Fragment {
 
+    @BindView(R.id.parking_spot_listview) ListView parkingListView;
+
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-
     @BindView(R.id.post_parking_spot_button) Button postParkingSpotButton;
 
     public ParkingSpotFragment() {
@@ -50,6 +54,11 @@ public class ParkingSpotFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getParkingSpots();
     }
 
@@ -75,6 +84,8 @@ public class ParkingSpotFragment extends Fragment {
                     userParkingSpots.add(spot);
                 }
                 //use adapter to display spots
+                ParkingSpot[] toAdapter = userParkingSpots.toArray(new ParkingSpot[userParkingSpots.size()]);
+                parkingListView.setAdapter(new CustomParkingAdapter(getActivity(), toAdapter));
             }
 
             @Override

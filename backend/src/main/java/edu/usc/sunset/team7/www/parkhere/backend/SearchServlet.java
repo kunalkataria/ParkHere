@@ -163,7 +163,7 @@ public class SearchServlet extends HttpServlet {
     private ParkingSpot parseParkingSpot (String providerID, String spotID) {
         DataSnapshot parkingSpotSnapshot = db.child("Parking Spots").child(providerID).child(spotID);
         ParkingSpot spot = new ParkingSpot();
-        spot.setParkingSpotID(Integer.parseInt(parkingSpotSnapshot.getKey()));
+        spot.setParkingSpotID(parkingSpotSnapshot.getKey());
         for(DataSnapshot param : parkingSpotSnapshot.getChildren()) {
             switch(param.getKey()) {
                 case "Compact":
