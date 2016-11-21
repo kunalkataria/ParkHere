@@ -11,6 +11,7 @@ public class ParkingSpot implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String name;
+    private String description;
     private double latitude;
     private double longitude;
     private boolean handicap;
@@ -35,6 +36,14 @@ public class ParkingSpot implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setString(String description) {
+        this.description = description;
     }
 
     public double getLatitude() {

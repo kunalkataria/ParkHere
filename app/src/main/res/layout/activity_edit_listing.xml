@@ -25,8 +25,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
                 android:textSize="20dp"
-                android:textColor="@color/blueClick"
-                />
+                android:textColor="@color/blueClick" />
 
             <include layout="@layout/divider"/>
 
@@ -116,83 +115,6 @@
 
             <include layout="@layout/divider"/>
 
-            <Button
-                android:id="@+id/upload_parking_button"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="@string/upload_parking_image"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:textColor="@color/colorAccent"
-                android:layout_marginTop="20dp"
-                android:textSize="20dp"/>
-
-
-            <ImageView
-                android:id="@+id/parking_image"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/profile_image_description"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_small"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/covered_button_control"
-                    android:text="@string/covered_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:textColor="@color/blueClick"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_small"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/compact_button_control"
-                    android:text="@string/compact_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:textColor="@color/blueClick"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_small"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="20dp">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/handicap_button_control"
-                    android:text="@string/handicap_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:textColor="@color/blueClick"/>
-            </LinearLayout>
-
-            <include layout="@layout/divider"/>
             <Button
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
