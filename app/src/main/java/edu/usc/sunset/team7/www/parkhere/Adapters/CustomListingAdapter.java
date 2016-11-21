@@ -71,7 +71,7 @@ public class CustomListingAdapter extends BaseAdapter {
 
         item.locationLabel.setText(((Listing)getItem(position)).getName());
         item.dateLabel.setText(Tools.convertUnixTimeToDateString(((Listing)getItem(position)).getStartTime()) + " - " + Tools.convertUnixTimeToDateString(((Listing)getItem(position)).getStopTime()));
-        Picasso.with(context).load(((Listing)getItem(position)).getImageURL()).into(item.imgView);
+        Picasso.with(context).load(((Listing)getItem(position)).getParkingSpot().getImageURL()).into(item.imgView);
 
         rowView.setOnClickListener(new View.OnClickListener() {
 

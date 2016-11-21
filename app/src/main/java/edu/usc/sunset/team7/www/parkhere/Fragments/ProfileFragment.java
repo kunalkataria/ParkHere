@@ -35,7 +35,7 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 public class ProfileFragment extends Fragment{
 
-    @BindView(R.id.userProfileImage_fragment) ImageView profilePic;
+    @BindView(R.id.profile_image) ImageView profilePic;
     @BindView(R.id.user_name_view_fragment) TextView userName;
 
     //@BindView(R.id.user_rating_bar_fragment) RatingBar userRating;
