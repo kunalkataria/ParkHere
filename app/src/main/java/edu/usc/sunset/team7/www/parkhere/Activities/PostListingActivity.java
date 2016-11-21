@@ -65,9 +65,6 @@ public class PostListingActivity extends AppCompatActivity {
 
     private static Hashtable<Integer, String> cancellationIds;
 
-    //Parking image controls
-    @BindView(R.id.upload_parking_button) Button uploadParkingImageButton;
-
     //Parking Type Buttons
     @BindView(R.id.handicap_button_control) SwitchCompat handicapSwitch;
     @BindView(R.id.compact_button_control) SwitchCompat compactSwitch;

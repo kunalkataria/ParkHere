@@ -103,25 +103,25 @@ public class ParkingSpotFragment extends Fragment {
         for(DataSnapshot param : parkingSpotSnapshot.getChildren()) {
             String key = param.getKey();
             switch(key) {
-                case Consts.COMPACT:
+                case Consts.PARKING_SPOTS_COMPACT:
                     spot.setCompact(Boolean.parseBoolean(param.getValue().toString()));
                     break;
-                case Consts.COVERED:
+                case Consts.PARKING_SPOTS_COVERED:
                     spot.setCovered(Boolean.parseBoolean(param.getValue().toString()));
                     break;
-                case Consts.HANDICAP:
+                case Consts.PARKING_SPOTS_HANDICAP:
                     spot.setHandicap(Boolean.parseBoolean(param.getValue().toString()));
                     break;
-                case Consts.IMAGE_URI:
+                case Consts.PARKING_SPOTS_IMAGE:
                     spot.setImageURL(param.getValue().toString());
                     break;
-                case Consts.LISTING_LATITUDE:
+                case Consts.PARKING_SPOTS_LATITUDE:
                     spot.setLatitude(Double.parseDouble(param.getValue().toString()));
                     break;
-                case Consts.LISTING_LONGITUDE:
+                case Consts.PARKING_SPOTS_LONGITUDE:
                     spot.setLongitude(Double.parseDouble(param.getValue().toString()));
                     break;
-                case Consts.LISTING_NAME:
+                case Consts.PARKING_SPOTS_NAME:
                     spot.setName(param.getValue().toString());
                     break;
             }

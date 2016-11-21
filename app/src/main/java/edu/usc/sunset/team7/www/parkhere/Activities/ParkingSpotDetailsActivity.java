@@ -1,6 +1,8 @@
 package edu.usc.sunset.team7.www.parkhere.Activities;
 
 import android.content.DialogInterface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,11 +72,30 @@ public class ParkingSpotDetailsActivity extends AppCompatActivity {
         parkingSpot = (ParkingSpot) getIntent().getSerializableExtra(Consts.PARKING_SPOT_EXTRA);
     }
 
+    private String getAddressString() throws IOException {
+        List<Address> addresses;
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        addresses = geocoder.getFromLocation(parkingSpot.getLatitude(), parkingSpot.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(addresses.get(0).getAddressLine(0)).append(", "); //address
+        sb.append(addresses.get(0).getLocality()).append(", "); //city
+        sb.append(addresses.get(0).getAdminArea()); //state
+
+        return sb.toString();
+    }
+
 
     private void displayView(){
         parkingSpotNameTextView.setText(parkingSpot.getName());
         Picasso.with(this).load(parkingSpot.getImageURL()).into(parkingImageView);
-        parkingSpotDetailsLocationTextView.setText("Latitude: " + parkingSpot.getLatitude() + " " + "Longitude: " + parkingSpot.getLongitude());
+        try {
+            parkingSpotDetailsLocationTextView.setText(getAddressString());
+        } catch (IOException e) {
+            parkingSpotDetailsLocationTextView.setText("Latitude: " + parkingSpot.getLatitude()
+            + " Longitude: " + parkingSpot.getLongitude());
+        }
         parkingSpotDetailsHandicapTextView.setText("Handicap? " + parkingSpot.isHandicap());
         parkingSpotDetailsCoveredTextView.setText("Covered? " + parkingSpot.isCovered());
         parkingSpotDetailsCompactTextView.setText("Compact? " + parkingSpot.isCompact());

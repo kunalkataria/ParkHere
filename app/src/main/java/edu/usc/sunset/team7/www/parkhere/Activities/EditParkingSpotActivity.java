@@ -69,7 +69,7 @@ public class EditParkingSpotActivity extends AppCompatActivity {
         }
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        editParkingSpot = (ParkingSpot) getIntent().getSerializableExtra(Consts.PARKING_SPOT_EXTRA);
+        editParkingSpot = (ParkingSpot) getIntent().getSerializableExtra(Consts.PARKING_SPOT_EDIT_EXTRA);
         populateFields();
     }
 
