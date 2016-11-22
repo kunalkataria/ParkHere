@@ -170,6 +170,32 @@ public class BookingDetailsActivity extends AppCompatActivity {
                         String startTime = snapshot.child(Consts.BOOKING_START_TIME).getValue().toString();
                         String providerID = snapshot.child(Consts.BOOKING_PROVIDER_ID).getValue().toString();
                         String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
+
+                        //decrement bookingcount
+                        String parkingID = snapshot.child(Consts.PARKING_SPOTS_ID).getValue().toString();
+
+                        final DatabaseReference parkingRef = FirebaseDatabase.getInstance().getReference()
+                                .child(Consts.PARKING_SPOTS_DATABASE).child(providerID).child(parkingID);
+                        parkingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot2) {
+                                for (DataSnapshot child2 : dataSnapshot2.getChildren()) {
+                                    if (child2.getKey() == Consts.PARKING_SPOTS_BOOKING_COUNT){
+                                        Integer addBookCount = Integer.parseInt(child2.getValue()
+                                                .toString());
+                                        addBookCount++;
+                                        parkingRef.child(Consts.PARKING_SPOTS_BOOKING_COUNT)
+                                                .setValue(addBookCount);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                         long longStartTime = Long.parseLong(startTime);
                         long unixTime = System.currentTimeMillis() / 1000L;
                         if(unixTime < longStartTime) {
