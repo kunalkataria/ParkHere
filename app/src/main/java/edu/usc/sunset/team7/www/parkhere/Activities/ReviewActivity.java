@@ -46,6 +46,12 @@ public class ReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         booking = (Booking) getIntent().getSerializableExtra(Consts.BOOKING_EXTRA);
+
+        if(booking == null){
+            Log.d (TAG, "*****************BOOKING IS NULL!");
+        } else {
+            Log.d (TAG, "*****************BOOKING IS NOT NULL!");
+        }
         setContentView(R.layout.activity_make_review);
         ButterKnife.bind(this);
 
@@ -87,14 +93,14 @@ public class ReviewActivity extends AppCompatActivity {
 
             //Add review to Firebase
             //Reviews -> Provider ID -> ParkingSpotID -> BookingID
-            Log.d(TAG, "BOOKING PROVIDER ID: " + booking.getProviderID());
+            Log.d(TAG, "BOOKING PROVIDER ID: " + booking.getMListing().getProviderID());
             Log.d(TAG, "BOOKING LISTING: " + booking.getMListing());
             Log.d(TAG, "BOOKING LISTING PARKING SPOT: " + booking.getMListing().getParkingSpot());
             Log.d(TAG, "BOOKING LISTING PARKING SPOT ID: " + booking.getMListing().getParkingSpot().getParkingSpotID());
             Log.d(TAG, "BOOKING ID: " + booking.getBookingID());
 
             DatabaseReference parkingSpotReviewRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE)
-                    .child(booking.getProviderID()).child(booking.getMListing().getParkingSpot().getParkingSpotID())
+                    .child(booking.getMListing().getProviderID()).child(booking.getMListing().getParkingSpot().getParkingSpotID())
                     .child(booking.getBookingID());
 
             parkingSpotReviewRef.child(Consts.REVIEW_DESCRIPTION).setValue(reviewDescription);
