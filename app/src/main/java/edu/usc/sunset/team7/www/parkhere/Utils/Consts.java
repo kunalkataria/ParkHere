@@ -164,5 +164,6 @@ public class Consts {
     public static final String PARKING_SPOTS_IMAGE = "ImageURL";
     public static final String PARKING_SPOTS_BOOKING_COUNT = "Booking Count";
     public static final String PARKING_SPOTS_NAME = "Name";
+    public static final String PARKING_SPOTS_ACTIVE = "Active";
 
 }

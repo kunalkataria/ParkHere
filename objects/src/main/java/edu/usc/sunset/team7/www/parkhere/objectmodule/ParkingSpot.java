@@ -21,6 +21,7 @@ public class ParkingSpot implements Serializable {
     private String parkingSpotID;
     private int bookingCount;
     private String providerID;
+    private boolean active;
 
     public boolean isCompact() {
         return compact;
@@ -110,5 +111,8 @@ public class ParkingSpot implements Serializable {
         this.providerID = providerID;
     }
 
+    public boolean isActive() { return active; }
+
+    public void setActive(boolean active) { this.active = active; }
 
 }

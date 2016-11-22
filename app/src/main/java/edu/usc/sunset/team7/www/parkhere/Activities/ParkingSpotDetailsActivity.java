@@ -157,8 +157,10 @@ public class ParkingSpotDetailsActivity extends AppCompatActivity {
 
 
     public void deleteParkingSpot() {
+        /*FirebaseDatabase.getInstance().getReference(Consts.PARKING_SPOT_DATABASE).child(providerID)
+                .child(parkingSpot.getParkingSpotID()).setValue(null);*/
         FirebaseDatabase.getInstance().getReference(Consts.PARKING_SPOT_DATABASE).child(providerID)
-                .child(parkingSpot.getParkingSpotID()).setValue(null);
+                .child(parkingSpot.getParkingSpotID()).child(Consts.PARKING_SPOTS_ACTIVE).setValue(false);
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {

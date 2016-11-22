@@ -80,8 +80,12 @@ public class ParkingSpotFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<ParkingSpot> userParkingSpots = new ArrayList<ParkingSpot>();
                 for(DataSnapshot parkingSpotSnapshot : dataSnapshot.getChildren()) {
-                    ParkingSpot spot = parseParkingSpot(parkingSpotSnapshot);
-                    userParkingSpots.add(spot);
+                    boolean isActive = Boolean.parseBoolean(parkingSpotSnapshot
+                            .child(Consts.PARKING_SPOTS_ACTIVE).getValue().toString());
+                    if (isActive){
+                        ParkingSpot spot = parseParkingSpot(parkingSpotSnapshot);
+                        userParkingSpots.add(spot);
+                    }
                 }
                 //use adapter to display spots
                 ParkingSpot[] toAdapter = userParkingSpots.toArray(new ParkingSpot[userParkingSpots.size()]);
