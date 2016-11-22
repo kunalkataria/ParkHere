@@ -85,8 +85,6 @@ public class ListingDetailsActivity extends AppCompatActivity {
         } else {
             listingResultPair = (ResultsPair) getIntent().getSerializableExtra(Consts.LISTING_RESULT_EXTRA);
             listingResult = listingResultPair.getListing();
-            if(listingResultPair == null) System.out.println(1);
-            if (listingResult == null) System.out.println(2);
         }
 
         providerID = listingResult.getProviderID();
