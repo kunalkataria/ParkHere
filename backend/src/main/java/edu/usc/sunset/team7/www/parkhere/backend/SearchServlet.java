@@ -46,6 +46,7 @@ public class SearchServlet extends HttpServlet {
     public boolean isInitialized;
     public boolean done;
     public PrintWriter pw;
+    public String searchResultAsJSON;
 
     public double latitude;
     public double longitude;
@@ -59,6 +60,7 @@ public class SearchServlet extends HttpServlet {
             throws IOException {
         resp.setContentType("application/json");
         pw = resp.getWriter();
+        done = false;
 
         latitude = Double.parseDouble(req.getParameter("lat"));
         longitude = Double.parseDouble(req.getParameter("lon"));
@@ -100,6 +102,17 @@ public class SearchServlet extends HttpServlet {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+
+        while(!done) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        pw.write(searchResultAsJSON);
+        pw.flush();
     }
 
     private void startSearch(DataSnapshot db) {
@@ -125,10 +138,8 @@ public class SearchServlet extends HttpServlet {
             }
         }
 
-        String searchResultAsJson = new Gson().toJson(searchResult);
-        System.out.println(searchResultAsJson);
-        pw.write(searchResultAsJson);
-        pw.flush();
+        searchResultAsJSON = new Gson().toJson(searchResult);
+        done = true;
     }
 
     //returns distance in meters between two lat/long pairs
@@ -148,6 +159,7 @@ public class SearchServlet extends HttpServlet {
     private boolean isWithinRadius(String userID, String spotID) {
         System.out.println(userID + " " + spotID);
         DataSnapshot parkingSpot = db.child("Parking Spots").child(userID).child(spotID);
+        if(!parkingSpot.child("Latitude").exists() || !parkingSpot.child("Longitude").exists()) return false;
         double latitude = Double.parseDouble(parkingSpot.child("Latitude").getValue().toString());
         double longitude = Double.parseDouble(parkingSpot.child("Longitude").getValue().toString());
         if (distance(latitude, longitude, this.latitude, this.longitude) <= 3 ) return true;
