@@ -2,12 +2,18 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,10 +27,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.usc.sunset.team7.www.parkhere.Adapters.CustomReviewAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Review;
 
 /**
  * Created by Jonathan on 10/28/16.
@@ -34,9 +45,13 @@ public class UserProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.userProfileImage) ImageView profilePic;
     @BindView(R.id.user_name_view) TextView userName;
+    @BindView(R.id.user_rating_bar) RatingBar userRating;
+    @BindView(R.id.review_content_space) LinearLayout reviewContentSpace;
     @BindView(R.id.public_profile_toolbar) Toolbar publicProfileToolbar;
 
     private String uid, name, imageURL;
+    private double rating = -1;
+    private List<Review> reviews;
 
     private static final String TAG = "UserProfileActivity";
 
@@ -76,6 +91,9 @@ public class UserProfileActivity extends AppCompatActivity {
                         case Consts.USER_PROFILE_PIC:
                             imageURL = child.getValue().toString();
                             break;
+                        case Consts.USER_RATING:
+                            rating = Double.parseDouble(child.getValue().toString());
+                            break;
                     }
                 }
                 if (imageURL == null){
@@ -105,7 +123,6 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
 
-        /*
         DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE);
         reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -137,25 +154,23 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
-        */
 
 
     }
 
     private void setValues(){
-        if(name!=null){
+        if(name!=null && rating!=-1){
             userName.setText(name);
 
             if (imageURL != null) {
                 Picasso.with(this).load(imageURL).into(profilePic);
             }
-            /*
+
             DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
 
             Drawable drawable = userRating.getProgressDrawable();
             drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
             userRating.setRating(Float.valueOf(oneDigit.format(rating)));
-
 
             if (reviews != null) {
                 reviewContentSpace.removeAllViewsInLayout();
@@ -163,7 +178,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 listView.setAdapter(new CustomReviewAdapter(this, reviews));
                 reviewContentSpace.addView(listView);
             }
-            */
         } else{
             Log.d(TAG, "MISSING VALUES FOR USER PROFILE = NULL");
         }
