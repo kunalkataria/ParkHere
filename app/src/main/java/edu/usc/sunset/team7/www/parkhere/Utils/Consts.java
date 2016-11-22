@@ -35,6 +35,8 @@ public class Consts {
     public static final String EMAIL_EXTRA = "email_extra";
     public static final String TEXT_BODY_EXTRA = "text_body_extra";
     public static final String PARKING_SPOT_EXTRA = "parking_spot_extra";
+    public static final String PRIOR_BOOKING_EXTRA = "prior_booking_extra";
+
 
     public static final String LISTING_TO_BE_BOOKED = "listing_to_be_booked";
     public static final String LISTING_DISTANCE = "listing_distance";

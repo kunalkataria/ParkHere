@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,6 +46,7 @@ public class ResultsActivity extends AppCompatActivity {
     private boolean covered = false;
     private boolean compact = false;
     private boolean handicap = false;
+    private boolean priorBooking = false;
 
     private  SearchResult mSearchResult;
 
@@ -123,7 +126,7 @@ public class ResultsActivity extends AppCompatActivity {
 //        intent.putExtra(Consts.HANDICAP_EXTRA, handicap);
 //        intent.putExtra(Consts.COMPACT_EXTRA, compact);
 //        startActivityForResult(intent, 1);
-        FilterActivity.startActivityForResult(1, this, covered, handicap, compact);
+        FilterActivity.startActivityForResult(1, this, covered, handicap, compact, priorBooking);
     }
 
     @Override
@@ -133,6 +136,7 @@ public class ResultsActivity extends AppCompatActivity {
                 handicap = data.getBooleanExtra(Consts.HANDICAP_EXTRA, false);
                 covered = data.getBooleanExtra(Consts.COVERED_EXTRA, false);
                 compact = data.getBooleanExtra(Consts.COMPACT_EXTRA, false);
+                priorBooking = data.getBooleanExtra(Consts.PRIOR_BOOKING_EXTRA, false);
                 filterResults();
             }
         }
@@ -142,7 +146,7 @@ public class ResultsActivity extends AppCompatActivity {
         if (mSearchResult != null) {
             List<ResultsPair> searchResultListings = mSearchResult.getAllListings();
             // if all are set to false, set back to original results
-            if (!covered && !handicap && !compact) {
+            if (!covered && !handicap && !compact && !priorBooking) {
                 populateResultsList(searchResultListings);
             } else {
                 List<ResultsPair> filteredResults = searchResultListings;
@@ -154,6 +158,9 @@ public class ResultsActivity extends AppCompatActivity {
                 }
                 if (compact) {
                     filteredResults = filteredResultsOnCompact(filteredResults);
+                }
+                if (priorBooking) {
+                    filteredResults = filteredResultsOnPriorBooking(filteredResults);
                 }
                 populateResultsList(filteredResults);
             }
@@ -200,6 +207,17 @@ public class ResultsActivity extends AppCompatActivity {
         return filteredResults;
     }
 
+    public List<ResultsPair> filteredResultsOnPriorBooking(List<ResultsPair> currentResults) {
+        List<ResultsPair> filteredResults = new ArrayList<ResultsPair>();
+        for (ResultsPair currentPair : currentResults) {
+            if (currentPair.getDistance() <= 1.0) {
+                filteredResults.add(currentPair);
+            }
+        }
+        Collections.sort(filteredResults, new BookingCountComparator());
+        return filteredResults;
+    }
+
     private void removeLoadingAnimation() {
         loadingPanel.setVisibility(View.GONE);
     }
@@ -208,6 +226,17 @@ public class ResultsActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+    }
+
+    static class BookingCountComparator implements Comparator<ResultsPair> {
+        @Override
+        public int compare(ResultsPair rp1, ResultsPair rp2) {
+            int count1 = rp1.getListing().getParkingSpot().getBookingCount();
+            int count2 = rp2.getListing().getParkingSpot().getBookingCount();
+            if ( count1 < count2 ){ return -1;}
+            if ( count1 > count2 ){ return 1;}
+            return 0;
+        }
     }
 
 }
