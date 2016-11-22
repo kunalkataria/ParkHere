@@ -78,6 +78,8 @@ public class ListingFragment extends Fragment {
 
         for (DataSnapshot listingSnapshot : listings.getChildren()) {
             Listing listing = new Listing();
+            listing.setProviderID(userID);
+            listing.setListingID(listingSnapshot.getKey());
             listing.setDescription(listingSnapshot.child(Consts.LISTING_DESCRIPTION).getValue().toString());
             listing.setName(listingSnapshot.child(Consts.LISTING_NAME).getValue().toString());
             listing.setRefundable(Boolean.parseBoolean(listingSnapshot.child(Consts.LISTING_REFUNDABLE).getValue().toString()));
