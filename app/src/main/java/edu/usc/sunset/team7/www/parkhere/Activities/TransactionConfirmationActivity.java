@@ -143,6 +143,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         bookingRef.child(Consts.LISTING_START_TIME).setValue(listing.getStartTime());
         bookingRef.child(Consts.LISTING_END_TIME).setValue(listing.getStopTime());
         bookingRef.child(Consts.PROVIDER_ID).setValue(listing.getProviderID());
+        bookingRef.child(Consts.PARKING_SPOTS_ID).setValue(listing.getParkingSpot().getParkingSpotID());
 
         //Move Listing to inactive
         DatabaseReference inactiveListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.INACTIVE_LISTINGS).child(listing.getListingID());
