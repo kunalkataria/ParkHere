@@ -46,6 +46,7 @@ public class SearchServlet extends HttpServlet {
     public boolean isInitialized;
     public boolean done;
     public PrintWriter pw;
+    public String searchResultAsJSON;
 
     public double latitude;
     public double longitude;
@@ -59,6 +60,7 @@ public class SearchServlet extends HttpServlet {
             throws IOException {
         resp.setContentType("application/json");
         pw = resp.getWriter();
+        done = false;
 
         latitude = Double.parseDouble(req.getParameter("lat"));
         longitude = Double.parseDouble(req.getParameter("lon"));
@@ -100,6 +102,17 @@ public class SearchServlet extends HttpServlet {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+
+        while(!done) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        pw.write(searchResultAsJSON);
+        pw.flush();
     }
 
     private void startSearch(DataSnapshot db) {
@@ -125,10 +138,8 @@ public class SearchServlet extends HttpServlet {
             }
         }
 
-        String searchResultAsJson = new Gson().toJson(searchResult);
-        System.out.println(searchResultAsJson);
-        pw.write(searchResultAsJson);
-        pw.flush();
+        searchResultAsJSON = new Gson().toJson(searchResult);
+        done = true;
     }
 
     //returns distance in meters between two lat/long pairs
