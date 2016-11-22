@@ -130,6 +130,7 @@ public class SearchServlet extends HttpServlet {
                 if(isWithinRadius(userID,spotID)) {
                     Listing listing = parseListing(activeListing);
                     listing.setParkingSpot(parseParkingSpot(userID, spotID));
+                    listing.setProviderID(userID);
                     double distance = distance(listing.getLatitude(), listing.getLongitude(),
                             latitude, longitude);
                     ResultsPair pair = new ResultsPair(listing, distance);
