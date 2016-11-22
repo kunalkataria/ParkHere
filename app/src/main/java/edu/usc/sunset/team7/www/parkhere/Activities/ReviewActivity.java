@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -86,6 +87,12 @@ public class ReviewActivity extends AppCompatActivity {
 
             //Add review to Firebase
             //Reviews -> Provider ID -> ParkingSpotID -> BookingID
+            Log.d(TAG, "BOOKING PROVIDER ID: " + booking.getProviderID());
+            Log.d(TAG, "BOOKING LISTING: " + booking.getMListing());
+            Log.d(TAG, "BOOKING LISTING PARKING SPOT: " + booking.getMListing().getParkingSpot());
+            Log.d(TAG, "BOOKING LISTING PARKING SPOT ID: " + booking.getMListing().getParkingSpot().getParkingSpotID());
+            Log.d(TAG, "BOOKING ID: " + booking.getBookingID());
+
             DatabaseReference parkingSpotReviewRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE)
                     .child(booking.getProviderID()).child(booking.getMListing().getParkingSpot().getParkingSpotID())
                     .child(booking.getBookingID());
