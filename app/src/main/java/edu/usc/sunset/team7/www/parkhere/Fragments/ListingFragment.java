@@ -86,29 +86,11 @@ public class ListingFragment extends Fragment {
     }
 
     private Listing parseListing (DataSnapshot listingSnapshot) {
-        Listing listing = new Listing();
+        final Listing listing = new Listing();
         for (DataSnapshot child : listingSnapshot.getChildren()) {
             switch (child.getKey()) {
-                case "Compact":
-                    listing.getParkingSpot().setCompact(Boolean.parseBoolean(child.getValue().toString()));
-                    break;
-                case "Covered":
-                    listing.getParkingSpot().setCovered(Boolean.parseBoolean(child.getValue().toString()));
-                    break;
                 case "Listing Description":
                     listing.setDescription(child.getValue().toString());
-                    break;
-                case "Handicap":
-                    listing.getParkingSpot().setHandicap(Boolean.parseBoolean(child.getValue().toString()));
-                    break;
-                case "Image URL":
-                    listing.getParkingSpot().setImageURL(child.getValue().toString());
-                    break;
-                case "Latitude":
-                    listing.getParkingSpot().setLatitude(Double.parseDouble(child.getValue().toString()));
-                    break;
-                case "Longitude":
-                    listing.getParkingSpot().setLongitude(Double.parseDouble(child.getValue().toString()));
                     break;
                 case "Listing Name":
                     listing.setName(child.getValue().toString());
@@ -128,6 +110,50 @@ public class ListingFragment extends Fragment {
                     Double price = Double.parseDouble(child.getValue().toString());
                     listing.setPrice(price);
                     break;
+                case "ParkingID":
+                    String parkingID = child.getValue().toString();
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    final String UID = mAuth.getCurrentUser().getUid();
+                    DatabaseReference dbRef2 = FirebaseDatabase.getInstance().getReference().child
+                            (Consts.PARKING_SPOT_DATABASE).child(UID).child(parkingID);
+
+                    dbRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot child2 : dataSnapshot.getChildren()) {
+                                switch (child2.getKey()) {
+                                    case "Compact":
+                                        listing.getParkingSpot().setCompact(Boolean.parseBoolean
+                                                (child2.getValue().toString()));
+                                        break;
+                                    case "Covered":
+                                        listing.getParkingSpot().setCovered(Boolean.parseBoolean
+                                                (child2.getValue().toString()));
+                                        break;
+                                    case "Handicap":
+                                        listing.getParkingSpot().setHandicap(Boolean.parseBoolean
+                                                (child2.getValue().toString()));
+                                        break;
+                                    case "Image URL":
+                                        listing.getParkingSpot().setImageURL(child2.getValue()
+                                                .toString());
+                                        break;
+                                    case "Latitude":
+                                        listing.getParkingSpot().setLatitude(Double.parseDouble
+                                                (child2.getValue().toString()));
+                                        break;
+                                    case "Longitude":
+                                        listing.getParkingSpot().setLongitude(Double.parseDouble
+                                                (child2.getValue().toString()));
+                                        break;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {}
+                    });
+
             }
         }
         return listing;
