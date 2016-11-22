@@ -3,6 +3,9 @@ package edu.usc.sunset.team7.www.parkhere.Fragments;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -10,6 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,10 +30,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.usc.sunset.team7.www.parkhere.Adapters.CustomReviewAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Review;
 
 /**
  * Created by Justin on 10/31/2016.
@@ -35,14 +46,18 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 public class ProfileFragment extends Fragment{
 
-    @BindView(R.id.profile_image) ImageView profilePic;
-    @BindView(R.id.user_name_view_fragment) TextView userName;
-
-    //@BindView(R.id.user_rating_bar_fragment) RatingBar userRating;
-    //@BindView(R.id.review_content_space_fragment) LinearLayout reviewContentSpace;
+    @BindView(R.id.userProfileImage_fragment)
+    ImageView profilePic;
+    @BindView(R.id.user_name_view_fragment)
+    TextView userName;
+    @BindView(R.id.user_rating_bar_fragment)
+    RatingBar userRating;
+    @BindView(R.id.review_content_space_fragment)
+    LinearLayout reviewContentSpace;
 
     private String uid, name, imageURL;
-    //private ArrayList<Review> reviews = new ArrayList<Review>();
+    private double rating = -1;
+    private ArrayList<Review> reviews = new ArrayList<Review>();
 
     private static final String TAG = "UserProfileFragment***";
 
@@ -80,10 +95,10 @@ public class ProfileFragment extends Fragment{
                         case Consts.USER_PROFILE_PIC:
                             imageURL = child.getValue().toString();
                             break;
-//                        case Consts.USER_RATING:
-//                            rating = Double.parseDouble(child.getValue().toString());
-//                            Log.d(TAG, "Rating: " + Double.toString(rating));
-//                            break;
+                        case Consts.USER_RATING:
+                            rating = Double.parseDouble(child.getValue().toString());
+                            Log.d(TAG, "Rating: " + Double.toString(rating));
+                            break;
                     }
                 }
                 if (imageURL == null){
@@ -111,7 +126,7 @@ public class ProfileFragment extends Fragment{
             public void onCancelled(DatabaseError databaseError) {}
         });
 
-        /*
+
         DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE);
         reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -155,13 +170,12 @@ public class ProfileFragment extends Fragment{
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
-        */
 
 
     }
 
     private void setValues(){
-        if(name!=null){
+        if(name!=null && rating!=-1){
             userName.setText(name);
             //profilePic.setImageURI(Uri.parse(imageURL));
 
@@ -169,7 +183,6 @@ public class ProfileFragment extends Fragment{
                 Picasso.with(getActivity()).load(imageURL).into(profilePic);
             }
 
-            /*
             DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
 
             Drawable drawable = userRating.getProgressDrawable();
@@ -182,7 +195,6 @@ public class ProfileFragment extends Fragment{
                 listView.setAdapter(new CustomReviewAdapter(getActivity(), reviews));
                 reviewContentSpace.addView(listView);
             }
-            */
         } else{
             Log.d(TAG, "MISSING VALUES FOR USER PROFILE = NULL");
         }
