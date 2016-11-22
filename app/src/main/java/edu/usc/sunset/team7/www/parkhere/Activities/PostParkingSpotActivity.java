@@ -156,7 +156,7 @@ public class PostParkingSpotActivity extends AppCompatActivity {
         if(checkFields()) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = currentUser.getUid();
-            String parkingID = mDatabase.child(Consts.PARKING_SPOTS_DATABASE).push().getKey();
+            String parkingID = mDatabase.child(Consts.PARKING_SPOTS_DATABASE).child(uid).push().getKey();
             final DatabaseReference newListingRef = mDatabase.child(Consts.PARKING_SPOTS_DATABASE)
                     .child(uid).child(parkingID);
             newListingRef.child(Consts.PARKING_SPOTS_NAME).setValue(nameString);
