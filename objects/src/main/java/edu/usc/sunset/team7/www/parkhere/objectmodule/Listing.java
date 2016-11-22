@@ -125,4 +125,8 @@ public class Listing implements Serializable {
     public void setProviderID(String providerID) {
         this.providerID = providerID;
     }
+
+    public void setParkingID(String parkingID) {
+        this.parkingSpot.setParkingSpotID(parkingID);
+    }
 }

@@ -51,27 +51,17 @@ public class ListingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final String userID = mAuth.getCurrentUser().getUid();
         final ArrayList<Listing> userListings = new ArrayList<Listing>();
 
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child
-                (Consts.LISTINGS_DATABASE).child(userID).child(Consts.ACTIVE_LISTINGS);
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+//        .child(Consts.LISTINGS_DATABASE).child(userID).child(Consts.ACTIVE_LISTINGS);
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Listing currentListing = parseListing(child);
-                    String listingID = child.getKey();
-                    currentListing.setListingID(child.getKey());
-                    currentListing.setProviderID(userID);
-                    System.out.println(currentListing.getListingID());
-                    userListings.add(currentListing);
-                }
-
-                Listing[] arrayListings = new Listing[userListings.size()];
-                arrayListings = userListings.toArray(arrayListings);
+                ArrayList<Listing> allListings = parseListing2(dataSnapshot);
+                Listing[] arrayListings = new Listing[allListings.size()];
+                arrayListings = allListings.toArray(arrayListings);
                 listingListView.setAdapter(new CustomListingAdapter(getActivity(), arrayListings));
             }
 
@@ -80,83 +70,64 @@ public class ListingFragment extends Fragment {
         });
     }
 
-    @OnClick(R.id.post_listing_button)
-    protected void postListing() {
-        PostListingActivity.startActivity(getActivity());
+    private ArrayList<Listing> parseListing2(DataSnapshot dataSnapshot) {
+        ArrayList<Listing> allListings = new ArrayList<>();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final String userID = mAuth.getCurrentUser().getUid();
+        DataSnapshot listings = dataSnapshot.child(Consts.LISTINGS_DATABASE).child(userID).child(Consts.ACTIVE_LISTINGS);
+
+        for (DataSnapshot listingSnapshot : listings.getChildren()) {
+            Listing listing = new Listing();
+            listing.setDescription(listingSnapshot.child(Consts.LISTING_DESCRIPTION).getValue().toString());
+            listing.setName(listingSnapshot.child(Consts.LISTING_NAME).getValue().toString());
+            listing.setRefundable(Boolean.parseBoolean(listingSnapshot.child(Consts.LISTING_REFUNDABLE).getValue().toString()));
+            listing.setStartTime(Long.valueOf(listingSnapshot.child(Consts.LISTING_START_TIME).getValue().toString()));
+            listing.setStopTime(Long.valueOf(listingSnapshot.child(Consts.LISTING_END_TIME).getValue().toString()));
+            listing.setPrice(Double.parseDouble(listingSnapshot.child(Consts.LISTING_PRICE).getValue().toString()));
+            listing.setParkingID(listingSnapshot.child(Consts.PARKING_SPOTS_ID).getValue().toString());
+            Listing toAdd = parseParkingSpot(dataSnapshot, listing, userID);
+            allListings.add(toAdd);
+        }
+
+        return allListings;
     }
 
-    private Listing parseListing (DataSnapshot listingSnapshot) {
-        final Listing listing = new Listing();
-        for (DataSnapshot child : listingSnapshot.getChildren()) {
+    private Listing parseParkingSpot(DataSnapshot datasnapshot, Listing listing, String userID) {
+        DataSnapshot parkingSnapShot = datasnapshot.child(Consts.PARKING_SPOT_DATABASE).child(userID).child(listing.getParkingSpot().getParkingSpotID());
+        for(DataSnapshot child : parkingSnapShot.getChildren()) {
             switch (child.getKey()) {
-                case "Listing Description":
-                    listing.setDescription(child.getValue().toString());
+                case Consts.PARKING_SPOTS_COMPACT:
+                    listing.getParkingSpot().setCompact(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "Listing Name":
-                    listing.setName(child.getValue().toString());
+                case Consts.PARKING_SPOTS_COVERED:
+                    listing.getParkingSpot().setCovered(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "Is Refundable":
-                    listing.setRefundable(Boolean.parseBoolean(child.getValue().toString()));
+                case Consts.PARKING_SPOTS_HANDICAP:
+                    listing.getParkingSpot().setHandicap(Boolean.parseBoolean(child.getValue().toString()));
                     break;
-                case "Start Time":
-                    String startTime = child.getValue().toString();
-                    listing.setStartTime(Long.valueOf(startTime));
+                case Consts.PARKING_SPOTS_IMAGE:
+                    listing.getParkingSpot().setImageURL(child.getValue().toString());
                     break;
-                case "End Time":
-                    String stopTime = child.getValue().toString();
-                    listing.setStopTime(Long.valueOf(stopTime));
+                case Consts.PARKING_SPOTS_NAME:
+                    listing.getParkingSpot().setName(child.getValue().toString());
                     break;
-                case "Price":
-                    Double price = Double.parseDouble(child.getValue().toString());
-                    listing.setPrice(price);
+                case Consts.PARKING_SPOTS_LATITUDE:
+                    listing.getParkingSpot().setLatitude(Double.parseDouble(child.getValue().toString()));
                     break;
-                case "ParkingID":
-                    String parkingID = child.getValue().toString();
-                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                    final String UID = mAuth.getCurrentUser().getUid();
-                    DatabaseReference dbRef2 = FirebaseDatabase.getInstance().getReference().child
-                            (Consts.PARKING_SPOT_DATABASE).child(UID).child(parkingID);
-
-                    dbRef2.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot child2 : dataSnapshot.getChildren()) {
-                                switch (child2.getKey()) {
-                                    case "Compact":
-                                        listing.getParkingSpot().setCompact(Boolean.parseBoolean
-                                                (child2.getValue().toString()));
-                                        break;
-                                    case "Covered":
-                                        listing.getParkingSpot().setCovered(Boolean.parseBoolean
-                                                (child2.getValue().toString()));
-                                        break;
-                                    case "Handicap":
-                                        listing.getParkingSpot().setHandicap(Boolean.parseBoolean
-                                                (child2.getValue().toString()));
-                                        break;
-                                    case "Image URL":
-                                        listing.getParkingSpot().setImageURL(child2.getValue()
-                                                .toString());
-                                        break;
-                                    case "Latitude":
-                                        listing.getParkingSpot().setLatitude(Double.parseDouble
-                                                (child2.getValue().toString()));
-                                        break;
-                                    case "Longitude":
-                                        listing.getParkingSpot().setLongitude(Double.parseDouble
-                                                (child2.getValue().toString()));
-                                        break;
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {}
-                    });
-
+                case Consts.PARKING_SPOTS_LONGITUDE:
+                    listing.getParkingSpot().setLongitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_BOOKING_COUNT:
+                    listing.getParkingSpot().setBookingCount(Integer.parseInt(child.getValue().toString()));
+                    break;
             }
         }
         return listing;
+    }
+
+    @OnClick(R.id.post_listing_button)
+    protected void postListing() {
+        PostListingActivity.startActivity(getActivity());
     }
 
 }
