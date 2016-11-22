@@ -73,10 +73,8 @@ public class ParkingSpotDetailsActivity extends AppCompatActivity {
     }
 
     private String getAddressString() throws IOException {
-        List<Address> addresses;
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-
-        addresses = geocoder.getFromLocation(parkingSpot.getLatitude(), parkingSpot.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        List<Address> addresses = geocoder.getFromLocation(parkingSpot.getLatitude(), parkingSpot.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
         StringBuilder sb = new StringBuilder();
         sb.append(addresses.get(0).getAddressLine(0)).append(", "); //address

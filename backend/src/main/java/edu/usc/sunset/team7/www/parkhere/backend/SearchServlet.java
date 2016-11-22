@@ -91,7 +91,6 @@ public class SearchServlet extends HttpServlet {
                 .getReference();
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        done = false;
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -109,19 +108,19 @@ public class SearchServlet extends HttpServlet {
         String userID;
         String spotID;
 
-        SearchResult result = new SearchResult(avgParkingCost(latitude, longitude));
+        searchResult = new SearchResult(avgParkingCost(latitude, longitude));
 
         for(DataSnapshot user : listingsDB.getChildren()){
             userID = user.getKey();
             for(DataSnapshot activeListing : user.child("Active Listings").getChildren()) {
-                spotID = activeListing.child("Spot ID").getValue().toString();
+                spotID = activeListing.child("ParkingID").getValue().toString();
                 if(isWithinRadius(userID,spotID)) {
                     Listing listing = parseListing(activeListing);
                     listing.setParkingSpot(parseParkingSpot(userID, spotID));
                     double distance = distance(listing.getLatitude(), listing.getLongitude(),
                             latitude, longitude);
                     ResultsPair pair = new ResultsPair(listing, distance);
-                    result.addListing(pair);
+                    searchResult.addListing(pair);
                 }
             }
         }
@@ -147,6 +146,7 @@ public class SearchServlet extends HttpServlet {
 
     //checks if a parking spot is within 3 miles of the searched location
     private boolean isWithinRadius(String userID, String spotID) {
+        System.out.println(userID + " " + spotID);
         DataSnapshot parkingSpot = db.child("Parking Spots").child(userID).child(spotID);
         double latitude = Double.parseDouble(parkingSpot.child("Latitude").getValue().toString());
         double longitude = Double.parseDouble(parkingSpot.child("Longitude").getValue().toString());
@@ -166,6 +166,12 @@ public class SearchServlet extends HttpServlet {
         spot.setParkingSpotID(parkingSpotSnapshot.getKey());
         for(DataSnapshot param : parkingSpotSnapshot.getChildren()) {
             switch(param.getKey()) {
+                case "Name":
+                    spot.setName(param.getValue().toString());
+                    break;
+                case "Booking Count":
+                    spot.setBookingCount(Integer.parseInt(param.getValue().toString()));
+                    break;
                 case "Compact":
                     spot.setCompact(Boolean.parseBoolean(param.getValue().toString()));
                     break;
@@ -175,7 +181,7 @@ public class SearchServlet extends HttpServlet {
                 case "Handicap":
                     spot.setHandicap(Boolean.parseBoolean(param.getValue().toString()));
                     break;
-                case "Image URL":
+                case "ImageURL":
                     spot.setImageURL(param.getValue().toString());
                     break;
                 case "Latitude":
@@ -213,11 +219,11 @@ public class SearchServlet extends HttpServlet {
                 case "Price":
                     listing.setPrice(Double.parseDouble(child.getValue().toString()));
                     break;
-                case "Increment":
-                    listing.setIncrement(Long.parseLong(child.getValue().toString()));
-                    break;
-                case "Times Available":
-                    listing.setTimesAvailable(child.getValue().toString());
+//                case "Increment":
+//                    listing.setIncrement(Long.parseLong(child.getValue().toString()));
+//                    break;
+//                case "Times Available":
+//                    listing.setTimesAvailable(child.getValue().toString());
             }
         }
         return listing;
@@ -268,6 +274,7 @@ public class SearchServlet extends HttpServlet {
                 totalPrice += listings.getJSONObject(i).getDouble("price");
             }
             double averagePrice = totalPrice/listings.length();
+            System.out.println(averagePrice);
             return averagePrice;
         } catch (Exception e) {
             Log.info(e.getMessage());
