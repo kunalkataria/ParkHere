@@ -148,6 +148,7 @@ public class SearchServlet extends HttpServlet {
     private boolean isWithinRadius(String userID, String spotID) {
         System.out.println(userID + " " + spotID);
         DataSnapshot parkingSpot = db.child("Parking Spots").child(userID).child(spotID);
+        if(!parkingSpot.child("Latitude").exists() || !parkingSpot.child("Longitude").exists()) return false;
         double latitude = Double.parseDouble(parkingSpot.child("Latitude").getValue().toString());
         double longitude = Double.parseDouble(parkingSpot.child("Longitude").getValue().toString());
         if (distance(latitude, longitude, this.latitude, this.longitude) <= 3 ) return true;
