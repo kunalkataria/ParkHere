@@ -37,6 +37,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
     //Listing Information
     private Listing listing;
     private String providerFirstName, providerLastName, providerPhoneNumber, providerEmail;
+    private int bookTime;
 
     private String billingText, listingText;
     //Payment Information
@@ -77,6 +78,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
                     &&  bundle.containsKey(Consts.LISTING_DETAILS_STRING)) {
                 listing = (Listing)bundle.getSerializable(Consts.LISTING_TO_BE_BOOKED);
                 listingText = bundle.getString(Consts.LISTING_DETAILS_STRING);
+                //bookTime = bundle.getInt(Consts.LISTING_BOOK_TIME);
                 listingDetailsTextView.setText(listingText);
             } else{
                 Log.d(TAG, "LISTING AND DISTANCE NOT FOUND");
@@ -147,6 +149,10 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         bookingRef.child(Consts.LISTING_END_TIME).setValue(listing.getStopTime());
         bookingRef.child(Consts.PROVIDER_ID).setValue(listing.getProviderID());
         bookingRef.child(Consts.PARKING_SPOTS_ID).setValue(listing.getParkingSpot().getParkingSpotID());
+        /*long bookStart = listing.getStartTime() + (bookTime * listing.getIncrement() * 60 * 60 * 1000);
+        long bookStop = bookStart + (listing.getIncrement() * 60 * 60 * 1000);
+        bookingRef.child(Consts.LISTING_START_TIME).setValue(listing.getStartTime());
+        bookingRef.child(Consts.LISTING_END_TIME).setValue(listing.getStopTime());*/
 
         //Move Listing to inactive
         DatabaseReference inactiveListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.INACTIVE_LISTINGS).child(listing.getListingID());

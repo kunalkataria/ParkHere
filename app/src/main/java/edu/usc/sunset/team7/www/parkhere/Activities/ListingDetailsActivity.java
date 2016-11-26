@@ -23,6 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -60,6 +63,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
     private String providerID;
     private static final String TAG = "ListingDetailsActivity";
     private boolean myOwnListing;
+    private long bookStart, bookStop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +171,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
         descriptionBuilder.append("\nListing Description: "  + listing.getDescription());
         descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()));
         descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
+        //descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(bookStart));
+        //descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(bookStop));
         if (!myOwnListing) {
             descriptionBuilder.append("\nDistance Away: " + listingResultPair.getDistance() + " miles");
         }
@@ -188,18 +194,38 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.book_listing_button)
     protected void bookListing() {
+
+        /*boolean [] timeIncrements = listingResultPair.getListing().getTimesAvailable();
+        long sTime = listingResultPair.getListing().getStartTime();
+        long timeIncr = listingResultPair.getListing().getIncrement();
+        List<String> timesStrings = new ArrayList<String>();
+        for (int i = 0; i < timeIncrements.length;  i++){
+            if (timeIncrements[i]){
+                long sT1 = sTime + (i * timeIncr * 60 * 60 * 1000);
+                String t1 = Tools.convertUnixTimeToDateString(sT1);
+                String t2 = Tools.convertUnixTimeToDateString(sT1 + (timeIncr * 60 * 60 * 1000));
+                timesStrings.add(t1 + " - " + t2);
+            }
+        }
+
+        CharSequence times[] = timesStrings.toArray(new CharSequence[timesStrings.size()]);*/
+
         CharSequence times[] = new CharSequence[]{"1", "2", "3"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pick a time");
         builder.setItems(times, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(DialogInterface dialogInterface, int selected) {
+
+                /*bookStart = sTime + (selected * timeIncr * 60 * 60 * 1000);
+                bookStop = bookStart + (timeIncr * 60 * 60 * 1000);*/
 
                 Intent intent = new Intent(ListingDetailsActivity.this, TransactionActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Consts.LISTING_TO_BE_BOOKED, listingResultPair.getListing());
                 bundle.putDouble(Consts.LISTING_DISTANCE, listingResultPair.getDistance());
                 bundle.putString(Consts.LISTING_DETAILS_STRING, listingDetailsString());
+                bundle.putInt(Consts.LISTING_BOOK_TIME, selected);
                 intent.putExtras(bundle);
                 startActivity(intent);
 
