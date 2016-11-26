@@ -131,6 +131,7 @@ public class SearchServlet extends HttpServlet {
                     Listing listing = parseListing(activeListing);
                     listing.setParkingSpot(parseParkingSpot(userID, spotID));
                     listing.setProviderID(userID);
+                    listing.setListingID(activeListing.getKey());
                     double distance = distance(listing.getLatitude(), listing.getLongitude(),
                             latitude, longitude);
                     ResultsPair pair = new ResultsPair(listing, distance);
