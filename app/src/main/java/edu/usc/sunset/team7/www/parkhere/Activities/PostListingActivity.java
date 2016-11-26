@@ -196,6 +196,10 @@ public class PostListingActivity extends AppCompatActivity {
             newListingRef.child(Consts.LISTING_REFUNDABLE).setValue(isRefundable);
             newListingRef.child(Consts.LISTING_PRICE).setValue(price);
             newListingRef.child(Consts.LISTING_START_TIME).setValue(startDate);
+
+            //Calculate StopDate
+            //stopDate += (timeIncrements * 60 * numIncrements * 60 * 1000);
+
             newListingRef.child(Consts.LISTING_END_TIME).setValue(stopDate);
             newListingRef.child(Consts.PARKING_SPOTS_ID).setValue(currentParkingSpot.getParkingSpotID());
 
