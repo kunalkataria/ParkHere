@@ -188,13 +188,25 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.book_listing_button)
     protected void bookListing() {
-        Intent intent = new Intent(ListingDetailsActivity.this, TransactionActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Consts.LISTING_TO_BE_BOOKED, listingResultPair.getListing());
-        bundle.putDouble(Consts.LISTING_DISTANCE, listingResultPair.getDistance());
-        bundle.putString(Consts.LISTING_DETAILS_STRING, listingDetailsString());
-        intent.putExtras(bundle);
-        startActivity(intent);
+        CharSequence times[] = new CharSequence[]{"1", "2", "3"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pick a time");
+        builder.setItems(times, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                Intent intent = new Intent(ListingDetailsActivity.this, TransactionActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Consts.LISTING_TO_BE_BOOKED, listingResultPair.getListing());
+                bundle.putDouble(Consts.LISTING_DISTANCE, listingResultPair.getDistance());
+                bundle.putString(Consts.LISTING_DETAILS_STRING, listingDetailsString());
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }
+        });
+        builder.show();
+
     }
 
     @OnClick(R.id.edit_listing_button)
