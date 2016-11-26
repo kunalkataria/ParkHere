@@ -57,4 +57,14 @@ public class Tools {
         return month + "/" + day + "/" + year + " " + hour + ":" + minute;
     }
 
+    public static String arrayToString(int[] mArray) {
+        StringBuilder sBuilder = new StringBuilder();
+        for (int i  = 0; i < mArray.length - 1; i++) {
+            sBuilder.append(mArray[i]);
+            sBuilder.append(",");
+        }
+        sBuilder.append(mArray[mArray.length - 1]);
+        return sBuilder.toString();
+    }
+
 }
