@@ -137,9 +137,6 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         String uid = currentUser.getUid();
         String bookingID = mDatabase.child(Consts.BOOKINGS_DATABASE).push().getKey();
 
-        //increment parking spot book count
-        incrementBookCount();
-
         //Add to Booking database
         DatabaseReference bookingRef = mDatabase.child(Consts.BOOKINGS_DATABASE).child(uid).child(bookingID);
         bookingRef.child(Consts.LISTING_ID).setValue(listing.getListingID());
@@ -163,6 +160,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         inactiveListingRef.child(Consts.LISTING_END_TIME).setValue(listing.getStopTime());
         inactiveListingRef.child(Consts.LISTING_IMAGE).setValue(listing.getImageURL());
         inactiveListingRef.child(Consts.LISTING_IS_PAID).setValue(false);
+        inactiveListingRef.child(Consts.PARKING_SPOTS_ID).setValue(listing.getParkingSpot().getParkingSpotID());
         //Remove listing from active
         mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(listing.getListingID()).removeValue();
 
@@ -170,24 +168,6 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         //getProviderInformation();
         HomeActivity.startActivityPostBooking(TransactionConfirmationActivity.this);
         finish();
-    }
-
-    private void incrementBookCount() {
-        mDatabase.child(Consts.PARKING_SPOT_DATABASE).child(currentUser.getUid())
-                .child(listing.getParkingSpot().getParkingSpotID())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int i = Integer.parseInt(dataSnapshot.child(Consts.PARKING_SPOTS_BOOKING_COUNT).getValue().toString());
-                i++;
-                mDatabase.child(Consts.PARKING_SPOT_DATABASE).child(currentUser.getUid())
-                        .child(listing.getParkingSpot().getParkingSpotID())
-                        .child(Consts.PARKING_SPOTS_BOOKING_COUNT).setValue(i);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
     }
 
     private void getProviderInformation(){

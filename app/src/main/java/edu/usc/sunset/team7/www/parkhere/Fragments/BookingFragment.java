@@ -24,6 +24,9 @@ import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
+
+import static edu.usc.sunset.team7.www.parkhere.R.string.listing;
 
 /**
  * Created by kunal on 10/22/16.
@@ -104,7 +107,9 @@ public class BookingFragment extends Fragment {
             }
         }
         Listing listing = parseListing(datasnapshot, listingID, providerID);
+        parseParkingSpot(datasnapshot, listing);
         toAddBooking.setMListing(listing);
+
         return toAddBooking;
     }
 
@@ -124,14 +129,6 @@ public class BookingFragment extends Fragment {
                     break;
                 case Consts.LISTING_REFUNDABLE:
                     curListing.setRefundable(Boolean.parseBoolean(child.getValue().toString()));
-                case Consts.LISTING_COMPACT:
-                    curListing.getParkingSpot().setCompact(Boolean.parseBoolean(child.getValue().toString()));
-                    break;
-                case Consts.LISTING_COVERED:
-                    curListing.getParkingSpot().setCovered(Boolean.parseBoolean(child.getValue().toString()));
-                    break;
-                case Consts.LISTING_HANDICAP:
-                    curListing.getParkingSpot().setHandicap(Boolean.parseBoolean(child.getValue().toString()));
                     break;
                 case Consts.LISTING_PRICE:
                     curListing.setPrice(Double.parseDouble(child.getValue().toString()));
@@ -148,12 +145,48 @@ public class BookingFragment extends Fragment {
                 case Consts.LISTING_END_TIME:
                     curListing.setStopTime(Long.valueOf(child.getValue().toString()));
                     break;
-                case Consts.LISTING_IMAGE:
-                    curListing.getParkingSpot().setImageURL(child.getValue().toString());
+                case Consts.PARKING_SPOTS_ID:
+                    curListing.setParkingID(child.getValue().toString());
                     break;
             }
         }
 
         return curListing;
+    }
+
+    private void parseParkingSpot(DataSnapshot dataSnapshot, Listing listing) {
+        DataSnapshot parkingSnapshot = dataSnapshot
+                .child(Consts.PARKING_SPOT_DATABASE)
+                .child(listing.getProviderID())
+                .child(listing.getParkingSpot().getParkingSpotID());
+
+        for (DataSnapshot child : parkingSnapshot.getChildren()) {
+            switch (child.getKey()) {
+                case Consts.PARKING_SPOTS_COMPACT:
+                    listing.getParkingSpot().setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_COVERED:
+                    listing.getParkingSpot().setCovered(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_HANDICAP:
+                    listing.getParkingSpot().setHandicap(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_IMAGE:
+                    listing.getParkingSpot().setImageURL(child.getValue().toString());
+                    break;
+                case Consts.PARKING_SPOTS_NAME:
+                    listing.getParkingSpot().setName(child.getValue().toString());
+                    break;
+                case Consts.PARKING_SPOTS_LATITUDE:
+                    listing.getParkingSpot().setLatitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_LONGITUDE:
+                    listing.getParkingSpot().setLongitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_BOOKING_COUNT:
+                    listing.getParkingSpot().setBookingCount(Integer.parseInt(child.getValue().toString()));
+                    break;
+            }
+        }
     }
 }
