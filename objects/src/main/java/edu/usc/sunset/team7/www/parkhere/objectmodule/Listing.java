@@ -15,7 +15,7 @@ public class Listing implements Serializable {
     private String description;
     private long startTime;
     private long stopTime;
-    private String timesAvailable;
+    private boolean[] timesAvailable;
     private boolean refundable;
     private String listingID;
     private double price;
@@ -34,13 +34,25 @@ public class Listing implements Serializable {
         this.parkingSpot = parkingSpot;
     }
 
-    public long getIncrement() {return increment;}
+    public long getIncrement() {
+        return increment;
+    }
 
-    public void setIncrement(long increment) {this.increment = increment;}
+    public void setIncrement(long increment) {
+        this.increment = increment;
+    }
 
-    public String getTimesAvailable() {return timesAvailable;}
+    public boolean[] getTimesAvailable() {
+        return timesAvailable;
+    }
 
-    public void setTimesAvailable(String timesAvailable) {this.timesAvailable = timesAvailable;}
+    public void setTimesAvailable(String timesAvailableString) {
+        String[] timeAvailability = timesAvailableString.split(",");
+        for (int i = 0; i < timeAvailability.length; i++) {
+            int availableTime = Integer.parseInt(timeAvailability[i]);
+            timesAvailable[availableTime] = true;
+        }
+    }
 
     public String getName() {
         return name;
