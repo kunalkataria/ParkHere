@@ -10,12 +10,8 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -25,12 +21,16 @@ import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
 
@@ -129,13 +129,42 @@ public class PostListingActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         currentUser = mAuth.getCurrentUser();
+        final String userID = mAuth.getCurrentUser().getUid();
 
         nameString = "";
         descriptionString = "";
         price = 0.0;
         startDate = 0;
         stopDate = 0;
-        currentParkingSpot = null;
+
+        final ArrayList<ParkingSpot> userSpots = new ArrayList<ParkingSpot>();
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Consts.PARKING_SPOT_DATABASE).child(userID);
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    boolean isActive = Boolean.parseBoolean(child.child(Consts.PARKING_SPOTS_ACTIVE)
+                            .getValue().toString());
+                    if (isActive) {
+                        ParkingSpot currentParkingSpot = parseParkingSpot(child);
+                        currentParkingSpot.setProviderID(userID);
+                        userSpots.add(currentParkingSpot);
+                    }
+                }
+
+                if (userSpots.size() == 1) {
+                    currentParkingSpot = userSpots.get(0);
+                    parkingSpotEditText.setText(currentParkingSpot.getName());
+
+                } else {
+                    currentParkingSpot = null;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
 
         cancellationIds = new Hashtable<Integer, String>();
         cancellationIds.put(R.id.refundable_rButton, Consts.REFUNDABLE);
@@ -366,5 +395,40 @@ public class PostListingActivity extends AppCompatActivity {
         startDate = listing.getStartTime();
         stopDate = listing.getStopTime();
         //need to account for time increments
+    }
+
+    public ParkingSpot parseParkingSpot(DataSnapshot parkingSnapShot) {
+        ParkingSpot pSpot = new ParkingSpot();
+        //dont knw if we need this but insertedt the id as well
+        pSpot.setParkingSpotID(parkingSnapShot.getKey());
+        for(DataSnapshot child : parkingSnapShot.getChildren()) {
+            switch (child.getKey()) {
+                case Consts.PARKING_SPOTS_COMPACT:
+                    pSpot.setCompact(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_COVERED:
+                    pSpot.setCovered(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_HANDICAP:
+                    pSpot.setHandicap(Boolean.parseBoolean(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_LONGITUDE:
+                    pSpot.setLongitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_LATITUDE:
+                    pSpot.setLatitude(Double.parseDouble(child.getValue().toString()));
+                    break;
+                case Consts.PARKING_SPOTS_IMAGE:
+                    pSpot.setImageURL(child.getValue().toString());
+                    break;
+                case Consts.PARKING_SPOTS_NAME:
+                    pSpot.setName(child.getValue().toString());
+                    break;
+                case Consts.PARKING_SPOTS_BOOKING_COUNT:
+                    pSpot.setBookingCount(Integer.parseInt(child.getValue().toString()));
+                    break;
+            }
+        }
+        return pSpot;
     }
 }
