@@ -166,7 +166,7 @@ public class PostParkingSpotActivity extends AppCompatActivity {
             newListingRef.child(Consts.PARKING_SPOTS_LATITUDE).setValue(latitude);
             newListingRef.child(Consts.PARKING_SPOTS_LONGITUDE).setValue(longitude);
             newListingRef.child(Consts.PARKING_SPOTS_BOOKING_COUNT).setValue(0);
-            newListingRef.child(Consts.PARKING_SPOTS_ACTIVE).setValue(false);
+            newListingRef.child(Consts.PARKING_SPOTS_ACTIVE).setValue(true);
 
             StorageReference storageRef = storage.getReferenceFromUrl(Consts.STORAGE_URL);
             StorageReference parkingRef = storageRef.child(Consts.STORAGE_PARKING_SPACES);
