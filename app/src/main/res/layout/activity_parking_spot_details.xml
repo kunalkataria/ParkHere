@@ -93,6 +93,17 @@
 
             <include layout="@layout/divider"/>
 
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft = "10dp"
+                android:layout_marginRight= "10dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/review_content_space_fragment">
+
+            </LinearLayout>
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/edit_parking_spot_button"
                 android:layout_width="match_parent"

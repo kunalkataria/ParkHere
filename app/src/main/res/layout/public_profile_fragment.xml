@@ -6,6 +6,9 @@
     android:id="@+id/fragment_public_profile_layout">
 
     <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -29,6 +32,7 @@
                 android:textSize="30sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:id="@+id/user_name_view_fragment"
                 android:layout_weight="1" />
 
@@ -47,8 +51,19 @@
 
     </LinearLayout>
 
+    <include layout="@layout/divider"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reviews"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:textSize="20dp"
+        android:textColor="@color/colorPrimaryDark"/>
+
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft = "10dp"
         android:layout_marginRight= "10dp"
         android:orientation="vertical"
