@@ -8,8 +8,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.usc.sunset.team7.www.parkhere.Adapters.CustomReviewAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ParkingSpot;
@@ -45,10 +49,12 @@ public class ParkingSpotDetailsActivity extends AppCompatActivity {
     @BindView(R.id.parking_spot_details_toolbar) Toolbar parkingSpotDetailsToolbar;
     @BindView(R.id.edit_parking_spot_button) AppCompatButton editParkingSpotButton;
     @BindView(R.id.delete_parking_spot_button) public AppCompatButton deleteParkingSpotButton;
+    @BindView(R.id.review_content_space) LinearLayout reviewContentSpace;
 
     private ParkingSpot parkingSpot;
     private String providerID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    private static final String TAG = "ParkingSpotDetailsActivity";
+    private static final String TAG = "ParkingSpotDetails";
+    private ArrayList<Review> reviews = new ArrayList<Review>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,7 @@ public class ParkingSpotDetailsActivity extends AppCompatActivity {
             // Temporary string, should replace with title of listing later
             getSupportActionBar().setTitle("Parking Spot Details");
         }
+
         displayView();
     }
 
@@ -98,29 +105,60 @@ public class ParkingSpotDetailsActivity extends AppCompatActivity {
         parkingSpotDetailsCoveredTextView.setText("Covered? " + parkingSpot.isCovered());
         parkingSpotDetailsCompactTextView.setText("Compact? " + parkingSpot.isCompact());
 
-        //make a review listview later
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final String userID = mAuth.getCurrentUser().getUid();
-        final ArrayList<Review> reviewsListing = new ArrayList<Review>();
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(Consts.REVIEWS_DATABASE).child(userID).child(parkingSpot.getParkingSpotID());
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    //youre at each parking spot id so need to iterate through all booking ids, possible threading problems here later
-                    Review toAdd = parseBookingID(child);
-                    reviewsListing.add(toAdd);
-                }
-                Review[] reviewParkingSpotArray = new Review[reviewsListing.size()];
-                reviewParkingSpotArray = reviewsListing.toArray(reviewParkingSpotArray);
-                //set adapter here
-                /*ParkingSpaceListView.setAdapter(new CustomParkingSpaceSelectionAdapter
-                        (MyParkingSpacesActivity.this, parkingSpotArray));*/
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+
+        final String userID = mAuth.getCurrentUser().getUid();
+
+        //Get Reviews
+        //ReviewsDB -> UID -> ParkingSpotID -> Booking ID -> Review Data
+        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE).child(userID);
+        if(reviewsRef!=null){ //User has reviews
+            if(reviewsRef.child(parkingSpot.getParkingSpotID()) != null ) { //The Parking Spot has reviews
+                reviewsRef.child(parkingSpot.getParkingSpotID()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for(DataSnapshot bookingID : dataSnapshot.getChildren()){
+                            int ratings = -1;
+                            String description = null;
+                            //Get the review data
+                            for(DataSnapshot review : bookingID.getChildren()){
+                                switch (review.getKey()) {
+                                    case Consts.REVIEW_DESCRIPTION:
+                                        description = review.getValue().toString();
+                                        Log.d(TAG, description);
+                                        break;
+                                    case Consts.REVIEW_RATING:
+                                        ratings = Integer.parseInt(review.getValue().toString());
+                                        break;
+                                }
+                            }
+                            if(ratings !=-1 && description!=null){
+                                Review r = new Review(ratings, description);
+                                reviews.add(r);
+                            } else {
+                                Log.d(TAG, "RATING WAS NOT ADDED");
+                            }
+                        }
+
+                        displayReviews();
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+
+            }
+        }
+    }
+
+    private void displayReviews(){
+        if (reviews != null || reviews.size() > 0) {
+            reviewContentSpace.removeAllViewsInLayout();
+            ListView listView = new ListView(this);
+            listView.setAdapter(new CustomReviewAdapter(this, reviews));
+            reviewContentSpace.addView(listView);
+        }
     }
 
     @Override

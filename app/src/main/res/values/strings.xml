@@ -165,6 +165,8 @@
     <string name="parking_spot_details_covered"> Parking Spot Details Covered</string>
     <string name="parking_spot_details_compact"> Parking Spot Details Compact</string>
 
+    <string name="parking_spot_reviews">Parking Spot Reviews</string>
+
     <string-array name="time_increment_spinner_label">
         <item>1</item>
         <item>2</item>
