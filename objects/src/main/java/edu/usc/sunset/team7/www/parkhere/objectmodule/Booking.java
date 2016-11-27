@@ -15,6 +15,7 @@ public class Booking implements Serializable {
     private String bookingID;
     private long bookStartTime;
     private long bookEndTime;
+    private int increment;
 
     public Booking(Listing mListing) {
         this.mListing = mListing;
@@ -51,5 +52,13 @@ public class Booking implements Serializable {
     public String getProviderID() { return providerID; }
 
     public void setProviderID(String providerID) {this.providerID = providerID; }
+
+    public void setIncrement(int increment) {
+        this.increment = increment;
+    }
+
+    public int getIncrement() {
+        return this.increment;
+    }
 
 }
