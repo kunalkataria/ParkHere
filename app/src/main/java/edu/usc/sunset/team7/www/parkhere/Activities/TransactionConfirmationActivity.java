@@ -152,8 +152,20 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         bookingRef.child(Consts.LISTING_END_TIME).setValue(listing.getStopTime());
         bookingRef.child(Consts.LISTING_BOOK_TIME).setValue(bookTime);*/
 
+        //Doodle: New Move Listing to inactive
+        DatabaseReference inactiveBookingRef = mDatabase.child(Consts.LISTINGS_DATABASE)
+                .child(listing.getProviderID()).child(Consts.INACTIVE_LISTINGS).child(bookingID);
+        inactiveBookingRef.child(Consts.LISTING_ID).setValue(listing.getListingID());
+        inactiveBookingRef.child(Consts.BOOKING_START_TIME).setValue(listing.getStartTime());
+        inactiveBookingRef.child(Consts.BOOKING_END_TIME).setValue(listing.getStopTime());
+        inactiveBookingRef.child(Consts.LISTING_BOOK_TIME).setValue(bookTime);
+        inactiveBookingRef.child(Consts.LISTING_IMAGE).setValue(listing.getImageURL());
+        inactiveBookingRef.child(Consts.LISTING_NAME).setValue(listing.getName());
+        inactiveBookingRef.child(Consts.LISTING_PRICE).setValue(listing.getPrice());
+
+
         //Move Listing to inactive
-        DatabaseReference inactiveListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.INACTIVE_LISTINGS).child(listing.getListingID());
+        /*DatabaseReference inactiveListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.INACTIVE_LISTINGS).child(listing.getListingID());
         inactiveListingRef.child(Consts.LISTING_NAME).setValue(listing.getName());
         inactiveListingRef.child(Consts.LISTING_DESCRIPTION).setValue(listing.getDescription());
         inactiveListingRef.child(Consts.LISTING_REFUNDABLE).setValue(listing.isRefundable());
@@ -169,7 +181,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         inactiveListingRef.child(Consts.LISTING_IS_PAID).setValue(false);
         inactiveListingRef.child(Consts.PARKING_SPOTS_ID).setValue(listing.getParkingSpot().getParkingSpotID());
         //Remove listing from active
-        mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(listing.getListingID()).removeValue();
+        mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(listing.getListingID()).removeValue();*/
 
         //Get provider variables and send the email
         //getProviderInformation();
