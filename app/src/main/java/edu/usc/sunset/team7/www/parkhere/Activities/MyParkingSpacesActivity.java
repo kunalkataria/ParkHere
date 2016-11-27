@@ -53,9 +53,13 @@ public class MyParkingSpacesActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    ParkingSpot currentParkingSpot = parseParkingSpot(child);
-                    currentParkingSpot.setProviderID(userID);
-                    userListings.add(currentParkingSpot);
+                    boolean isActive = Boolean.parseBoolean(child.child(Consts.PARKING_SPOTS_ACTIVE)
+                            .getValue().toString());
+                    if (isActive) {
+                        ParkingSpot currentParkingSpot = parseParkingSpot(child);
+                        currentParkingSpot.setProviderID(userID);
+                        userListings.add(currentParkingSpot);
+                    }
                 }
                 ParkingSpot[] parkingSpotArray = new ParkingSpot[userListings.size()];
                 parkingSpotArray = userListings.toArray(parkingSpotArray);
