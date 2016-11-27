@@ -31,6 +31,7 @@ import butterknife.OnClick;
 import edu.usc.sunset.team7.www.parkhere.Activities.ConfirmPaymentActivity;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
+import edu.usc.sunset.team7.www.parkhere.objectmodule.Booking;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 
 import static android.support.v7.appcompat.R.styleable.View;
@@ -103,29 +104,47 @@ public class BalanceFragment extends Fragment {
     protected void viewPayments(){
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         String uid = currentUser.getUid();
+        //may need to check null
         DatabaseReference ref = mDatabase.child(Consts.LISTINGS_DATABASE).child(uid).child(Consts.INACTIVE_LISTINGS);
         ref.addListenerForSingleValueEvent(new ValueEventListener(){
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<Listing> inactiveListingz = new ArrayList<Listing>();
-                for(DataSnapshot listing : dataSnapshot.getChildren()) {
-                    String currListingID = listing.getKey();
-                    Listing toAdd = parseListing(listing);
-                    if(toAdd != null){
-                        toAdd.setListingID(currListingID);
-                        inactiveListingz.add(toAdd);
+                ArrayList<Booking>  bookingsToConfirm = new ArrayList<>();
+                for(DataSnapshot bookingSnap : dataSnapshot.getChildren()) {
+                    String currBookingID = bookingSnap.getKey();
+                    Booking booking = parseBooking(bookingSnap);
+                    if(booking != null) {
+                        booking.setBookingID(currBookingID);
+                        bookingsToConfirm.add(booking);
                     }
                 }
-                if (inactiveListingz.size() != 0) {
-                    ConfirmPaymentActivity.startActivity(getActivity(), inactiveListingz);
+                if(bookingsToConfirm.size() != 0) {
+                    ConfirmPaymentActivity.startActivity(getActivity(), bookingsToConfirm);
                 } else {
-                    // popup box
                     AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
                     adb.setTitle("No pending booking payments");
                     adb.setPositiveButton("OK", null);
                     adb.show();
                 }
+//                ArrayList<Listing> inactiveListingz = new ArrayList<Listing>();
+//                for(DataSnapshot listing : dataSnapshot.getChildren()) {
+//                    String currListingID = listing.getKey();
+//                    Listing toAdd = parseListing(listing);
+//                    if(toAdd != null){
+//                        toAdd.setListingID(currListingID);
+//                        inactiveListingz.add(toAdd);
+//                    }
+//                }
+//                if (inactiveListingz.size() != 0) {
+//                    ConfirmPaymentActivity.startActivity(getActivity(), inactiveListingz);
+//                } else {
+//                    // popup box
+//                    AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
+//                    adb.setTitle("No pending booking payments");
+//                    adb.setPositiveButton("OK", null);
+//                    adb.show();
+//                }
 
             }
             @Override
@@ -135,6 +154,50 @@ public class BalanceFragment extends Fragment {
         });
     }
 
+
+    private Booking parseBooking(DataSnapshot bookingSnap) {
+        Listing listing = new Listing();
+        Booking booking = new Booking(listing);
+        String endTime = bookingSnap.child(Consts.BOOKING_END_TIME).getValue().toString();
+        long convertTime = Long.parseLong(endTime);
+        long unixTime = System.currentTimeMillis()/1000L;
+        if(unixTime >= convertTime) {
+            for(DataSnapshot child : bookingSnap.getChildren()) {
+                switch(child.getKey()) {
+                    case Consts.LISTING_ID:
+                        booking.getMListing().setListingID(child.getValue().toString());
+                        break;
+                    case Consts.LISTING_NAME:
+                        booking.getMListing().setName(child.getValue().toString());
+                        break;
+                    case Consts.PARKING_SPOTS_ID:
+                        booking.getMListing().getParkingSpot().setParkingSpotID(child.getValue().toString());
+                        break;
+                    case Consts.BOOKING_START_TIME:
+                        String getStartTime = child.getValue().toString();
+                        booking.setBookStartTime(Long.parseLong(getStartTime));
+                        break;
+                    case Consts.BOOKING_END_TIME:
+                        String getEndTime = child.getValue().toString();
+                        booking.setBookEndTime(Long.parseLong(getEndTime));
+                        break;
+                    case Consts.LISTING_IMAGE:
+                        booking.getMListing().getParkingSpot().setImageURL(child.getValue().toString());
+                        break;
+                    case Consts.LISTING_BOOK_TIME:
+                        booking.setTimeIncrement(Integer.parseInt(child.getValue().toString()));
+                        break;
+                    case Consts.LISTING_PRICE:
+                        booking.getMListing().setPrice(Double.parseDouble(child.getValue().toString()));
+                        break;
+                }
+            }
+        } else {
+            return null;
+        }
+        return booking;
+
+    }
     private Listing parseListing (DataSnapshot snapshot) {
         Listing listing = new Listing();
         String endTime = snapshot.child(Consts.LISTING_END_TIME).getValue().toString();

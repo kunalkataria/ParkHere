@@ -34,14 +34,14 @@ import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
  */
 
 public class CustomPaymentAdapter extends BaseAdapter {
-    private ArrayList<Listing> allBookings;
+    private ArrayList<Booking> allBookings;
     private static LayoutInflater inflater = null;
     private Context context;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 
-    public CustomPaymentAdapter(Activity activity, ArrayList<Listing> allBookings) {
+    public CustomPaymentAdapter(Activity activity, ArrayList<Booking> allBookings) {
         this.context = activity;
         this.allBookings = allBookings;
         mAuth = FirebaseAuth.getInstance();
@@ -89,14 +89,24 @@ public class CustomPaymentAdapter extends BaseAdapter {
         } else{
             item = (ItemShell) rowView.getTag();
         }
-        
-        long startTime = ((Listing) getItem(position)).getStartTime();
-        long endTime = ((Listing) getItem(position)).getStopTime();
 
-        item.bookingLabel.setText(((Listing)getItem(position)).getName());
+        Booking currBooking = (Booking) getItem(position);
+
+        long startTime = currBooking.getBookStartTime();
+        long endTime = currBooking.getBookEndTime();
+
+        item.bookingLabel.setText(currBooking.getMListing().getName());
         item.dateLabel.setText(Tools.getDateString(startTime) + "--" + Tools.getDateString(endTime));
-        double userBalance = ((Listing)getItem(position)).getPrice();
+        double userBalance = currBooking.getMListing().getPrice();
         item.amountLabel.setText("$"+String.format("%.2f",userBalance));
+
+//        long startTime = ((Listing) getItem(position)).getStartTime();
+//        long endTime = ((Listing) getItem(position)).getStopTime();
+//
+//        item.bookingLabel.setText(((Listing)getItem(position)).getName());
+//        item.dateLabel.setText(Tools.getDateString(startTime) + "--" + Tools.getDateString(endTime));
+//        double userBalance = ((Listing)getItem(position)).getPrice();
+//        item.amountLabel.setText("$"+String.format("%.2f",userBalance));
         return rowView;
     }
 
