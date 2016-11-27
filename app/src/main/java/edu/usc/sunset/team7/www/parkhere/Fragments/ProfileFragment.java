@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment{
     private double rating = -1;
     private ArrayList<Review> reviews = new ArrayList<Review>();
 
-    private static final String TAG = "UserProfileFragment***";
+    private static final String TAG = "ProfileFragment*****";
 
 
     @Override
@@ -127,51 +127,48 @@ public class ProfileFragment extends Fragment{
         });
 
 
-        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE);
-        reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(uid)){
+        //Get Reviews
+        //ReviewsDB -> UID -> ParkingSpotID -> Booking ID -> Review Data
+        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE).child(uid);
+        if(reviewsRef!=null){ //User has reviews
+            reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    if(dataSnapshot.child(uid).hasChildren()){
-                        int ratings = -1;
-                        int counter = 0;
-                        String description = null;
-                        for(DataSnapshot child : dataSnapshot.child(uid).getChildren()){
-                            for (DataSnapshot child2 : child.getChildren()){
-                                switch (child2.getKey()) {
-                                    case Consts.REVIEW_DESCRIPTION:
-                                        description = child2.getValue().toString();
-                                        break;
-                                    case Consts.REVIEW_RATING:
-                                        ratings = Integer.parseInt(child2.getValue().toString());
-                                        rating += (double)ratings;
-                                        counter++;
-                                        break;
+                    if(dataSnapshot.hasChildren()){
+                        //Getting all Parking Spot IDs
+                        for(DataSnapshot parkingSpotID : dataSnapshot.getChildren()){
+                            //Getting the Booking ID
+                            for(DataSnapshot bookingID : parkingSpotID.getChildren()){
+                                int ratings = -1;
+                                String description = null;
+                                //Get the review data
+                                for(DataSnapshot review : bookingID.getChildren()){
+                                    switch (review.getKey()) {
+                                        case Consts.REVIEW_DESCRIPTION:
+                                            description = review.getValue().toString();
+                                            Log.d(TAG, description);
+                                            break;
+                                        case Consts.REVIEW_RATING:
+                                            ratings = Integer.parseInt(review.getValue().toString());
+                                            break;
+                                    }
+                                }
+                                if(ratings !=-1 && description!=null){
+                                    Review r = new Review(ratings, description);
+                                    reviews.add(r);
+                                } else {
+                                    Log.d(TAG, "RATING WAS NOT ADDED");
                                 }
                             }
-                            Log.d(TAG, "Description: " + description);
-                            Log.d(TAG, "a Rating value: " + Integer.toString(ratings));
-                            if(ratings !=-1 && description != null){
-                                Log.d(TAG, "Created review");
-                                Review r = new Review(ratings, description);
-                                reviews.add(r);
-
-                            }
                         }
-                        rating = rating/(double) counter;
-                        Log.d(TAG, Double.toString(rating));
-                        Log.d(TAG, "Reviews Size: " + Integer.toString(reviews.size()));
                     }
+                    setValues();
                 }
-                setValues();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+        }
     }
 
     private void setValues(){

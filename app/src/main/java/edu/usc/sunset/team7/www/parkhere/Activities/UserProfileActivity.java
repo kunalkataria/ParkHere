@@ -51,7 +51,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private String uid, name, imageURL;
     private double rating = -1;
-    private List<Review> reviews;
+    private List<Review> reviews = null;
 
     private static final String TAG = "UserProfileActivity";
 
@@ -61,6 +61,7 @@ public class UserProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(publicProfileToolbar);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Public Profile");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -122,55 +123,62 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {}
         });
 
+        //Get Reviews
+        //ReviewsDB -> UID -> ParkingSpotID -> Booking ID -> Review Data
+        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE).child(uid);
+        if(reviewsRef!=null){ //User has reviews
+            reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE);
-        reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(uid)){
-                    if(dataSnapshot.child(uid).hasChildren()){
-                        int ratings = -1;
-                        String description = null;
-                        for(DataSnapshot child : dataSnapshot.child(uid).getChildren()){
-                            switch (child.getKey()) {
-                                case Consts.REVIEW_DESCRIPTION:
-                                    description = child.getValue().toString();
-                                    Log.d(TAG, description);
-                                    break;
-                                case Consts.REVIEW_RATING:
-                                    ratings = (int)child.getValue();
-                                    break;
+                    if(dataSnapshot.hasChildren()){
+                        //Getting all Parking Spot IDs
+                        for(DataSnapshot parkingSpotID : dataSnapshot.getChildren()){
+                            //Getting the Booking ID
+                            for(DataSnapshot bookingID : parkingSpotID.getChildren()){
+                                int ratings = -1;
+                                String description = null;
+                                //Get the review data
+                                for(DataSnapshot review : bookingID.getChildren()){
+                                    switch (review.getKey()) {
+                                        case Consts.REVIEW_DESCRIPTION:
+                                            description = review.getValue().toString();
+                                            Log.d(TAG, description);
+                                            break;
+                                        case Consts.REVIEW_RATING:
+                                            ratings = Integer.parseInt(review.getValue().toString());
+                                            break;
+                                    }
+                                }
+                                if(ratings !=-1 && description!=null){
+                                    Review r = new Review(ratings, description);
+                                    reviews.add(r);
+                                } else {
+                                    Log.d(TAG, "RATING WAS NOT ADDED");
+                                }
                             }
                         }
-                        if(ratings !=-1 && description!=null){
-                            Review r = new Review(ratings, description);
-                            reviews.add(r);
-                        }
                     }
+                    setValues();
                 }
-                setValues();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+        }
     }
 
     private void setValues(){
         if(name!=null && rating!=-1){
             userName.setText(name);
-
             if (imageURL != null) {
                 Picasso.with(this).load(imageURL).into(profilePic);
             }
-
             DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
 
             Drawable drawable = userRating.getProgressDrawable();
             drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
             userRating.setRating(Float.valueOf(oneDigit.format(rating)));
+
 
             if (reviews != null) {
                 reviewContentSpace.removeAllViewsInLayout();
