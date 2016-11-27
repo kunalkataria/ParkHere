@@ -20,6 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -169,23 +172,33 @@ public class BookingDetailsActivity extends AppCompatActivity {
                     if(snapshot.getKey().toString().equals(booking.getBookingID())) {
                         String startTime = snapshot.child(Consts.BOOKING_START_TIME).getValue().toString();
                         String providerID = snapshot.child(Consts.BOOKING_PROVIDER_ID).getValue().toString();
-                        String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
+                        final String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
 
-                        //decrement bookingcount
-                        String parkingID = snapshot.child(Consts.PARKING_SPOTS_ID).getValue().toString();
-
-                        final DatabaseReference parkingRef = FirebaseDatabase.getInstance().getReference()
-                                .child(Consts.PARKING_SPOTS_DATABASE).child(providerID).child(parkingID);
-                        parkingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        //add increment back to listing after cancel
+                        /*DatabaseReference listingRef = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE)
+                                .child(providerID);
+                        listingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot2) {
-                                for (DataSnapshot child2 : dataSnapshot2.getChildren()) {
-                                    if (child2.getKey() == Consts.PARKING_SPOTS_BOOKING_COUNT){
-                                        Integer addBookCount = Integer.parseInt(child2.getValue()
-                                                .toString());
-                                        addBookCount++;
-                                        parkingRef.child(Consts.PARKING_SPOTS_BOOKING_COUNT)
-                                                .setValue(addBookCount);
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot2 : dataSnapshot.getChildren()){
+                                    if (snapshot2.getKey().toString().equals(listingID)){
+                                        String bookingTimes = snapshot2.child(Consts.LISTING_ACTIVE_TIMES).getValue().toString();
+                                        String[] timeAvailability = bookingTimes.split(",");
+                                        ArrayList<Boolean> timesAvailable = new ArrayList<>();
+                                        for (int i = 0; i < timeAvailability.length; i++) {
+                                            int availableTime = Integer.parseInt(timeAvailability[i]);
+                                            timesAvailable.set(availableTime, true);
+                                        }
+                                        timesAvailable.set(booking.getTimeIncrement(), true);
+                                        String listingTimesAvailable = "";
+                                        for (int l = 0; l < timesAvailable.size(); l++){
+                                            if (listingTimesAvailable == "" && timesAvailable.get(l) == true){
+                                                listingTimesAvailable += Integer.toString(l);
+                                            }
+                                            else if (listingTimesAvailable != "" && timesAvailable.get(l) == true){
+                                                listingTimesAvailable += ("," + Integer.toString(l));
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -194,7 +207,9 @@ public class BookingDetailsActivity extends AppCompatActivity {
                             public void onCancelled(DatabaseError databaseError) {
 
                             }
-                        });
+                        });*/
+
+                        String parkingID = snapshot.child(Consts.PARKING_SPOTS_ID).getValue().toString();
 
                         long longStartTime = Long.parseLong(startTime);
                         long unixTime = System.currentTimeMillis() / 1000L;

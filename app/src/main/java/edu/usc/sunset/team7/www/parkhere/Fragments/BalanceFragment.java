@@ -185,7 +185,7 @@ public class BalanceFragment extends Fragment {
                         booking.getMListing().getParkingSpot().setImageURL(child.getValue().toString());
                         break;
                     case Consts.LISTING_BOOK_TIME:
-                        booking.setIncrement(Integer.parseInt(child.getValue().toString()));
+                        booking.setTimeIncrement(Integer.parseInt(child.getValue().toString()));
                         break;
                     case Consts.LISTING_PRICE:
                         booking.getMListing().setPrice(Double.parseDouble(child.getValue().toString()));
