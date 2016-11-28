@@ -151,4 +151,8 @@ public class Listing implements Serializable {
     public void setParkingID(String parkingID) {
         this.parkingSpot.setParkingSpotID(parkingID);
     }
+
+    public String getParkingID() {
+        return this.parkingSpot.getParkingSpotID();
+    }
 }

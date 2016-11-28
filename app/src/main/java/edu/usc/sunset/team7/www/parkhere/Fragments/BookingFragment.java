@@ -109,15 +109,15 @@ public class BookingFragment extends Fragment {
                     break;
             }
         }
-        Listing listing = parseListing(datasnapshot, listingID, providerID);
+        Listing listing = parseListing(datasnapshot, listingID, booking.getKey(), providerID);
         parseParkingSpot(datasnapshot, listing);
         toAddBooking.setMListing(listing);
 
         return toAddBooking;
     }
 
-    private Listing parseListing (DataSnapshot dataSnapshot, String listingID, String providerID) {
-        DataSnapshot listing = dataSnapshot.child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(listingID);
+    private Listing parseListing (DataSnapshot dataSnapshot, String listingID, String bookingID, String providerID) {
+        DataSnapshot listing = dataSnapshot.child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(bookingID);
         Listing curListing = new Listing();
         curListing.setListingID(listingID);
         curListing.setProviderID(providerID);
@@ -161,7 +161,7 @@ public class BookingFragment extends Fragment {
         DataSnapshot parkingSnapshot = dataSnapshot
                 .child(Consts.PARKING_SPOT_DATABASE)
                 .child(listing.getProviderID())
-                .child(listing.getParkingSpot().getParkingSpotID());
+                .child(listing.getParkingID());
 
         for (DataSnapshot child : parkingSnapshot.getChildren()) {
             switch (child.getKey()) {
