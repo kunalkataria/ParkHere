@@ -162,6 +162,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         inactiveBookingRef.child(Consts.LISTING_IMAGE).setValue(listing.getImageURL());
         inactiveBookingRef.child(Consts.LISTING_NAME).setValue(listing.getName());
         inactiveBookingRef.child(Consts.LISTING_PRICE).setValue(listing.getPrice());
+        inactiveBookingRef.child(Consts.PARKING_SPOTS_ID).setValue(listing.getParkingID());
 
 
         //Move Listing to inactive
