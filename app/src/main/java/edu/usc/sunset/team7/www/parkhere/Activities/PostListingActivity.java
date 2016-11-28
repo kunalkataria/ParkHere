@@ -238,7 +238,7 @@ public class PostListingActivity extends AppCompatActivity {
             //Time Increments
             StringBuilder sb = new StringBuilder();
             sb.append("0");
-            for (int i = 1; i < timeIncrements; i ++){
+            for (int i = 1; i < numIncrements; i ++){
                 sb.append(",");
                 sb.append(Integer.toString(i));
             }

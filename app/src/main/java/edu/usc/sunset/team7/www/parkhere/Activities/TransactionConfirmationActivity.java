@@ -19,6 +19,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -163,6 +166,41 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         inactiveBookingRef.child(Consts.LISTING_NAME).setValue(listing.getName());
         inactiveBookingRef.child(Consts.LISTING_PRICE).setValue(listing.getPrice());
         inactiveBookingRef.child(Consts.PARKING_SPOTS_ID).setValue(listing.getParkingID());
+
+        //Edit Listing Active Times
+        final DatabaseReference activeTimesRef = mDatabase.child(Consts.LISTINGS_DATABASE)
+                .child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS)
+                .child(listing.getListingID());
+        activeTimesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String bookingTimes = dataSnapshot
+                        .child(Consts.LISTING_ACTIVE_TIMES)
+                        .getValue().toString();
+                String[] timeAvailability = bookingTimes.split(",");
+                ArrayList<Integer> timesAvailable = new ArrayList<>();
+                for (int i = 0; i < timeAvailability.length; i++) {
+                    int currTime = Integer.parseInt(timeAvailability[i]);
+                    timesAvailable.add(currTime);
+                }
+                timesAvailable.add(bookTime);
+                Collections.sort(timesAvailable);
+                StringBuilder sb = new StringBuilder();
+                sb.append(timesAvailable.get(0));
+                for (int i = 1; i < timesAvailable.size(); i++) {
+                    sb.append(",");
+                    sb.append(timesAvailable.get(i));
+                }
+                String timeAvailabilityString = sb.toString();
+                activeTimesRef.child(Consts.LISTING_ACTIVE_TIMES)
+                        .setValue(timeAvailabilityString);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         //Move Listing to inactive
