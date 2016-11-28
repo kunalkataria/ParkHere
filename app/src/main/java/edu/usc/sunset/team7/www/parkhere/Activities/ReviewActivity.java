@@ -93,21 +93,15 @@ public class ReviewActivity extends AppCompatActivity {
 
             //Add review to Firebase
             //Reviews -> Provider ID -> ParkingSpotID -> BookingID
-            Log.d(TAG, "BOOKING PROVIDER ID: " + booking.getMListing().getProviderID());
-            Log.d(TAG, "BOOKING LISTING: " + booking.getMListing());
-            Log.d(TAG, "BOOKING LISTING PARKING SPOT: " + booking.getMListing().getParkingSpot());
-            Log.d(TAG, "BOOKING LISTING PARKING SPOT ID: " + booking.getMListing().getParkingSpot().getParkingSpotID());
-            Log.d(TAG, "BOOKING ID: " + booking.getBookingID());
-
             DatabaseReference parkingSpotReviewRef = FirebaseDatabase.getInstance().getReference(Consts.REVIEWS_DATABASE)
                     .child(booking.getMListing().getProviderID()).child(booking.getMListing().getParkingSpot().getParkingSpotID())
                     .child(booking.getBookingID());
 
             parkingSpotReviewRef.child(Consts.REVIEW_DESCRIPTION).setValue(reviewDescription);
             parkingSpotReviewRef.child(Consts.REVIEW_RATING).setValue(reviewRating);
+
             finish();
 
         }
     }
-
 }

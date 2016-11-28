@@ -28,7 +28,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +51,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private String uid, name, imageURL;
     private double rating = -1;
-    private List<Review> reviews = null;
+    private ArrayList<Review> reviews = new ArrayList<Review>();
 
     private static final String TAG = "UserProfileActivity";
 
@@ -179,12 +179,17 @@ public class UserProfileActivity extends AppCompatActivity {
             drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
             userRating.setRating(Float.valueOf(oneDigit.format(rating)));
 
-
-            if (reviews != null) {
+            if (reviews.size() > 0) {
                 reviewContentSpace.removeAllViewsInLayout();
                 ListViewCompat listView = new ListViewCompat(this);
                 listView.setAdapter(new CustomReviewAdapter(this, reviews));
                 reviewContentSpace.addView(listView);
+
+                int reviewSum = 0;
+                for(Review r : reviews) {
+                    reviewSum += r.getReviewRating();
+                }
+                userRating.setRating(Float.valueOf(oneDigit.format(reviewSum/reviews.size())));
             }
         } else{
             Log.d(TAG, "MISSING VALUES FOR USER PROFILE = NULL");

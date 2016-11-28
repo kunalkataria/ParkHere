@@ -62,7 +62,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:textSize="20dp"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textColor="@color/blueClick"/>
 
     <LinearLayout
         android:layout_marginTop="20dp"
