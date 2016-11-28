@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -171,7 +174,7 @@ public class PostListingActivity extends AppCompatActivity {
         cancellationIds.put(R.id.nonrefundable_rButton, Consts.NONREFUNDABLE);
 
         //Time Increments Initialization
-        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.time_increment_spinner_label, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeIncrementsSpinner.setAdapter(adapter);
@@ -187,7 +190,7 @@ public class PostListingActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });*/
+        });
 
 
         ActivityCompat.requestPermissions(this,
@@ -227,18 +230,20 @@ public class PostListingActivity extends AppCompatActivity {
             newListingRef.child(Consts.LISTING_START_TIME).setValue(startDate);
 
             //Calculate StopDate
-            //stopDate += (timeIncrements * 60 * numIncrements * 60 * 1000);
+            stopDate = startDate + (numIncrements * timeIncrements) * 60 * 60;
 
             newListingRef.child(Consts.LISTING_END_TIME).setValue(stopDate);
             newListingRef.child(Consts.PARKING_SPOTS_ID).setValue(currentParkingSpot.getParkingSpotID());
 
             //Time Increments
-            /*StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.append("0");
             for (int i = 1; i < timeIncrements; i ++){
-                sb.append(", " + Integer.toString(i));
+                sb.append(",");
+                sb.append(Integer.toString(i));
             }
-            newListingRef.child(Consts.LISTING_ACTIVE_TIMES).setValue(sb.toString());*/
+            newListingRef.child(Consts.LISTING_ACTIVE_TIMES).setValue(sb.toString());
+            newListingRef.child(Consts.LISTING_BOOK_TIME).setValue(timeIncrements);
             finish();
         }
     }
@@ -303,6 +308,7 @@ public class PostListingActivity extends AppCompatActivity {
     public boolean checkFields() {
         nameString = parkingNameEditText.getText().toString();
         descriptionString = descriptionEditText.getText().toString();
+        numIncrements = Integer.parseInt(numIncrementsEditText.getText().toString());
         boolean isValid = true;
         try {
             price = Double.parseDouble(priceEditText.getText().toString());
@@ -354,30 +360,30 @@ public class PostListingActivity extends AppCompatActivity {
         } else {
             startDateLayout.setErrorEnabled(false);
         }
-        if (stopDate == 0) {
-            isValid = false;
-            stopDateLayout.setError("Please select a stop date");
-            stopDateLayout.setErrorEnabled(true);
-        } else {
-            stopDateLayout.setErrorEnabled(false);
-        }
-        if (startDate != 0 && stopDate != 0) {
-            if (startDate >= stopDate) {
-                isValid = false;
-                startDateLayout.setError("Please select a valid start date");
-                startDateLayout.setErrorEnabled(true);
-                stopDateLayout.setError("Please select a valid stop date");
-                stopDateLayout.setErrorEnabled(true);
-            }
-        }
+//        if (stopDate == 0) {
+//            isValid = false;
+//            stopDateLayout.setError("Please select a stop date");
+//            stopDateLayout.setErrorEnabled(true);
+//        } else {
+//            stopDateLayout.setErrorEnabled(false);
+//        }
+//        if (startDate != 0 && stopDate != 0) {
+//            if (startDate >= stopDate) {
+//                isValid = false;
+//                startDateLayout.setError("Please select a valid start date");
+//                startDateLayout.setErrorEnabled(true);
+//                stopDateLayout.setError("Please select a valid stop date");
+//                stopDateLayout.setErrorEnabled(true);
+//            }
+//        }
         //Time Increments
-        /*if (numIncrements == 0){
+        if (numIncrements == 0){
             isValid = false;
             numIncrementsLayout.setError("Please enter the number of time increments");
             numIncrementsLayout.setErrorEnabled(true);
         } else {
             numIncrementsLayout.setErrorEnabled(false);
-        }*/
+        }
 
         return isValid;
     }

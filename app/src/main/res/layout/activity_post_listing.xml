@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
+
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/name_edittext"
                     android:layout_width="match_parent"
@@ -115,30 +116,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
 
                 <Spinner
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:hint="@string/time_increment"
                     android:id="@+id/time_increments_spinner">
                 </Spinner>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/num_increments_textinputlayout"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/num_increments"
                     >
                     <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/num_increments_edittext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
                         android:ems="10"
-                        android:id="@+id/num_increments_edittext"/>
+                        android:inputType="number"/>
                 </android.support.design.widget.TextInputLayout>
 
 

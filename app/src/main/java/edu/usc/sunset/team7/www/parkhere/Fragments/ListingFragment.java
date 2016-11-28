@@ -87,6 +87,8 @@ public class ListingFragment extends Fragment {
             listing.setStopTime(Long.valueOf(listingSnapshot.child(Consts.LISTING_END_TIME).getValue().toString()));
             listing.setPrice(Double.parseDouble(listingSnapshot.child(Consts.LISTING_PRICE).getValue().toString()));
             listing.setParkingID(listingSnapshot.child(Consts.PARKING_SPOTS_ID).getValue().toString());
+            listing.setIncrement(Long.parseLong(listingSnapshot.child(Consts.LISTING_BOOK_TIME).getValue().toString()));
+            listing.setTimesAvailable(listingSnapshot.child(Consts.LISTING_ACTIVE_TIMES).getValue().toString());
             Listing toAdd = parseParkingSpot(dataSnapshot, listing, userID);
             allListings.add(toAdd);
         }

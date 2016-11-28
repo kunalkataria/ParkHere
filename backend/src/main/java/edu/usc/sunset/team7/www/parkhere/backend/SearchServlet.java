@@ -233,11 +233,15 @@ public class SearchServlet extends HttpServlet {
                 case "Price":
                     listing.setPrice(Double.parseDouble(child.getValue().toString()));
                     break;
-//                case "Increment":
-//                    listing.setIncrement(Long.parseLong(child.getValue().toString()));
-//                    break;
-//                case "Times Available":
-//                    listing.setTimesAvailable(child.getValue().toString());
+                case "Book Time Increment":
+                    listing.setIncrement(Long.parseLong(child.getValue().toString()));
+                    break;
+                case "Active Times":
+                    listing.setTimesAvailable(child.getValue().toString());
+                    break;
+                case "ParkingID":
+                    listing.setParkingID(child.getValue().toString());
+                    break;
             }
         }
         return listing;
