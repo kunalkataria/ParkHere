@@ -223,6 +223,10 @@ public class ListingDetailsActivity extends AppCompatActivity {
                 bookStart = startTime + (selected * timeIncr * 60 * 60);
                 bookStop = bookStart + (timeIncr * 60 * 60);
 
+                Listing bookListing = listingResultPair.getListing();
+                bookListing.setStartTime(bookStart);
+                bookListing.setStopTime(bookStop);
+
                 Intent intent = new Intent(ListingDetailsActivity.this, TransactionActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Consts.LISTING_TO_BE_BOOKED, listingResultPair.getListing());
