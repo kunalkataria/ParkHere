@@ -1,6 +1,8 @@
 package edu.usc.sunset.team7.www.parkhere.objectmodule;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by kunal on 10/12/16.
@@ -15,7 +17,7 @@ public class Listing implements Serializable {
     private String description;
     private long startTime;
     private long stopTime;
-    private boolean[] timesAvailable;
+    private ArrayList<Integer> timesAvailable;
     private boolean refundable;
     private String listingID;
     private double price;
@@ -42,15 +44,23 @@ public class Listing implements Serializable {
         this.increment = increment;
     }
 
-    public boolean[] getTimesAvailable() {
+    public ArrayList<Integer> getTimesAvailable() {
         return timesAvailable;
     }
 
     public void setTimesAvailable(String timesAvailableString) {
         String[] timeAvailability = timesAvailableString.split(",");
+        timesAvailable = new ArrayList<>();
         for (int i = 0; i < timeAvailability.length; i++) {
-            int availableTime = Integer.parseInt(timeAvailability[i]);
-            timesAvailable[availableTime] = true;
+            int currTime = Integer.parseInt(timeAvailability[i]);
+            timesAvailable.add(currTime);
+        }
+    }
+
+    public void addTimeAvailable(int timeAvailable) {
+        if (timesAvailable != null) {
+            timesAvailable.add(timeAvailable);
+            Collections.sort(timesAvailable);
         }
     }
 

@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -175,39 +176,42 @@ public class BookingDetailsActivity extends AppCompatActivity {
                         final String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
 
                         //add increment back to listing after cancel
-                        /*DatabaseReference listingRef = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE)
-                                .child(providerID);
+                        final DatabaseReference listingRef = FirebaseDatabase.getInstance().getReference()
+                                .child(Consts.LISTINGS_DATABASE)
+                                .child(providerID)
+                                .child(Consts.ACTIVE_LISTINGS)
+                                .child(listingID);
                         listingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snapshot2 : dataSnapshot.getChildren()){
-                                    if (snapshot2.getKey().toString().equals(listingID)){
-                                        String bookingTimes = snapshot2.child(Consts.LISTING_ACTIVE_TIMES).getValue().toString();
-                                        String[] timeAvailability = bookingTimes.split(",");
-                                        ArrayList<Boolean> timesAvailable = new ArrayList<>();
-                                        for (int i = 0; i < timeAvailability.length; i++) {
-                                            int availableTime = Integer.parseInt(timeAvailability[i]);
-                                            timesAvailable.set(availableTime, true);
-                                        }
-                                        timesAvailable.set(booking.getTimeIncrement(), true);
-                                        String listingTimesAvailable = "";
-                                        for (int l = 0; l < timesAvailable.size(); l++){
-                                            if (listingTimesAvailable == "" && timesAvailable.get(l) == true){
-                                                listingTimesAvailable += Integer.toString(l);
-                                            }
-                                            else if (listingTimesAvailable != "" && timesAvailable.get(l) == true){
-                                                listingTimesAvailable += ("," + Integer.toString(l));
-                                            }
-                                        }
-                                    }
+                                String bookingTimes = dataSnapshot
+                                        .child(Consts.LISTING_ACTIVE_TIMES)
+                                        .getValue().toString();
+                                String[] timeAvailability = bookingTimes.split(",");
+                                ArrayList<Integer> timesAvailable = new ArrayList<>();
+                                for (int i = 0; i < timeAvailability.length; i++) {
+                                    int currTime = Integer.parseInt(timeAvailability[i]);
+                                    timesAvailable.add(currTime);
                                 }
+                                int toAdd = booking.getTimeIncrement();
+                                timesAvailable.add(toAdd);
+                                Collections.sort(timesAvailable);
+                                StringBuilder sb = new StringBuilder();
+                                sb.append(timesAvailable.get(0));
+                                for (int i = 1; i < timesAvailable.size(); i++) {
+                                    sb.append(",");
+                                    sb.append(timesAvailable.get(i));
+                                }
+                                String timeAvailabilityString = sb.toString();
+                                listingRef.child(Consts.LISTING_ACTIVE_TIMES)
+                                        .setValue(timeAvailabilityString);
                             }
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
 
                             }
-                        });*/
+                        });
 
                         String parkingID = snapshot.child(Consts.PARKING_SPOTS_ID).getValue().toString();
 

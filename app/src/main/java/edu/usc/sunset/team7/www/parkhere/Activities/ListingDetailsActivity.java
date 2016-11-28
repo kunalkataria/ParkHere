@@ -146,8 +146,11 @@ public class ListingDetailsActivity extends AppCompatActivity {
         listingNameTextView.setText(listingResult.getName());
         Picasso.with(this).load(listingResult.getImageURL()).into(parkingImageView);
         listingDetailsDescriptionTextView.setText("Listing Description: " + listingResult.getDescription());
-        listingDetailsStartTimeTextView.setText("Start Time: " + Tools.convertUnixTimeToDateString(listingResult.getStartTime()));
-        listingDetailsStopTimeTextView.setText("End Time: " + Tools.convertUnixTimeToDateString(listingResult.getStopTime()));
+//        listingDetailsStartTimeTextView.setText("Start Time: " + Tools.convertUnixTimeToDateString(listingResult.getStartTime()));
+//        listingDetailsStopTimeTextView.setText("End Time: " + Tools.convertUnixTimeToDateString(listingResult.getStopTime()));
+        listingDetailsStartTimeTextView.setText("Start Time:" + Tools.convertUnixTimeToDateString(bookStart));
+        listingDetailsStopTimeTextView.setText("End Time:" + Tools.convertUnixTimeToDateString(bookStop));
+
         if (!myOwnListing) {
             listingDetailsDistanceTextView.setText("Distance Away: " + listingResultPair.getDistance() + " miles");
         }
@@ -169,10 +172,10 @@ public class ListingDetailsActivity extends AppCompatActivity {
         StringBuilder descriptionBuilder = new StringBuilder();
         descriptionBuilder.append("Name of Listing: " + listing.getName());
         descriptionBuilder.append("\nListing Description: "  + listing.getDescription());
-        descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()));
-        descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
-        //descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(bookStart));
-        //descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(bookStop));
+//        descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(listing.getStartTime()));
+//        descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(listing.getStopTime()));
+        descriptionBuilder.append("\nStart Time: " + Tools.convertUnixTimeToDateString(bookStart));
+        descriptionBuilder.append("\nEnd Time: " + Tools.convertUnixTimeToDateString(bookStop));
         if (!myOwnListing) {
             descriptionBuilder.append("\nDistance Away: " + listingResultPair.getDistance() + " miles");
         }
@@ -194,31 +197,31 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.book_listing_button)
     protected void bookListing() {
-
-        /*boolean [] timeIncrements = listingResultPair.getListing().getTimesAvailable();
-        long sTime = listingResultPair.getListing().getStartTime();
-        long timeIncr = listingResultPair.getListing().getIncrement();
-        List<String> timesStrings = new ArrayList<String>();
-        for (int i = 0; i < timeIncrements.length;  i++){
-            if (timeIncrements[i]){
-                long sT1 = sTime + (i * timeIncr * 60 * 60 * 1000);
-                String t1 = Tools.convertUnixTimeToDateString(sT1);
-                String t2 = Tools.convertUnixTimeToDateString(sT1 + (timeIncr * 60 * 60 * 1000));
-                timesStrings.add(t1 + " - " + t2);
-            }
+        ArrayList<Integer> timeIncrements = listingResultPair.getListing().getTimesAvailable();
+        final long startTime = listingResultPair.getListing().getStartTime();
+        final long timeIncr = listingResultPair.getListing().getIncrement();
+        Log.i("TESTING******", "TIME INCREMENT: " + timeIncr);
+        List<String> timeStrings = new ArrayList<>();
+        for (int i = 0; i < timeIncrements.size(); i++) {
+            long startTimeLong = startTime + (timeIncrements.get(i) * timeIncr * 60 * 60);
+            String timeStart = Tools.convertUnixTimeToDateString(startTimeLong);
+            String timeStop = Tools.convertUnixTimeToDateString(startTimeLong + (timeIncr * 60 * 60));
+            Log.i("TESTING*****", "TIMESTART: " + timeStart);
+            Log.i("TESTING*****", "TIMESTOP: " + timeStop);
+            timeStrings.add(timeStart + " - " + timeStop);
         }
 
-        CharSequence times[] = timesStrings.toArray(new CharSequence[timesStrings.size()]);*/
+        CharSequence times[] = timeStrings.toArray(new CharSequence[timeStrings.size()]);
 
-        CharSequence times[] = new CharSequence[]{"1", "2", "3"};
+//        CharSequence times[] = new CharSequence[]{"1", "2", "3"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pick a time");
         builder.setItems(times, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int selected) {
 
-                /*bookStart = sTime + (selected * timeIncr * 60 * 60 * 1000);
-                bookStop = bookStart + (timeIncr * 60 * 60 * 1000);*/
+                bookStart = startTime + (selected * timeIncr * 60 * 60);
+                bookStop = bookStart + (timeIncr * 60 * 60);
 
                 Intent intent = new Intent(ListingDetailsActivity.this, TransactionActivity.class);
                 Bundle bundle = new Bundle();
