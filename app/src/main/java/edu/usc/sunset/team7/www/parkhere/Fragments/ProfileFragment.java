@@ -186,11 +186,17 @@ public class ProfileFragment extends Fragment{
             drawable.setColorFilter(Color.parseColor("#FFCC00"), PorterDuff.Mode.SRC_ATOP);
             userRating.setRating(Float.valueOf(oneDigit.format(rating)));
 
-            if (reviews != null || reviews.size() > 0) {
+            if (reviews.size() > 0) {
                 reviewContentSpace.removeAllViewsInLayout();
                 ListView listView = new ListView(getActivity());
                 listView.setAdapter(new CustomReviewAdapter(getActivity(), reviews));
                 reviewContentSpace.addView(listView);
+
+                int reviewSum = 0;
+                for(Review r : reviews) {
+                    reviewSum += r.getReviewRating();
+                }
+                userRating.setRating(Float.valueOf(oneDigit.format(reviewSum/reviews.size())));
             }
         } else{
             Log.d(TAG, "MISSING VALUES FOR USER PROFILE = NULL");
