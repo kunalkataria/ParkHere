@@ -274,7 +274,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
                                 addToActive.child("Increment").setValue(child.getValue());
                                 break;
                             case "Times Available":
-                                addToActive.child("Tims Available").setValue(child.getValue());
+                                addToActive.child("Times Available").setValue(child.getValue());
                                 break;
                         }
                     }
