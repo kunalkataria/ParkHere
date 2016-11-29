@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +23,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,9 +113,6 @@ public class BookingDetailsActivity extends AppCompatActivity {
     }
 
     private void displayBooking() {
-        if(!listing.isRefundable()){
-            cancelBookingButton.setEnabled(false);
-        }
         bookingName.setText(listing.getName());
         providerName.setText(providerFullName);
         Picasso.with(this).load(listing.getImageURL()).into(parkingImage);
@@ -164,78 +161,80 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.cancel_booking_button)
     protected void cancelBooking() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Consts.BOOKINGS_DATABASE).child(currentUser.getUid());
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if(snapshot.getKey().toString().equals(booking.getBookingID())) {
-                        String startTime = snapshot.child(Consts.BOOKING_START_TIME).getValue().toString();
-                        String providerID = snapshot.child(Consts.BOOKING_PROVIDER_ID).getValue().toString();
-                        final String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
+        if(listing.isRefundable()){
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Consts.BOOKINGS_DATABASE).child(currentUser.getUid());
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if(snapshot.getKey().toString().equals(booking.getBookingID())) {
+                            String startTime = snapshot.child(Consts.BOOKING_START_TIME).getValue().toString();
+                            String providerID = snapshot.child(Consts.BOOKING_PROVIDER_ID).getValue().toString();
+                            final String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
 
-                        //add increment back to listing after cancel
-                        final DatabaseReference listingRef = FirebaseDatabase.getInstance().getReference()
-                                .child(Consts.LISTINGS_DATABASE)
-                                .child(providerID)
-                                .child(Consts.ACTIVE_LISTINGS)
-                                .child(listingID);
-                        listingRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                String bookingTimes = dataSnapshot
-                                        .child(Consts.LISTING_ACTIVE_TIMES)
-                                        .getValue().toString();
-                                String[] timeAvailability = bookingTimes.split(",");
-                                ArrayList<Integer> timesAvailable = new ArrayList<>();
-                                for (int i = 0; i < timeAvailability.length; i++) {
-                                    int currTime = Integer.parseInt(timeAvailability[i]);
-                                    timesAvailable.add(currTime);
+                            //add increment back to listing after cancel
+                            final DatabaseReference listingRef = FirebaseDatabase.getInstance().getReference()
+                                    .child(Consts.LISTINGS_DATABASE)
+                                    .child(providerID)
+                                    .child(Consts.ACTIVE_LISTINGS)
+                                    .child(listingID);
+                            listingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    String bookingTimes = dataSnapshot
+                                            .child(Consts.LISTING_ACTIVE_TIMES)
+                                            .getValue().toString();
+                                    String[] timeAvailability = bookingTimes.split(",");
+                                    ArrayList<Integer> timesAvailable = new ArrayList<>();
+                                    for (int i = 0; i < timeAvailability.length; i++) {
+                                        int currTime = Integer.parseInt(timeAvailability[i]);
+                                        timesAvailable.add(currTime);
+                                    }
+                                    int toAdd = booking.getTimeIncrement();
+                                    timesAvailable.add(toAdd);
+                                    Collections.sort(timesAvailable);
+                                    StringBuilder sb = new StringBuilder();
+                                    sb.append(timesAvailable.get(0));
+                                    for (int i = 1; i < timesAvailable.size(); i++) {
+                                        sb.append(",");
+                                        sb.append(timesAvailable.get(i));
+                                    }
+                                    String timeAvailabilityString = sb.toString();
+                                    listingRef.child(Consts.LISTING_ACTIVE_TIMES)
+                                            .setValue(timeAvailabilityString);
                                 }
-                                int toAdd = booking.getTimeIncrement();
-                                timesAvailable.add(toAdd);
-                                Collections.sort(timesAvailable);
-                                StringBuilder sb = new StringBuilder();
-                                sb.append(timesAvailable.get(0));
-                                for (int i = 1; i < timesAvailable.size(); i++) {
-                                    sb.append(",");
-                                    sb.append(timesAvailable.get(i));
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
                                 }
-                                String timeAvailabilityString = sb.toString();
-                                listingRef.child(Consts.LISTING_ACTIVE_TIMES)
-                                        .setValue(timeAvailabilityString);
+                            });
+
+                            String parkingID = snapshot.child(Consts.PARKING_SPOTS_ID).getValue().toString();
+
+                            long longStartTime = Long.parseLong(startTime);
+                            long unixTime = System.currentTimeMillis() / 1000L;
+                            if(unixTime < longStartTime) {
+                                removeListing(listingID, providerID, booking.getBookingID());
+                            } else {
+                                AlertDialog.Builder adb=new AlertDialog.Builder(BookingDetailsActivity.this);
+                                adb.setTitle("This booking cannot be cancelled because the transaction has been completed");
+                                adb.setPositiveButton("OK", null);
+                                adb.show();
                             }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                        String parkingID = snapshot.child(Consts.PARKING_SPOTS_ID).getValue().toString();
-
-                        long longStartTime = Long.parseLong(startTime);
-                        long unixTime = System.currentTimeMillis() / 1000L;
-                        if(unixTime < longStartTime) {
-                            removeListing(listingID, providerID, booking.getBookingID());
-                        } else {
-                            AlertDialog.Builder adb=new AlertDialog.Builder(BookingDetailsActivity.this);
-                            adb.setTitle("This booking cannot be cancelled because the transaction has been completed");
-                            adb.setPositiveButton("OK", null);
-                            adb.show();
                         }
                     }
+                    HomeActivity.startActivityPostBooking(BookingDetailsActivity.this);
+                    finish();
                 }
-                HomeActivity.startActivityPostBooking(BookingDetailsActivity.this);
-                finish();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-
-       // DatabaseReference providerListingRef = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+        } else {
+            Toast.makeText(BookingDetailsActivity.this, "Your booking is non-refundable.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     protected void removeListing(final String listingID, final String providerID, final String bookingID){
