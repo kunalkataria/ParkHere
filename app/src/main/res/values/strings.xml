@@ -167,6 +167,8 @@
 
     <string name="parking_spot_reviews">Parking Spot Reviews</string>
 
+    <string name="post_at_currentlocation">Post at Current Location</string>
+
     <string-array name="time_increment_spinner_label">
         <item>1</item>
         <item>2</item>

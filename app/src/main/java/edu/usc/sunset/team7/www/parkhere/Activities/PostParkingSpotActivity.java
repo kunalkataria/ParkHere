@@ -3,15 +3,17 @@ package edu.usc.sunset.team7.www.parkhere.Activities;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -20,10 +22,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,11 +54,14 @@ import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 
 public class PostParkingSpotActivity extends AppCompatActivity {
 
-    private static final String TAG = "PostListingActivity";
+    private static final String TAG = "PostParkingSpotActivity";
 
     @BindView(R.id.parking_spot_name_textinputlayout) TextInputLayout parkingNameTextInputLayout;
     @BindView(R.id.parking_spot_name_edittext)AppCompatEditText parkingNameEditText;
     private String nameString;
+
+    @BindView(R.id.post_currentlocation_checkbox)
+    AppCompatCheckBox postCurrentLocationCheckbox;
 
     //Parking image controls
     @BindView(R.id.upload_parking_spot_picture_button) Button uploadParkingImageButton;
@@ -89,6 +99,11 @@ public class PostParkingSpotActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                1);
+
         setContentView(R.layout.activity_post_parking_spot);
         ButterKnife.bind(this);
 
@@ -117,6 +132,39 @@ public class PostParkingSpotActivity extends AppCompatActivity {
                     Log.i(TAG, "An error occurred: " + status);
                 }
             });
+        } else {
+            if (postCurrentLocationCheckbox.isChecked()) {
+                if (HomeActivity.getGoogleApiClient() != null) {
+
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+                            .getCurrentPlace(HomeActivity.getGoogleApiClient(), null);
+
+                    result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+                        @Override
+                        public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                            Log.i("Place", "onResult");
+                            if (likelyPlaces.getCount() <= 0) {
+                                Toast.makeText(PostParkingSpotActivity.this, "Unable to detect Current Location", Toast.LENGTH_SHORT).show();
+                            } else {
+                                locationSelected = likelyPlaces.get(0).getPlace();
+                                LatLng latLng = likelyPlaces.get(0).getPlace().getLatLng();
+                                latitude = locationSelected.getLatLng().latitude;
+                                longitude = locationSelected.getLatLng().longitude;
+                            }
+                            likelyPlaces.release();
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(PostParkingSpotActivity.this, "No GoogleApiClient", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Please select a location",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
 
         mAuth = FirebaseAuth.getInstance();
