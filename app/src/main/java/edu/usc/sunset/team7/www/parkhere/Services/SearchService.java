@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
@@ -52,6 +53,9 @@ public class SearchService extends IntentService {
         httpLogger.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
         clientBuilder.addInterceptor(httpLogger);
+
+        clientBuilder.connectTimeout(10, TimeUnit.SECONDS);
+        clientBuilder.readTimeout(10, TimeUnit.SECONDS);
 
         OkHttpClient okClient = clientBuilder.build();
 

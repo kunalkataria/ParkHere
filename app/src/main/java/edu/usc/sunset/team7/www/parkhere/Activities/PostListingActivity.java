@@ -21,6 +21,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -230,6 +231,7 @@ public class PostListingActivity extends AppCompatActivity {
             newListingRef.child(Consts.LISTING_REFUNDABLE).setValue(isRefundable);
             newListingRef.child(Consts.LISTING_PRICE).setValue(price);
             newListingRef.child(Consts.LISTING_START_TIME).setValue(startDate);
+            newListingRef.child(Consts.LISTING_CURRENT_ACTIVE).setValue(true);
 
             //Calculate StopDate
             stopDate = startDate + (numIncrements * timeIncrements) * 60 * 60;
@@ -326,7 +328,13 @@ public class PostListingActivity extends AppCompatActivity {
             priceTextInputLayout.setErrorEnabled(true);
             priceTextInputLayout.setError("Not a valid price");
         }
-
+        if (!refundableRButton.isChecked() && !nonrefundableRButton.isChecked()) {
+            isValid = false;
+            Toast.makeText(PostListingActivity.this, "Please select a refund policy.",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            isRefundable = refundableRButton.isChecked();
+        }
         if (nameString.isEmpty()) {
             isValid = false;
             listingNameTextInput.setErrorEnabled(true);

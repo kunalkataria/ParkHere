@@ -197,7 +197,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.book_listing_button)
     protected void bookListing() {
-        ArrayList<Integer> timeIncrements = listingResultPair.getListing().getTimesAvailable();
+        final ArrayList<Integer> timeIncrements = listingResultPair.getListing().getTimesAvailable();
         final long startTime = listingResultPair.getListing().getStartTime();
         final long timeIncr = listingResultPair.getListing().getIncrement();
         Log.i("TESTING******", "TIME INCREMENT: " + timeIncr);
@@ -218,8 +218,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
         builder.setTitle("Pick a time");
         builder.setItems(times, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int selected) {
-
+            public void onClick(DialogInterface dialogInterface, int sel) {
+                int selected = timeIncrements.get(sel);
                 bookStart = startTime + (selected * timeIncr * 60 * 60);
                 bookStop = bookStart + (timeIncr * 60 * 60);
 
