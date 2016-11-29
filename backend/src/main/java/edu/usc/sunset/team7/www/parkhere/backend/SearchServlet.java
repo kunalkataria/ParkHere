@@ -174,11 +174,11 @@ public class SearchServlet extends HttpServlet {
     }
 
     private boolean isWithinTimeConstraints(DataSnapshot activeListing) {
-        if(!activeListing.child("Start Time").exists()
-                || !activeListing.child("Stop Time").exists()) return false;
+        if(!Boolean.parseBoolean(activeListing.child("Currently Active").getValue().toString())) return false;
         double startTime = Long.parseLong(activeListing.child("Start Time").getValue().toString());
-        double stopTime = Long.parseLong(activeListing.child("Stop Time").getValue().toString());
-        return (this.startTime >= startTime && this.stopTime <= stopTime);
+        double stopTime = Long.parseLong(activeListing.child("End Time").getValue().toString());
+        if(this.stopTime == -1) return (this.startTime >= startTime);
+        else return (this.startTime >= startTime && this.stopTime <= stopTime);
     }
 
     private ParkingSpot parseParkingSpot (String providerID, String spotID) {
