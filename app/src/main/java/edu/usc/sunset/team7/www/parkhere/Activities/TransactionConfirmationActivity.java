@@ -166,6 +166,7 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
         inactiveBookingRef.child(Consts.LISTING_NAME).setValue(listing.getName());
         inactiveBookingRef.child(Consts.LISTING_PRICE).setValue(listing.getPrice());
         inactiveBookingRef.child(Consts.PARKING_SPOTS_ID).setValue(listing.getParkingID());
+        inactiveBookingRef.child(Consts.LISTING_REFUNDABLE).setValue(listing.isRefundable());
 
         //Edit Listing Active Times
         final DatabaseReference activeTimesRef = mDatabase.child(Consts.LISTINGS_DATABASE)
@@ -185,16 +186,23 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
                         timesAvailable.add(currTime);
                     }
                 }
-                Collections.sort(timesAvailable);
-                StringBuilder sb = new StringBuilder();
-                sb.append(timesAvailable.get(0));
-                for (int i = 1; i < timesAvailable.size(); i++) {
-                    sb.append(",");
-                    sb.append(timesAvailable.get(i));
+                if (timesAvailable.size() > 0) {
+                    Collections.sort(timesAvailable);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(timesAvailable.get(0));
+                    for (int i = 1; i < timesAvailable.size(); i++) {
+                        sb.append(",");
+                        sb.append(timesAvailable.get(i));
+                    }
+                    String timeAvailabilityString = sb.toString();
+                    activeTimesRef.child(Consts.LISTING_ACTIVE_TIMES)
+                            .setValue(timeAvailabilityString);
+                } else {
+                    activeTimesRef.child(Consts.LISTING_ACTIVE_TIMES)
+                            .setValue(",");
+                    activeTimesRef.child(Consts.LISTING_CURRENT_ACTIVE)
+                            .setValue(false);
                 }
-                String timeAvailabilityString = sb.toString();
-                activeTimesRef.child(Consts.LISTING_ACTIVE_TIMES)
-                        .setValue(timeAvailabilityString);
             }
 
             @Override
@@ -203,28 +211,6 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
             }
         });
 
-
-        //Move Listing to inactive
-        /*DatabaseReference inactiveListingRef = mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.INACTIVE_LISTINGS).child(listing.getListingID());
-        inactiveListingRef.child(Consts.LISTING_NAME).setValue(listing.getName());
-        inactiveListingRef.child(Consts.LISTING_DESCRIPTION).setValue(listing.getDescription());
-        inactiveListingRef.child(Consts.LISTING_REFUNDABLE).setValue(listing.isRefundable());
-        inactiveListingRef.child(Consts.LISTING_PRICE).setValue(listing.getPrice());
-        inactiveListingRef.child(Consts.LISTING_COMPACT).setValue(listing.isCompact());
-        inactiveListingRef.child(Consts.LISTING_COVERED).setValue(listing.isCovered());
-        inactiveListingRef.child(Consts.LISTING_HANDICAP).setValue(listing.isHandicap());
-        inactiveListingRef.child(Consts.LISTING_LATITUDE).setValue(listing.getLatitude());
-        inactiveListingRef.child(Consts.LISTING_LONGITUDE).setValue(listing.getLongitude());
-        inactiveListingRef.child(Consts.LISTING_START_TIME).setValue(listing.getStartTime());
-        inactiveListingRef.child(Consts.LISTING_END_TIME).setValue(listing.getStopTime());
-        inactiveListingRef.child(Consts.LISTING_IMAGE).setValue(listing.getImageURL());
-        inactiveListingRef.child(Consts.LISTING_IS_PAID).setValue(false);
-        inactiveListingRef.child(Consts.PARKING_SPOTS_ID).setValue(listing.getParkingSpot().getParkingSpotID());
-        //Remove listing from active
-        mDatabase.child(Consts.LISTINGS_DATABASE).child(listing.getProviderID()).child(Consts.ACTIVE_LISTINGS).child(listing.getListingID()).removeValue();*/
-
-        //Get provider variables and send the email
-        //getProviderInformation();
         HomeActivity.startActivityPostBooking(TransactionConfirmationActivity.this);
         finish();
     }

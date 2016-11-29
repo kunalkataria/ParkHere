@@ -173,60 +173,60 @@ public class BookingDetailsActivity extends AppCompatActivity {
                             String providerID = snapshot.child(Consts.BOOKING_PROVIDER_ID).getValue().toString();
                             final String listingID = snapshot.child(Consts.BOOKING_LISTING_ID).getValue().toString();
 
-                            //add increment back to listing after cancel
-                            final DatabaseReference listingRef = FirebaseDatabase.getInstance().getReference()
-                                    .child(Consts.LISTINGS_DATABASE)
-                                    .child(providerID)
-                                    .child(Consts.ACTIVE_LISTINGS)
-                                    .child(listingID);
-                            listingRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    String bookingTimes = dataSnapshot
-                                            .child(Consts.LISTING_ACTIVE_TIMES)
-                                            .getValue().toString();
-                                    String[] timeAvailability = bookingTimes.split(",");
-                                    ArrayList<Integer> timesAvailable = new ArrayList<>();
-                                    for (int i = 0; i < timeAvailability.length; i++) {
-                                        int currTime = Integer.parseInt(timeAvailability[i]);
-                                        timesAvailable.add(currTime);
-                                    }
-                                    int toAdd = booking.getTimeIncrement();
-                                    timesAvailable.add(toAdd);
-                                    Collections.sort(timesAvailable);
-                                    StringBuilder sb = new StringBuilder();
-                                    sb.append(timesAvailable.get(0));
-                                    for (int i = 1; i < timesAvailable.size(); i++) {
-                                        sb.append(",");
-                                        sb.append(timesAvailable.get(i));
-                                    }
-                                    String timeAvailabilityString = sb.toString();
-                                    listingRef.child(Consts.LISTING_ACTIVE_TIMES)
-                                            .setValue(timeAvailabilityString);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-
-                            String parkingID = snapshot.child(Consts.PARKING_SPOTS_ID).getValue().toString();
-
                             long longStartTime = Long.parseLong(startTime);
                             long unixTime = System.currentTimeMillis() / 1000L;
                             if(unixTime < longStartTime) {
                                 removeListing(listingID, providerID, booking.getBookingID());
+
+                                //add increment back to listing after cancel
+                                final DatabaseReference listingRef = FirebaseDatabase.getInstance().getReference()
+                                        .child(Consts.LISTINGS_DATABASE)
+                                        .child(providerID)
+                                        .child(Consts.ACTIVE_LISTINGS)
+                                        .child(listingID);
+                                listingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        String bookingTimes = dataSnapshot
+                                                .child(Consts.LISTING_ACTIVE_TIMES)
+                                                .getValue().toString();
+                                        String[] timeAvailability = bookingTimes.split(",");
+                                        ArrayList<Integer> timesAvailable = new ArrayList<>();
+                                        for (int i = 0; i < timeAvailability.length; i++) {
+                                            int currTime = Integer.parseInt(timeAvailability[i]);
+                                            timesAvailable.add(currTime);
+                                        }
+                                        int toAdd = booking.getTimeIncrement();
+                                        timesAvailable.add(toAdd);
+                                        Collections.sort(timesAvailable);
+                                        StringBuilder sb = new StringBuilder();
+                                        sb.append(timesAvailable.get(0));
+                                        for (int i = 1; i < timesAvailable.size(); i++) {
+                                            sb.append(",");
+                                            sb.append(timesAvailable.get(i));
+                                        }
+                                        String timeAvailabilityString = sb.toString();
+                                        listingRef.child(Consts.LISTING_ACTIVE_TIMES)
+                                                .setValue(timeAvailabilityString);
+                                        listingRef.child(Consts.LISTING_CURRENT_ACTIVE)
+                                                .setValue(true);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                                HomeActivity.startActivityPostBooking(BookingDetailsActivity.this);
+                                finish();
                             } else {
-                                AlertDialog.Builder adb=new AlertDialog.Builder(BookingDetailsActivity.this);
-                                adb.setTitle("This booking cannot be cancelled because the transaction has been completed");
-                                adb.setPositiveButton("OK", null);
-                                adb.show();
+                                Toast.makeText
+                                        (BookingDetailsActivity.this,
+                                        "This booking cannot be cancelled because the transaction has been already been started",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
-                    HomeActivity.startActivityPostBooking(BookingDetailsActivity.this);
-                    finish();
                 }
 
                 @Override
@@ -238,7 +238,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
     }
 
     protected void removeListing(final String listingID, final String providerID, final String bookingID){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(listingID);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(bookingID);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -280,7 +280,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
                 }
                 //remove from inactive listing
-                FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(listingID).removeValue();
+                FirebaseDatabase.getInstance().getReference().child(Consts.LISTINGS_DATABASE).child(providerID).child(Consts.INACTIVE_LISTINGS).child(bookingID).removeValue();
                 FirebaseDatabase.getInstance().getReference().child(Consts.BOOKINGS_DATABASE).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bookingID).removeValue();
             }
 
