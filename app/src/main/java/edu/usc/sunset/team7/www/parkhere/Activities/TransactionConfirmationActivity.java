@@ -181,9 +181,10 @@ public class TransactionConfirmationActivity extends AppCompatActivity {
                 ArrayList<Integer> timesAvailable = new ArrayList<>();
                 for (int i = 0; i < timeAvailability.length; i++) {
                     int currTime = Integer.parseInt(timeAvailability[i]);
-                    timesAvailable.add(currTime);
+                    if (currTime != bookTime){
+                        timesAvailable.add(currTime);
+                    }
                 }
-                timesAvailable.add(bookTime);
                 Collections.sort(timesAvailable);
                 StringBuilder sb = new StringBuilder();
                 sb.append(timesAvailable.get(0));
