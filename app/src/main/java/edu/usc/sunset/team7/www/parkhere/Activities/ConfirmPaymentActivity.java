@@ -98,6 +98,25 @@ public class ConfirmPaymentActivity extends AppCompatActivity{
                                 .child(Consts.INACTIVE_LISTINGS)
                                 .child(toRemove.getBookingID())
                                 .removeValue();
+
+                        final DatabaseReference pRef = mDatabase
+                                .child(Consts.PARKING_SPOT_DATABASE)
+                                .child(providerID)
+                                .child(toRemove.getMListing().getParkingID());
+
+                        pRef.addListenerForSingleValueEvent(new ValueEventListener(){
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                int bookCount = Integer.parseInt(dataSnapshot.child(Consts.PARKING_SPOTS_BOOKING_COUNT).getValue().toString());
+                                ref.child(Consts.PARKING_SPOTS_BOOKING_COUNT).setValue(bookCount + 1);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 //                        mDatabase
 //                                .child(Consts.LISTINGS_DATABASE)
 //                                .child(providerID)
