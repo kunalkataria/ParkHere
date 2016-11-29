@@ -127,7 +127,7 @@ public class SearchServlet extends HttpServlet {
             userID = user.getKey();
             for(DataSnapshot activeListing : user.child("Active Listings").getChildren()) {
                 spotID = activeListing.child("ParkingID").getValue().toString();
-                if(isWithinRadius(userID,spotID)) {
+                if(isWithinRadius(userID,spotID) && isWithinTimeConstraints(activeListing)) {
                     Listing listing = parseListing(activeListing);
                     listing.setParkingSpot(parseParkingSpot(userID, spotID));
                     listing.setProviderID(userID);
@@ -139,7 +139,6 @@ public class SearchServlet extends HttpServlet {
                 }
             }
         }
-
         searchResultAsJSON = new Gson().toJson(searchResult);
         done = true;
     }
@@ -172,6 +171,14 @@ public class SearchServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         resp.getWriter().println("POST requests are not supported");
+    }
+
+    private boolean isWithinTimeConstraints(DataSnapshot activeListing) {
+        if(!Boolean.parseBoolean(activeListing.child("Currently Active").getValue().toString())) return false;
+        double startTime = Long.parseLong(activeListing.child("Start Time").getValue().toString());
+        double stopTime = Long.parseLong(activeListing.child("End Time").getValue().toString());
+        if(this.stopTime == -1) return (this.startTime >= startTime);
+        else return (this.startTime >= startTime && this.stopTime <= stopTime);
     }
 
     private ParkingSpot parseParkingSpot (String providerID, String spotID) {
