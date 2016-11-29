@@ -107,6 +107,7 @@ public class Consts {
     public static final String LISTING_IS_PAID = "Paid";
     public static final String LISTING_ACTIVE_TIMES = "Active Times";
     public static final String LISTING_BOOK_TIME = "Book Time Increment";
+    public static final String LISTING_CURRENT_ACTIVE = "Currently Active";
 
 
     public static final String DEFAULT_PARKING_IMAGE = "https://firebasestorage.googleapis.com/v0/b/parkhere-ceccb.appspot.com/o/parking_spaces%2Fempty_parking.png?alt=media&token=9f2a1602-9248-4485-8eef-1c73f7a5ea77";
