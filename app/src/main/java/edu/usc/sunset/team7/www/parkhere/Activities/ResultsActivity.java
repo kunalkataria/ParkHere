@@ -27,7 +27,6 @@ import edu.usc.sunset.team7.www.parkhere.Adapters.CustomResultsAdapter;
 import edu.usc.sunset.team7.www.parkhere.R;
 import edu.usc.sunset.team7.www.parkhere.Services.SearchService;
 import edu.usc.sunset.team7.www.parkhere.Utils.Consts;
-import edu.usc.sunset.team7.www.parkhere.objectmodule.Listing;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.ResultsPair;
 import edu.usc.sunset.team7.www.parkhere.objectmodule.SearchResult;
 
@@ -233,8 +232,8 @@ public class ResultsActivity extends AppCompatActivity {
         public int compare(ResultsPair rp1, ResultsPair rp2) {
             int count1 = rp1.getListing().getParkingSpot().getBookingCount();
             int count2 = rp2.getListing().getParkingSpot().getBookingCount();
-            if ( count1 < count2 ){ return -1;}
-            if ( count1 > count2 ){ return 1;}
+            if ( count1 < count2 ){ return 1;}
+            if ( count1 > count2 ){ return -1;}
             return 0;
         }
     }
