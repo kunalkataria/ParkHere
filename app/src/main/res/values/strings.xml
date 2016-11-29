@@ -18,7 +18,7 @@
     <string name="handicap_label">Handicap-friendly?</string>
     <string name="covered_label">Covered?</string>
     <string name="compact_label">Compact?</string>
-    <string name="booking_count_label">Show Prior Booking</string>
+    <string name="booking_count_label">Sort by Most Booked</string>
     <string name="suv_label">SUV-friendly?</string>
     <string name="truck_label">Truck-friendly?</string>
     <string name="upload_parking_image">Upload parking image</string>
