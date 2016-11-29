@@ -112,6 +112,7 @@ public class PostListingActivity extends AppCompatActivity {
     public static void startActivity(Context context) {
         Intent i = new Intent(context, PostListingActivity.class);
         context.startActivity(i);
+        Log.i("Activity started", "Time: " + System.currentTimeMillis());
     }
 
     @Override
@@ -156,6 +157,7 @@ public class PostListingActivity extends AppCompatActivity {
                 if (userSpots.size() == 1) {
                     currentParkingSpot = userSpots.get(0);
                     parkingSpotEditText.setText(currentParkingSpot.getName());
+                    Log.i("Parking spot selected", "Time: " + System.currentTimeMillis());
 
                 } else {
                     currentParkingSpot = null;
@@ -200,12 +202,12 @@ public class PostListingActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("TESTING****", "ONACTIVITYRESULT REQUEST CODE:" + requestCode + " RESULT CODE: " + resultCode);
         if(requestCode == Consts.PARKING_SPOT_REQUEST
                 && resultCode == Consts.PARKING_SPOT_SUCCESSFUL_RESULT && data != null ) {
             currentParkingSpot = (ParkingSpot) data.getSerializableExtra(Consts.PARKING_SPOT_EXTRA);
             parkingSpotEditText.setText(currentParkingSpot.getName());
         }
+        Log.i("Parking spot selected", "Time: " + System.currentTimeMillis());
     }
 
     @OnClick (R.id.parkingspot_edittext)
