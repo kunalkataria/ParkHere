@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -30,7 +31,6 @@ import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -90,6 +90,14 @@ public class PostParkingSpotActivity extends AppCompatActivity {
 
     private Place locationSelected;
 
+    PlaceAutocompleteFragment autocompleteFragment;
+
+    public GoogleApiClient mGoogleApiClient;
+
+    public GoogleApiClient getGoogleApiClient() {
+        return mGoogleApiClient;
+    }
+
     public static void startActivity(Context context) {
         Intent i = new Intent(context, PostParkingSpotActivity.class);
         context.startActivity(i);
@@ -107,6 +115,12 @@ public class PostParkingSpotActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_parking_spot);
         ButterKnife.bind(this);
 
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, null)
+                .build();
 
         setSupportActionBar(postParkingSpotToolbar);
         if (getSupportActionBar() != null) {
@@ -114,7 +128,7 @@ public class PostParkingSpotActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+        autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.post_parking_spot_autocomplete_fragment);
 
         if (autocompleteFragment != null) {
@@ -132,39 +146,6 @@ public class PostParkingSpotActivity extends AppCompatActivity {
                     Log.i(TAG, "An error occurred: " + status);
                 }
             });
-        } else {
-            if (postCurrentLocationCheckbox.isChecked()) {
-                if (HomeActivity.getGoogleApiClient() != null) {
-
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
-                            .getCurrentPlace(HomeActivity.getGoogleApiClient(), null);
-
-                    result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-                        @Override
-                        public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                            Log.i("Place", "onResult");
-                            if (likelyPlaces.getCount() <= 0) {
-                                Toast.makeText(PostParkingSpotActivity.this, "Unable to detect Current Location", Toast.LENGTH_SHORT).show();
-                            } else {
-                                locationSelected = likelyPlaces.get(0).getPlace();
-                                LatLng latLng = likelyPlaces.get(0).getPlace().getLatLng();
-                                latitude = locationSelected.getLatLng().latitude;
-                                longitude = locationSelected.getLatLng().longitude;
-                            }
-                            likelyPlaces.release();
-                        }
-                    });
-                }
-                else{
-                    Toast.makeText(PostParkingSpotActivity.this, "No GoogleApiClient", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(this, "Please select a location",
-                        Toast.LENGTH_SHORT).show();
-            }
         }
 
         mAuth = FirebaseAuth.getInstance();
@@ -197,6 +178,36 @@ public class PostParkingSpotActivity extends AppCompatActivity {
             sourceImageUri = data.getData();
             parkingImageView.setImageURI(sourceImageUri);
         }
+    }
+
+    @OnClick(R.id.post_currentlocation_checkbox)
+    protected void setCurrentLocation() {
+            if (this.getGoogleApiClient() != null) {
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+                        .getCurrentPlace(this.getGoogleApiClient(), null);
+
+                result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+                    @Override
+                    public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                        Log.i("Place", "onResult");
+                        if (likelyPlaces.getCount() <= 0) {
+                            Toast.makeText(PostParkingSpotActivity.this, "Unable to detect Current Location", Toast.LENGTH_SHORT).show();
+                        } else {
+                            locationSelected = likelyPlaces.get(0).getPlace();
+                            latitude = locationSelected.getLatLng().latitude;
+                            longitude = locationSelected.getLatLng().longitude;
+                        }
+                        likelyPlaces.release();
+                    }
+                });
+            }
+            else{
+                Toast.makeText(PostParkingSpotActivity.this, "No GoogleApiClient", Toast.LENGTH_SHORT).show();
+            }
     }
 
     @OnClick(R.id.upload_parking_spot_button)
@@ -286,6 +297,7 @@ public class PostParkingSpotActivity extends AppCompatActivity {
 //            Toast.makeText(PostListingActivity.this, "Please upload a picture of your parking spot.",
 //                    Toast.LENGTH_SHORT).show();
 //        }
+
         if (latitude == -1 && longitude == -1) {
             isValid = false;
             Toast.makeText(PostParkingSpotActivity.this, "Please select a location through the search bar.",
