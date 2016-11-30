@@ -76,23 +76,23 @@ public class PostListingActivity extends AppCompatActivity {
 
     // Date selector pieces
     @BindView(R.id.start_date_inputlayout) TextInputLayout startDateLayout;
-    @BindView(R.id.stop_date_inputlayout) TextInputLayout stopDateLayout;
+//    @BindView(R.id.stop_date_inputlayout) TextInputLayout stopDateLayout;
     @BindView(R.id.start_time_edittext) AppCompatEditText startDateEditText;
-    @BindView(R.id.stop_time_edittext) AppCompatEditText stopDateEditText;
+//    @BindView(R.id.stop_time_edittext) AppCompatEditText stopDateEditText;
 
     @BindView(R.id.post_listing_toolbar) Toolbar postListingToolbar;
 
     private ParkingSpot currentParkingSpot;
 
     private DatePickerDialog startDatePicker;
-    private DatePickerDialog stopDatePicker;
+//    private DatePickerDialog stopDatePicker;
 
     private TimePickerDialog startTimePicker;
-    private TimePickerDialog stopTimePicker;
+//    private TimePickerDialog stopTimePicker;
 
     private int startYear, startMonth, startDay, startHour, startMinute;
 
-    private int stopYear, stopMonth, stopDay, stopHour, stopMinute;
+//    private int stopYear, stopMonth, stopDay, stopHour, stopMinute;
 
     private long startDate, stopDate;
 
@@ -280,33 +280,33 @@ public class PostListingActivity extends AppCompatActivity {
         startDatePicker.show();
     }
 
-    @OnClick(R.id.stop_time_edittext)
-    protected void selectStopTime() {
-        Calendar c = Calendar.getInstance();
-        TimePickerDialog.OnTimeSetListener stopTimeListener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                stopHour = hourOfDay;
-                stopMinute = minute;
-                DateTime dateTime = new DateTime(stopYear, stopMonth, stopDay, stopHour, stopMinute);
-                stopDate = dateTime.getMillis() / 1000;
-                stopDateEditText.setText(Tools.getDateString(dateTime));
-            }
-        };
-        stopTimePicker = new TimePickerDialog(this, stopTimeListener, c.get(Calendar.HOUR), c.get(Calendar.MINUTE), false);
-        DatePickerDialog.OnDateSetListener stopDateListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                stopYear = year;
-                stopMonth = month + 1;
-                stopDay = day;
-                stopTimePicker.show();
-            }
-        };
-        stopDatePicker = new DatePickerDialog
-                (this, stopDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-        stopDatePicker.show();
-    }
+//    @OnClick(R.id.stop_time_edittext)
+//    protected void selectStopTime() {
+//        Calendar c = Calendar.getInstance();
+//        TimePickerDialog.OnTimeSetListener stopTimeListener = new TimePickerDialog.OnTimeSetListener() {
+//            @Override
+//            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+//                stopHour = hourOfDay;
+//                stopMinute = minute;
+//                DateTime dateTime = new DateTime(stopYear, stopMonth, stopDay, stopHour, stopMinute);
+//                stopDate = dateTime.getMillis() / 1000;
+//                stopDateEditText.setText(Tools.getDateString(dateTime));
+//            }
+//        };
+//        stopTimePicker = new TimePickerDialog(this, stopTimeListener, c.get(Calendar.HOUR), c.get(Calendar.MINUTE), false);
+//        DatePickerDialog.OnDateSetListener stopDateListener = new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+//                stopYear = year;
+//                stopMonth = month + 1;
+//                stopDay = day;
+//                stopTimePicker.show();
+//            }
+//        };
+//        stopDatePicker = new DatePickerDialog
+//                (this, stopDateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+//        stopDatePicker.show();
+//    }
 
 
     public boolean checkFields() {
