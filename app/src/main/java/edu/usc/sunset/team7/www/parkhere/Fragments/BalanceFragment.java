@@ -87,17 +87,29 @@ public class BalanceFragment extends Fragment {
     @OnClick(R.id.transfer_button)
     protected void transferToBank(){
 
-        String formattedBalance = "$" + String.format("%.2f", userBalance);
-        Toast.makeText(getActivity().getApplicationContext(),
-                "You transferred " + formattedBalance + " to the bank!",
-                Toast.LENGTH_SHORT).show();
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Consts.USERS_DATABASE).child(currentUser.getUid());
+        ref.addListenerForSingleValueEvent(new ValueEventListener(){
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference balanceRef = mDatabase.child(Consts.USERS_DATABASE).child(uid);
-        balanceRef.child(Consts.USER_BALANCE).setValue(0.0);
-        userBalance = 0.0;
-        formattedBalance = "$" + String.format("%.2f", userBalance);
-        currentBalanceNumber.setText(formattedBalance);
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Double balance = Double.parseDouble(dataSnapshot.child(Consts.USER_BALANCE).getValue().toString());
+                String formattedBalance = "$" + String.format("%.2f", balance);
+                Toast.makeText(getActivity().getApplicationContext(),
+                        "You transferred " + formattedBalance + " to the bank!",
+                        Toast.LENGTH_SHORT).show();
+
+                ref.child(Consts.USER_BALANCE).setValue(0.0);
+                userBalance = 0.0;
+                formattedBalance = "$" + String.format("%.2f", userBalance);
+                currentBalanceNumber.setText(formattedBalance);
+//                ref.child(Consts.USER_BALANCE).setValue(addToBalance + balance);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @OnClick(R.id.confirm_payment_button)
