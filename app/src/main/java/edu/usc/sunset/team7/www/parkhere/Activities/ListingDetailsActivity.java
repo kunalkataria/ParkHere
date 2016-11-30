@@ -160,7 +160,6 @@ public class ListingDetailsActivity extends AppCompatActivity {
         listingDetailsHandicapTextView.setText("Handicap? " + listingResult.isHandicap());
         listingDetailsCoveredTextView.setText("Covered? " + listingResult.isCovered());
         listingDetailsCompactTextView.setText("Compact? " + listingResult.isCompact());
-        //listingDetailsTextView.setText(listingDetailsString());
     }
 
 
