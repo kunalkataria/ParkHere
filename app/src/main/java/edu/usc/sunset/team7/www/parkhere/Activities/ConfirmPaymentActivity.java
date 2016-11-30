@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -108,8 +109,11 @@ public class ConfirmPaymentActivity extends AppCompatActivity{
 
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
+                                //Log.i("TESTING*******", "TRYING TO INCREMENT BOOKING COUNT");
                                 int bookCount = Integer.parseInt(dataSnapshot.child(Consts.PARKING_SPOTS_BOOKING_COUNT).getValue().toString());
-                                ref.child(Consts.PARKING_SPOTS_BOOKING_COUNT).setValue(bookCount + 1);
+                                //Log.i("TESTING*******", "BOOKING COUNT CURRENTLY:" + bookCount);
+                                pRef.child(Consts.PARKING_SPOTS_BOOKING_COUNT).setValue(bookCount + 1);
+                                //Log.i("TESTING*******", "BOOKING COUNT CURRENTLY:" + bookCount);
                             }
 
                             @Override
