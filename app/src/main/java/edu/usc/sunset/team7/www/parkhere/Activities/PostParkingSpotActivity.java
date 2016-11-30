@@ -182,6 +182,7 @@ public class PostParkingSpotActivity extends AppCompatActivity {
 
     @OnClick(R.id.post_currentlocation_checkbox)
     protected void setCurrentLocation() {
+        if(postCurrentLocationCheckbox.isChecked()){
             if (this.getGoogleApiClient() != null) {
 
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -208,6 +209,10 @@ public class PostParkingSpotActivity extends AppCompatActivity {
             else{
                 Toast.makeText(PostParkingSpotActivity.this, "No GoogleApiClient", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            latitude = -1;
+            longitude = -1;
+        }
     }
 
     @OnClick(R.id.upload_parking_spot_button)

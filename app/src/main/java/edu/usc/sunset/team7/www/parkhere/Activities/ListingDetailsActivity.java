@@ -146,10 +146,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
         listingNameTextView.setText(listingResult.getName());
         Picasso.with(this).load(listingResult.getImageURL()).into(parkingImageView);
         listingDetailsDescriptionTextView.setText("Listing Description: " + listingResult.getDescription());
-//        listingDetailsStartTimeTextView.setText("Start Time: " + Tools.convertUnixTimeToDateString(listingResult.getStartTime()));
-//        listingDetailsStopTimeTextView.setText("End Time: " + Tools.convertUnixTimeToDateString(listingResult.getStopTime()));
-        listingDetailsStartTimeTextView.setText("Start Time:" + Tools.convertUnixTimeToDateString(bookStart));
-        listingDetailsStopTimeTextView.setText("End Time:" + Tools.convertUnixTimeToDateString(bookStop));
+        listingDetailsStartTimeTextView.setText("Start Time: " + Tools.convertUnixTimeToDateString(listingResult.getStartTime()));
+        listingDetailsStopTimeTextView.setText("End Time: " + Tools.convertUnixTimeToDateString(listingResult.getStopTime()));
 
         if (!myOwnListing) {
             listingDetailsDistanceTextView.setText("Distance Away: " + listingResultPair.getDistance() + " miles");
